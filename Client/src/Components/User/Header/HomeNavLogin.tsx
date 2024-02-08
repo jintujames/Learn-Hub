@@ -21,7 +21,7 @@ function HomeNavLogin() {
       setIsLoggedIn(false);
       dispatch(logout ())
 
-      navigate("/Login"); // Redirect to the login page after logout
+      navigate("/Login");  //Redirect to the login page after logout
     } catch (error) {
       console.error("Logout failed:", error);
       // Handle logout failure, such as displaying an error message
