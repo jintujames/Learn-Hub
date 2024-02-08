@@ -1,0 +1,20 @@
+/* dashboard.css */
+
+/* Container for the entire dashboard layout */
+.dashboard-container {
+    display: flex;
+  }
+  
+  /* Style for the sidebar */
+  .sidebar {
+    width: 20%; /* Adjust the width as needed */
+    background-color: #f0f0f0; /* Set your desired background color */
+    padding: 20px; /* Adjust the padding as needed */
+  }
+  
+  /* Style for the main content area (table in this case) */
+  .main-content {
+    flex: 1; /* Take remaining space */
+    padding: 20px; /* Adjust the padding as needed */
+  }
+  
