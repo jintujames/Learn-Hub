@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
-  user: string; // You should replace 'any' with the actual type of your user object
+  user: any; // You should replace 'any' with the actual type of your user object
 }
 
 const initialState: UserState = {
-  user: '',
+  user: null,
 };
 
 const userSlice = createSlice({
@@ -20,12 +20,12 @@ const userSlice = createSlice({
 
     },
     logout: (state) => {
-      state.user = '';
+      state.user = null;
     },
   },
 });
 
-export const { login, logout,signup } = userSlice.actions;
+export const { login, logout, signup } = userSlice.actions;
 export const selectUser = (state: { user: UserState }) => state.user.user
 
 export default userSlice.reducer;

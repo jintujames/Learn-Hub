@@ -13,7 +13,7 @@ function TutorBio() {
     <div className="flex flex-col lg:flex-row lg:items-center text-slate-900 dark:text-gray-200 lg:justify-between -mx-4">
       
       <div
-        className="w-full lg:w-1/2 xl:w-5/12 px-4"
+        className="w-full lg:w-full xl:w-full px-4"
         data-aos="fade-up"
         data-aos-delay={500}
         data-aos-duration={2000}

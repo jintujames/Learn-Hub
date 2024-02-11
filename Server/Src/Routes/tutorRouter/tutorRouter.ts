@@ -3,7 +3,9 @@ const tutorRouter = express.Router();
 
 import {
     firebaseGoogleTutorAuthVerication,
-    instructorSignup, loginInstructor
+    instructorSignup, 
+    loginInstructor, 
+    tutorLogout,
 } from "../../Controller/tutorController/tutorController";
 
 // tutorRouter.get("/",(req,res)=>{
@@ -12,11 +14,12 @@ import {
 // })
 
 tutorRouter.post("/tutorSignup", instructorSignup)
-
 tutorRouter.post("/tutorLogin", loginInstructor)
-tutorRouter.post("/firebseAuthVerify", firebaseGoogleTutorAuthVerication )
+tutorRouter.post("/tutorLogout", tutorLogout)
 
-tutorRouter.post("/tutorProfile")
+tutorRouter.post("/firebseAuthVerify", firebaseGoogleTutorAuthVerication )
+tutorRouter.get("/tutorProfile")
+
 
 
 

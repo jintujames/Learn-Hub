@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface tutorState {
-  tutor: string; // You should replace 'any' with the actual type of your user object
+  tutor: any; // You should replace 'any' with the actual type of your user object
 }
 
 const initialState: tutorState = {
-  tutor: '',
+  tutor: null,
 };
 
 const tutorSlice = createSlice({
@@ -20,7 +20,7 @@ const tutorSlice = createSlice({
 
     },
     logout: (state) => {
-      state.tutor = '';
+      state.tutor = null;
     },
   },
 });

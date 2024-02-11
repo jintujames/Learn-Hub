@@ -2,13 +2,18 @@ import React from 'react'
 import Navbar from '../../Components/User/Header/Navbar'
 import AddCategory from '../../Components/Admin/AdminDashBoard/AddCategory'
 import AdminCategory from '../../Components/Admin/AdminDashBoard/AdminCategory'
+import AdminSidebar from '../../Components/Admin/AdminDashBoard/Header/AdminSidebar'
 
 function AdminCategoryPage() {
   return (
-    <div>
+    <>
       <Navbar />
+      <div className='flex '>
+      <AdminSidebar />
       <AdminCategory />
-    </div>
+      </div>
+      
+    </>
   )
 }
 

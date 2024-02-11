@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../AdminDashBoard/Header/dashBoard.css'
+import { logout } from '../../../Features/AdminSlice/adminSlice';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { adminLogout } from '../../../utils/config/axios.Methode.post';
 
-function AdminDashboard() {
+function AdminDashboard() {  
+  
   return (
     <>
   {/* component */}

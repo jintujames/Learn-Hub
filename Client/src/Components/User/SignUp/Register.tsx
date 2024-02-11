@@ -6,14 +6,17 @@ import { Auth } from "firebase/auth";
 import { signUpUser } from "../../../utils/api/api.Types";
 import { studentSignUp } from "../../../utils/config/axios.Methode.post";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useGoogleSignIn } from "../../../utils/customeHooks/customeHooks";
 import { authentication } from "../../../utils/config/firebase.config";
 import { useStudentAuth } from "../../../utils/validations/signInValidation";
 import { googleAuthVerification } from "../../../utils/config/axios.Method.Get";
+import { useDispatch } from "react-redux";
+import { signup } from "../../../Features/UserSlice/userSlice";
 
 function Register() {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const { errors, handleSubmit, register, reset } = useStudentAuth();
 
   type studentAuth = {
@@ -36,7 +39,8 @@ function Register() {
             if (res.data.userExist) {
               console.log(res.data.token, "res");
               localStorage.setItem("Token",`${res.data.token}`);
-              navigate("/Home");
+              dispatch(signup (res.data.token))
+              navigate("/Home",{replace:true});
             } else {
               console.log("user not exist");
             }
@@ -48,39 +52,21 @@ function Register() {
         }
       }
     } catch (error) {
-      console.log(error, "iiijiiijij");
       console.log("something went wrong");
     }
   };
   const handleSignUP = async (data: studentAuth) => {
     await studentSignUp(data).then((response: any) => {
       if (response.status === 200) {
-        navigate("/login");
-      }
+        console.log(response.data,"jiiiii");
+        navigate("/login",{replace:true});
+        toast.success(response.data);
+      } 
     });
   };
-
-  // const googleSignInTutor = async (auth: Auth) => {
-  //   try {
-  //     // useGooglesignIn is custom hook that handles all firebase related config
-  //     const response = await useGoogleSignIn(auth);
-  //     console.log(response, "response");
-  //     if (response.status && response.userEmail !== null) {
-  //       try {
-  //         // const res: any = await getUserByEmail(response.userEmail);
-          
-  //       } catch (error) {
-  //         console.log("something went wrong");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error, "iiijiiijij");
-  //     console.log("something went wrong");
-  //   }
-  // };
-
   return (
     <div>
+      <ToastContainer />
       <>
         <div className="flex flex-wrap min-h-screen w-full content-center justify-center bg-white">
           <div className="flex shadow-md">
@@ -183,10 +169,12 @@ function Register() {
                   </div>
                   <div className="mb-3 flex flex-wrap content-center"></div>
                   <div className="mb-3">
-                    <input
+                    <button
                       type="submit"
                       className="mb-1.5 block w-full text-center text-white bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% hover:bg-gradient-to-r hover:from-indigo-700 hover:via-sky-700 hover:to-emerald-700 px-2 py-1.5 rounded-md"
-                    />
+                      >
+                        SIGN UP
+                      </button>
                   </div>
                 </form>
 

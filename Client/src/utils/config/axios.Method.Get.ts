@@ -28,10 +28,23 @@ export const  googleAuthVerification = async (emailPayload:string) => {
   return await apiRequest(config);
 };
 
-export const  googleTutorAuthVerification = async (emailPayload:string) => {
+export const  googleTutorAuthVerification = async (response:any) => {
+  console.log(response,"response");
+  
   const config: AxiosRequestConfig = {
-    method: 'GET',
-    url: `api/v1/tutor/firebseAuthVerify?email=${emailPayload}`
+    method: 'POST',
+    url: `api/v1/tutor/firebseAuthVerify`,
+    data:response
   };
   return await apiRequest(config);
 };
+
+
+export const getTutorProfile = async () => {
+  const config: AxiosRequestConfig = {
+    method: 'GET',
+    url: `/api/v1/tutor/tutorProfile`,
+  };
+  return await apiRequest(config);
+};
+

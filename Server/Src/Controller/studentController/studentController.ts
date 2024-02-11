@@ -55,8 +55,9 @@ const studentSignUp = async (req: Request, res: Response) => {
     const rlst = await User.create(student);
     if (rlst) {
       console.log("created");
+      return res.status(200).json({message: "Registered Successfully"});
+
     }
-    return res.json(rlst);
   } catch (error) {
     return res.status(500).json({ message: "An Error Occured" });
   }
@@ -70,7 +71,7 @@ const studentLogin = async (req: Request, res: Response) => {
     const user = await studentModel
       .findOne({ studentEmail })
       .where({ isBlocked: false });
-    console.log(user, "user******");
+      console.log(user, "user******");
 
     if (!user) {
       console.log("USER NOT DEFINED RETURNING ERROR");
@@ -96,12 +97,16 @@ const studentLogin = async (req: Request, res: Response) => {
         token,
       });
     } else {
+      console.log("errrrrrrr");
+
+      
       return res.status(401).json({ message: "Invalid Email or password" });
     }
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 const studentLogout = async (req: Request, res: Response) => {
   res.cookie("jwt", "", {
@@ -221,7 +226,8 @@ const firebaseGoogleAuthVerication = async (req: Request, res: Response) => {
     studentEmail: inComingEmailForVerification,
   });
   if (userExists) {
-    res.send({ userExist: true });
+    const token = generateToken(userExists._id)
+    res.send({ userExist: true, token });
   } else {
     const us = {
       studentEmail: inComingEmailForVerification,

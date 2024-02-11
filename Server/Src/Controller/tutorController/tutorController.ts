@@ -76,25 +76,38 @@ const loginInstructor = async (req: Request, res: Response) => {
     }
 }
 
+const tutorLogout = async (req: Request, res: Response) => {
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+  
+    return res.status(200).json({ message: "Tutor Logged Out" });
+  };
+
 
 const firebaseGoogleTutorAuthVerication = async (req: Request, res: Response) => {
-    const inComingEmailForVerification = req.query.email;
-    console.log(inComingEmailForVerification, "incoming email");
-    const userExists = await instructorModel.findOne({
-      instructorEmail: inComingEmailForVerification,
+    console.log(req.body,'this body body');
+    const {result} =req.body
+    const tutorExists = await instructorModel.findOne({
+      instructorEmail: result.user.email,
     });
-    if (userExists) {
-      res.send({ userExist: true });
+    if (tutorExists) {
+        const token = generateToken(tutorExists._id)
+     return res.send({ tutorExist: true, token });
     } else {
-      const us = {
-        instructorEmail: inComingEmailForVerification,
+      const data = {
+        instructorEmail:result.user.email,
+        instructorFirstName:result._tokenResponse.firstName,
+        instructorLastName:result._tokenResponse.lastName,
+        photo:result.user.photoURL
       };
-      const tutor = await Tutor.create(us);
+      const tutor = await Tutor.create(data);
       if (tutor) {
         const token = generateToken(tutor._id);
         console.log("hiiiii");
   
-        res.send({ userExist: true, token });
+       return res.send({ tutorExist: true, token });
       }
     }
   };
@@ -104,6 +117,7 @@ const firebaseGoogleTutorAuthVerication = async (req: Request, res: Response) =>
 export{ 
     instructorSignup, 
     loginInstructor,
+    tutorLogout,
     firebaseGoogleTutorAuthVerication
 }
 

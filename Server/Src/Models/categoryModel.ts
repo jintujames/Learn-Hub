@@ -3,7 +3,7 @@ import { Schema, Document, model, Model } from "mongoose";
 interface ICATEGORY extends Document {
   categoryName: string;
 
-  photo: string[];
+ 
 
   createdAt: Date;
   updatedAt: Date;
@@ -16,11 +16,7 @@ const categorySchema = new Schema<ICATEGORY>(
       required: true,
     },
     
-    photo: [
-      {
-        type: String,
-      },
-    ],
+    
 
     createdAt: {
       type: Date,

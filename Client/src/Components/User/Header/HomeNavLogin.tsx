@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate,} from 'react-router-dom';
 import { studentLogout } from '../../../utils/config/axios.Methode.post';
 import { logout } from '../../../Features/UserSlice/userSlice';
+import { useDispatch } from 'react-redux'; // Import useDispatch from react-redux
+
 
 function HomeNavLogin() {
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const dispatch = useDispatch()
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
   const navigate = useNavigate();
   useEffect(()=>{
    const data =  localStorage.getItem('Token')
@@ -19,17 +21,15 @@ function HomeNavLogin() {
       await studentLogout();
       localStorage.removeItem("Token")
       setIsLoggedIn(false);
-      dispatch(logout ())
-
-      navigate("/Login");  //Redirect to the login page after logout
+      dispatch(logout())
+      window.history.replaceState(null,'','/')
+      navigate("/");  
     } catch (error) {
       console.error("Logout failed:", error);
-      // Handle logout failure, such as displaying an error message
     }
   };
 
   const handleLogin = () => {
-    // Simulate successful login
        navigate('/Login')
   };
 
@@ -41,15 +41,7 @@ function HomeNavLogin() {
           <div className="flex h-9 items-center justify-between">
             <div className="flex items-center">
               <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-4">
-                  {/* Content for the first navbar */}
-                  <Link
-                    to="/tutorLogin"
-                    className="text-white hover:text-green-400 rounded-md px-3 py-2 text-sm font-medium ml-auto"
-                    >
-                    Become An Instructor
-                  </Link>
-                </div>
+                
               </div>
             </div>
             <div className="hidden md:block">
@@ -124,10 +116,10 @@ function HomeNavLogin() {
                       </div>
                     </div>
                   </div>
-                  <Link to="/" className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium">
+                  <Link to="/Home" className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium">
                     Home
                   </Link>
-                  <Link to="/" className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium">
+                  <Link to="/courses" className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium">
                     Courses
                   </Link>
                   <Link to="/" className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium">
@@ -162,56 +154,7 @@ function HomeNavLogin() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <header className="mt-0 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% ...">
-        <nav className="border-t-10">
-          <div className="container max-w flex items-center justify-between px-2 py-2 mx-auto">
-            {/* ... your navigation content */}
-          </div>
-        </nav>
-        <div className="container px-10 py-30 mx-auto">
-          <div className="items-center lg:flex">
-            <div className="flex w-full mt-6 lg:mt-0 lg:w-2/2">
-              <img
-                className="w-half object-contain"
-                src="public/Home screen.png"
-                alt="email illustration vector art"
-              />
-            </div>
-
-            <div className="w-full lg:w-1/2">
-              <div className="lg:max-w-lg">
-                <h1 className="text-3xl font-semibold text-gray-800 dark:text-white lg:text-4xl">
-                  Elevate Your E-Learning Journey Instantly.
-                </h1>
-                <br />
-                <p className="mt-3 text-yellow-300">
-                  Empower yourself with the knowledge and skills gained through online education! The key to your future!
-                </p>
-                <br />
-
-                <div className=" mt-3  flex  flex-row  flex-wrap">
-                  <input
-                    type="text"
-                    className=" text-gray-600  w-2/3  p-2  rounded-l-lg"
-                  />
-                  <button
-                    className=" p-2  w-1/3   rounded-r-lg  text-white hover: bg-blue-600"
-                    type="button"
-                  >
-                    Search Now
-                  </button>
-                </div>
-                <br />
-                <p className="mt-3 text-white">
-                  500K+ People already trusted us.{' '}
-                  <span className="underline text-yellow-300">View courses</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      
 
       {/* Main Content */}
       {/* ... (your existing code) */}

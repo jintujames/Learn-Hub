@@ -9,11 +9,15 @@ import instructorModel from "../../Models/instructorModel";
 const loginAdmin = async (req: Request, res: Response) => {
     try {
 
-        const adminEmail = "admin@gmail.com"
-        const adminPassword = 123456
+        const adminsEmail = "admin@gmail.com"
+        const adminsPassword = 123456
         const id = "ObjectId(65bb5e5f359e1fc0bbdd7e0f)"
-        const { email, password } = req.body;
-        if ( adminEmail == email && adminPassword == password) {
+        const { adminEmail, adminPassword } = req.body;
+
+        
+        
+        
+        if ( adminEmail == adminsEmail && adminPassword == adminsPassword) {
             const token = generateToken(id)
             return res.status(200).json({
                 id,
@@ -21,14 +25,22 @@ const loginAdmin = async (req: Request, res: Response) => {
                 token,
             })
         } else {
-            return res.status(400).json({
-                message: "please correct code"
-            })
+          return res.status(401).json({ message: "Invalid Email or password" });
+
         }
 
     } catch (error) {
-        return res.status(500).json({ message: "Internal Server Error" });
-      }
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+const adminLogout = async (req: Request, res: Response) => {
+  res.cookie('jwtAdmin','',{
+      httpOnly:true,
+      expires:new Date()
+  })
+  res.status(200).json({message:'Admin Logged Out'})
+
 }
 
 const getAllStudent = async (req: Request, res: Response) => {
@@ -122,6 +134,7 @@ const getAllCategory = async (req: Request, res: Response) => {
 
 export {
     loginAdmin,
+    adminLogout,
     getAllStudent,
     getAllInstructor,
     getAllCategory,

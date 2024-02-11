@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { signInTutor } from "../../../utils/api/api.Types";
 import { tutorLogin } from "../../../utils/config/axios.Methode.post";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,19 +7,43 @@ import { googleTutorAuthVerification } from "../../../utils/config/axios.Method.
 import { Auth } from "firebase/auth";
 import { authentication } from "../../../utils/config/firebase.config";
 import { useTutorValidate } from "../../../utils/validations/tutorLoginValidation";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../../Features/TutorSlice/tutorSlice";
+import { toast } from "react-toastify";
 
 function TutorLogin() {
-  const [instructorEmail, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { errors, handleSubmit, register } = useTutorValidate();
 
-  const handleLogin = async (data: signInTutor) => {
-    
-    await tutorLogin(data).then((rslt) => {
-      console.log(rslt, "response");
+  const { tutor } = useSelector((state: any) => state.tutor);
+
+  useEffect(() => {
+    if (tutor) {
+      console.log("tutor is here");
       navigate("/tutorProfile");
-    });
+    }
+  }, []);
+
+  const handleLogin = async (data: signInTutor) => {
+    try {
+      const response: any = await tutorLogin(data);
+
+      console.log(response, "response");
+      if (response.status === 200) {
+        console.log(response.data.token, "res");
+        dispatch(login(response.data.token));
+        localStorage.setItem("Token", `${response.data.token}`);
+        navigate("/", { replace: true });
+        navigate("/tutorProfile",{ replace: true });
+      } else {
+        if (response.response.status === 404) {
+          toast.error(response.response.data.message);
+        } else if (response.response.status === 401) {
+          toast.error(response.response.data.message);
+        }
+      }
+    } catch (error) {}
   };
 
   const googleSignInTutor = async (auth: Auth) => {
@@ -29,13 +53,14 @@ function TutorLogin() {
       console.log(response, "response");
       if (response.status && response.userEmail !== null) {
         try {
-          const res: any = await googleTutorAuthVerification(
-            response.userEmail
-          );
+          const res: any = await googleTutorAuthVerification(response);
+          console.log(res, "this is ressspoce from bakend ");
           if (res.status === 200) {
             console.log(res, "ressssssss");
-            if (res.data.userExist) {
-              navigate("/tutorProfile");
+            if (res.data.tutorExist) {
+              localStorage.setItem("Token", `${res.data.token}`);
+              dispatch(login(res.data.token));
+              navigate("/tutorProfile",{ replace: true });
             } else {
               console.log("user not exist");
             }

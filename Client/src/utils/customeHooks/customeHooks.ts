@@ -11,11 +11,12 @@ export const useGoogleSignIn = async (auth: Auth): Promise<any> => {
       console.log("promise entered");
       signInWithPopup(auth, provider)
         .then((result: UserCredential) => {
-          console.log("working");
+          console.log("working",result);
           resolve({
             status: true,
             userEmail: result.user.email,
             userProfileImageGooleUrl: result.user.photoURL,
+            userName:result.user.displayName,
             result:result
           });
         })

@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import LoginPage from "./Pages/Student/LoginPage"
 import SignUpPage from "./Pages/Student/SignUpPage"
 import TutorSignUpPage from "./Pages/Tutor/TutorSignUpPage";
@@ -16,8 +17,17 @@ import AdminTutorPage from "./Pages/Admin/AdminTutorPage";
 import AdminCategoryPage from "./Pages/Admin/AdminCategoryPage";
 import { ToastContainer } from "react-toastify";
 import NewPassword from "./Components/User/ForgetPswd/NewPassword";
+import { selectUser } from "./Features/UserSlice/userSlice";
+import { useSelector } from "react-redux";
+import CoursePage from "./Pages/Student/CoursePage";
+import 'react-toastify/dist/ReactToastify.css'
+import TutorPrivateRoute from "./Components/PrivateRouter/TutorPrivateRoute";
+
 
 function App() {
+
+  const user = useSelector(selectUser)
+
 
   return (
     <>
@@ -32,14 +42,18 @@ function App() {
         <Route path="/forget_password" element={<ForgetPasswordPage/>}/>
         <Route path="/otp_verify" element={<OtpPage/>}/>
         <Route path="/newPassword" element={<NewPassword/>}/>
+        <Route path="/courses" element={<CoursePage/>}/>
 
 
 
 
 
+        <Route element = {<TutorPrivateRoute />}>
+          <Route path="/tutorProfile" element={<TutorProfilePage/>}/>
+        </Route>
         <Route path="/tutorSignup" element={<TutorSignUpPage/>}/>
         <Route path="/tutorLogin" element={<TutorLoginPage/>}/>
-        <Route path="/tutorProfile" element={<TutorProfilePage/>}/>
+        
 
 
 

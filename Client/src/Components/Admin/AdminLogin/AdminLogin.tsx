@@ -1,22 +1,51 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { adminLogin } from '../../../utils/config/axios.Methode.post';
 import { signInAdmin } from '../../../utils/api/api.Types';
 import { adminValidate } from '../../../utils/validations/adminValidation';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../../Features/AdminSlice/adminSlice';
+import { toast } from 'react-toastify';
   
 function AdminLogin() {
   const [adminEmail, setEmail] = useState("");
   const [adminPassword, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   const { errors, handleSubmit, register } = adminValidate();
+
+  const { admin } = useSelector( (state:any) => state.admin)
+
+  useEffect ( () =>{
+    if(admin){
+      console.log("user is here");
+      
+      navigate('/adminDashboard')
+    }
+  },[])
 
   const handleLogin = async (data: signInAdmin) => {
    
-  
-    await adminLogin(data).then((rslt) => {
-      console.log(rslt, "response");
-      navigate('/adminDashboard');
-    });
+    try {
+      const response: any = await adminLogin(data);
+
+      if (response.status === 200) {
+        console.log(response.data.token, "res");
+        dispatch(login (response.data.token))
+        localStorage.setItem("Token", `${response.data.token}`);
+        navigate("/adminDashboard");
+      } else {
+        if (response.response.status === 401) {
+          toast.error(response.response.data.message)
+        }
+        else if (response.response.status === 500) {
+          toast.error(response.response.data.message)
+        
+        }
+      }
+      
+    } catch (error) {}
   };
   return (
     <>

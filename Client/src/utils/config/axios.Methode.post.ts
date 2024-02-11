@@ -14,7 +14,7 @@ export const studentSignUp = async (signUpPayload: signUpUser) => {
 };
 
 export const studentLogin = async (signInPayload: signInUser) => {
-  console.log(signInPayload);
+  console.log("signInPayload",signInPayload);
   
   try {
     const config: AxiosRequestConfig = {
@@ -68,6 +68,20 @@ export const tutorLogin =async (SignInPayload: signInTutor) => {
   return await apiRequest(config);
 }
 
+export const tutorLogout = async () => {
+  try {
+    const config: AxiosRequestConfig = {
+      method: 'POST',
+      url: 'api/v1/tutor/tutorLogout',
+      // You may include additional headers or data if required
+    };
+   
+    return await apiRequest(config); // You may handle the response as needed
+  } catch (error) {
+    throw error; // Handle any errors occurred during the API call
+  }
+};
+
 
 
 export const studentForgetPassword = async (forgetPasswordPayload: String ) => {
@@ -102,17 +116,23 @@ export const adminLogin = async (LoginPayload: signInAdmin) => {
   return await apiRequest(config);
 };
 
+export const adminLogout = async () => {
+  try {
+    const config: AxiosRequestConfig = {
+      method: 'POST',
+      url: 'api/v1/admin/adminLogout',
+      // You may include additional headers or data if required
+    };
+   
+    return await apiRequest(config); // You may handle the response as needed
+  } catch (error) {
+    throw error; // Handle any errors occurred during the API call
+  }
+};
 
 
 
-// export const googleAuth = async (LoginPayload: signInAdmin) => {
-//   const config: AxiosRequestConfig = {
-//     method: 'POST',
-//     url: `/admin/adminLogin`,
-//     data: LoginPayload,
-//   };
-//   return await apiRequest(config);
-// };
+
 
 
 

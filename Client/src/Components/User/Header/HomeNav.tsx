@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 function HomeNav() {
 
-  
   return (
     <>
       {/* First Navbar */}
@@ -106,19 +105,19 @@ function HomeNav() {
                     Home
                   </Link>
                   <Link
-                    to="#"
+                    to="/courses"
                     className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
                   >
                     Courses
                   </Link>
                   <Link
-                    to="#"
+                    to=""
                     className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
                   >
                     Blogs
                   </Link>
                   <Link
-                    to="#"
+                    to="/tutorSignup"
                     className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
                   >
                     Become An Instructor
@@ -133,7 +132,7 @@ function HomeNav() {
                 to={`/signup`}
                 className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... rounded-md px-4 py-2 text-sm font-medium"
               >
-                Register
+                Sign Up
               </Link>
               <Link
                 to={`/login`}

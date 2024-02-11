@@ -8,7 +8,7 @@ interface ITUTOR extends Document {
     instructorEmail : string;
     phone: string;
     password: string;
-    photo: string[];
+    photo: string;
     courses: mongoose.Schema.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
@@ -35,11 +35,11 @@ const instructorSchema = new Schema<ITUTOR>(
         },
         phone: {
             type: String,
-            required: true,
+           
         },
         password: {
             type: String,
-            required: true,
+            
         },
         photo: [
             {

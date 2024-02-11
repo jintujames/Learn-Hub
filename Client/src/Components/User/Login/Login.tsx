@@ -21,12 +21,10 @@ function Login() {
 
   useEffect ( () =>{
     if(user){
+      console.log("user is here");
       navigate('/Home')
     }
-  })
-
-  const userInfo = localStorage.getItem("Token")
-
+  },[])
   const handleLogin = async (validatedData: signInUser) => {
     console.log(validatedData, "validate");
     try {
@@ -37,13 +35,17 @@ function Login() {
         console.log(response.data.token, "res");
         dispatch(login (response.data.token))
         localStorage.setItem("Token", `${response.data.token}`);
-        navigate("/Home");
+        navigate("/Home",{replace:true});
       } else {
         if (response.response.status === 404) {
-          alert(response.response.data);
-          // UseSomthingWentWrong(response.response.data.message)
+          toast.error(response.response.data.message)
+        }
+        else if (response.response.status === 401) {
+          toast.error(response.response.data.message)
+        
         }
       }
+      
     } catch (error) {}
   };
 
@@ -55,11 +57,10 @@ function Login() {
         try {
           const res: any = await googleAuthVerification(response.userEmail);
           if (res.status === 200) {
-
             if (res.data.userExist) {
-              // dispatch(login (response.data.token))
-
-              navigate("/Home");
+              localStorage.setItem("Token", `${res.data.token}`);
+              dispatch(login (res.data.token))
+              navigate("/Home",{replace:true});
             } else {
               console.log("user not exist");
             }
@@ -162,7 +163,7 @@ function Login() {
                       type="submit"
                       className="mb-1.5 block w-full text-center text-white bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% hover:bg-gradient-to-r hover:from-indigo-700 hover:via-sky-700 hover:to-emerald-700 px-2 py-1.5 rounded-md"
                     >
-                      Sign in
+                      SIGN IN
                     </button>
                     
                   </div>

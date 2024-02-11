@@ -7,6 +7,7 @@ import {
     getAllCategory,
     getAllInstructor,
     addCategory,
+    adminLogout,
     
  } from "../../Controller/adminController/adminController";
 
@@ -14,6 +15,7 @@ import {
 
 adminRouter.post("/adminLogin", loginAdmin );
 adminRouter.get("/adminDashboard" );
+adminRouter.get("/", adminLogout );
 adminRouter.get("/adminStudent", getAllStudent);
 adminRouter.get("/adminTutor", getAllInstructor);
 adminRouter.post("/addCategory", addCategory)

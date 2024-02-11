@@ -5,7 +5,7 @@ function FeaturedCard() {
         <>
 
 {/* Featured Courses */}
-
+<br></br>
 <h1 className="text-center text-blue-600 font-medium mb-2">Featured Courses</h1>
            <br></br>
 <h4 className="text-center text-lg font-bold mb-2">Find Yours From The Featured</h4>
