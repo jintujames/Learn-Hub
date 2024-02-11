@@ -1,6 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 function TutorBio() {
+  const navigate = useNavigate()
+  const { tutor } = useSelector((state: any) => state.tutor);
+
+  useEffect(() => {
+    if (tutor) {
+      console.log("tutor is here");
+      navigate("/tutorProfile");
+    }
+  }, []);
+
   return (
     <>
   <section

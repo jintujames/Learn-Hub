@@ -2,10 +2,23 @@ import React, { useEffect, useState } from 'react'
 import '../AdminDashBoard/Header/dashBoard.css'
 import { logout } from '../../../Features/AdminSlice/adminSlice';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { adminLogout } from '../../../utils/config/axios.Methode.post';
 
 function AdminDashboard() {  
+
+  const navigate = useNavigate()
+
+  const { admin } = useSelector( (state:any) => state.admin)
+
+  useEffect ( () =>{
+    if(admin){
+      console.log("user is here");
+      
+      navigate('/adminDashboard')
+    }
+  },[])
+
   
   return (
     <>

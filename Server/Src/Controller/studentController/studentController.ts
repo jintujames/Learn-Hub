@@ -226,8 +226,7 @@ const firebaseGoogleAuthVerication = async (req: Request, res: Response) => {
     studentEmail: inComingEmailForVerification,
   });
   if (userExists) {
-    const token = generateToken(userExists._id)
-    res.send({ userExist: true, token });
+    res.send({ userExist: true });
   } else {
     const us = {
       studentEmail: inComingEmailForVerification,
@@ -241,6 +240,7 @@ const firebaseGoogleAuthVerication = async (req: Request, res: Response) => {
     }
   }
 };
+
 
 export {
   studentSignUp,

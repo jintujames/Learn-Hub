@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 
 function AdminCategory() {
-  const [openModal, setOpenModal] = useState(false)
   return (
     <>
       {/* component */}
@@ -36,16 +35,16 @@ function AdminCategory() {
           </tbody>
         </table>
 
-        <div className="flex space-x-4">
+     
           <>
-            <button onClick={()=> setOpenModal(true)}
+            <button 
               type="button"
               className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               data-hs-overlay="#hs-focus-management-modal" 
             >
               Open modal
             </button>
-            {openModal && 
+           
             <div
             id="hs-focus-management-modal"
             className="hs-overlay z-50 hidden w-full h-full fixed top-0 start-0 overflow-x-hidden overflow-y-auto pointer-events-none"
@@ -112,10 +111,9 @@ function AdminCategory() {
               </div>
             </div>
           </div>
-            }
+            
           </>
         </div>
-      </div>
     </>
   );
 }

@@ -21,7 +21,7 @@ function AdminLogin() {
     if(admin){
       console.log("user is here");
       
-      navigate('/adminDashboard')
+      navigate('/adminDashboard',{ replace: true })
     }
   },[])
 
@@ -34,7 +34,7 @@ function AdminLogin() {
         console.log(response.data.token, "res");
         dispatch(login (response.data.token))
         localStorage.setItem("Token", `${response.data.token}`);
-        navigate("/adminDashboard");
+        navigate("/adminDashboard",{ replace: true });
       } else {
         if (response.response.status === 401) {
           toast.error(response.response.data.message)

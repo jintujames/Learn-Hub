@@ -87,7 +87,7 @@ function AdminSidebar() {
                 <span className="mx-2 text-sm font-medium">Blog</span>
               </Link>
               <Link onClick={handleLogout}
-                to="/"
+                to="/adminLogin"
                 className="flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
               >
                 🚪

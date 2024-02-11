@@ -14,7 +14,7 @@ function Otp() {
       const res:any=await verifyOTP(otp)
       console.log(res);
       if(res.status){
-        navigate('/newpassword')
+        navigate('/newpassword',{replace:true})
       }
       
     } catch (error) {
@@ -52,7 +52,7 @@ function Otp() {
             {/* Form */}
             <form  className="mt-4" onSubmit={(e)=>handleSubmit(e)}>
   <div className="mb-3">
-    <label className="mb-2 block text-xs font-semibold">Email Address</label>
+    <label className="mb-2 block text-xs font-semibold">Enter Otp</label>
     <input
       type="text"
       placeholder="Enter your email"

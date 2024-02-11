@@ -3,27 +3,40 @@ import { useState } from 'react';
 import { Link, useNavigate,} from 'react-router-dom';
 import { studentLogout } from '../../../utils/config/axios.Methode.post';
 import { logout } from '../../../Features/UserSlice/userSlice';
-import { useDispatch } from 'react-redux'; // Import useDispatch from react-redux
+import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch from react-redux
 
 
 function HomeNavLogin() {
   const dispatch = useDispatch()
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
   const navigate = useNavigate();
+
+  const { user } = useSelector( (state:any) => state.user)
+
+  useEffect ( () =>{
+    if(user){
+      console.log("user is here");
+      navigate('/Home',)
+    }
+  },[])
+
   useEffect(()=>{
    const data =  localStorage.getItem('Token')
    if(typeof data === "string"){
       setIsLoggedIn(true)
    }
   },[isLoggedIn])
+  
+
+  
   const handleLogout = async () => {
     try {
       await studentLogout();
       localStorage.removeItem("Token")
       setIsLoggedIn(false);
       dispatch(logout())
-      window.history.replaceState(null,'','/')
-      navigate("/");  
+      // window.history.replaceState(null,'','/')
+      navigate("/",{replace:true});  
     } catch (error) {
       console.error("Logout failed:", error);
     }

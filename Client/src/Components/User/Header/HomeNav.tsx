@@ -1,7 +1,19 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 function HomeNav() {
+
+  const navigate = useNavigate()
+
+  const { user } = useSelector( (state:any) => state.user)
+
+  useEffect ( () =>{
+    if(user){
+      console.log("user is here");
+      navigate('/Home')
+    }
+  },[])
 
   return (
     <>
@@ -111,7 +123,7 @@ function HomeNav() {
                     Courses
                   </Link>
                   <Link
-                    to=""
+                    to="/courses"
                     className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
                   >
                     Blogs

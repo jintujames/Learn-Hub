@@ -8,7 +8,7 @@ import { useGoogleSignIn } from "../../../utils/customeHooks/customeHooks";
 import { Auth } from "firebase/auth";
 import { googleTutorAuthVerification } from "../../../utils/config/axios.Method.Get";
 import { authentication } from "../../../utils/config/firebase.config";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../../Features/TutorSlice/tutorSlice";
 
 function TutorRegister() {
@@ -24,6 +24,15 @@ function TutorRegister() {
     password: string;
   };
 
+  const { tutor } = useSelector((state: any) => state.tutor);
+
+  useEffect(() => {
+    if (tutor) {
+      console.log("tutor is here");
+      navigate("/tutorLogin",{ replace: true });
+    }
+  }, []);
+
   const googleSignInTutor = async (auth: Auth) => {
     try {
       // useGooglesignIn is custom hook that handles all firebase related config
@@ -38,7 +47,7 @@ function TutorRegister() {
             if (res.data.tutorExist) {
               dispatch(login(res.data.token));
               localStorage.setItem("Token", `${res.data.token}`);
-              navigate("/tutorProfile",{ replace: true });
+              navigate("/tutorLogin",{ replace: true });
             } else {
               console.log("user not exist");
             }
@@ -59,14 +68,14 @@ function TutorRegister() {
       console.log(response, "response");
 
       if (response.status === 200) {
-        navigate("/", { replace: true });
-        navigate("/tutorProfile",{ replace: true });
+        // navigate("/", { replace: true });
+        navigate("/tutorLogin",{ replace: true });
       }
     });
   };
 
   const handleLogin = () => {
-    navigate("/", { replace: true });
+    // navigate("/", { replace: true });
     navigate("/tutorLogin");
   };
 
@@ -83,7 +92,7 @@ function TutorRegister() {
           >
             <img
               className="w-full h-full bg-center bg-no-repeat bg-cover rounded-l-md"
-              src="public/3D_Girl_with_tablet_and_working_process_on_desktop__1_-removebg-preview.png"
+              src="public/Kody_rabatowe_i_kupony_do_Twoich_ulubionych_sklepów_-removebg-preview (1).png"
               alt="Login Banner"
             />
           </div>

@@ -21,7 +21,7 @@ function TutorLogin() {
   useEffect(() => {
     if (tutor) {
       console.log("tutor is here");
-      navigate("/tutorProfile");
+      navigate("/tutorProfile",{ replace: true });
     }
   }, []);
 
@@ -34,7 +34,7 @@ function TutorLogin() {
         console.log(response.data.token, "res");
         dispatch(login(response.data.token));
         localStorage.setItem("Token", `${response.data.token}`);
-        navigate("/", { replace: true });
+        // navigate("/", { replace: true });
         navigate("/tutorProfile",{ replace: true });
       } else {
         if (response.response.status === 404) {

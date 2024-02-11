@@ -22,7 +22,7 @@ function Login() {
   useEffect ( () =>{
     if(user){
       console.log("user is here");
-      navigate('/Home')
+      navigate('/Home',{replace:true})
     }
   },[])
   const handleLogin = async (validatedData: signInUser) => {

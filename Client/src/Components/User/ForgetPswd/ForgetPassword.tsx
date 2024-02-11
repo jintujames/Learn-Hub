@@ -24,7 +24,7 @@ function ForgetPassword() {
         password: '',
       });
 
-      navigate('/otp_verify');
+      navigate('/otp_verify', {replace:true});
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(error.message);

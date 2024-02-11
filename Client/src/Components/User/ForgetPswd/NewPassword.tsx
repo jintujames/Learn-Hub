@@ -21,7 +21,7 @@ const handleSettingNewPassword=async (data:settingNewPasswordType)=>{
     console.log(response,"yyyyy");
     
     if (response.status === 200) {
-      navigate("/login");
+      navigate("/login", {replace:true});
     }
   });
   
