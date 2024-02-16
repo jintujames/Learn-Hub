@@ -15,7 +15,7 @@ const adminSlice = createSlice({
     login: (state, action: PayloadAction<string>) => {
       state.admin = action.payload;
     },
-   
+
     logout: (state) => {
       state.admin = null;
     },

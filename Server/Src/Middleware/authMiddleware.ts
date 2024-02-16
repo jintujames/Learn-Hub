@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
-import User from "../Models/studentModel"
+import User from "../Models/studentModel";
 import * as dotenv from "dotenv";
 import { Document } from "mongoose";
 dotenv.config();

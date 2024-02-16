@@ -1,119 +1,333 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { addCategory, editAdminCategory } from "../../../utils/config/axios.Methode.post";
+import { addAdminCategory } from "../../../utils/api/api.Types";
+import { admingetCategory } from "../../../utils/config/axios.Method.Get";
+import { deleteAdminCategory } from "../../../utils/config/axios.Method.Delete";
+
 
 
 function AdminCategory() {
+  const navigate = useNavigate();
+
+  const [data, setData]:any = useState([]);
+
+  const [category, setCategory] = useState<addAdminCategory>({
+    categoryName: "",
+  });
+
+  const [editModalIndex,setEditModalIndex]:any=useState(null)
+  const [editCategory, setEditCategory] =useState<any>({
+    categoryName: "",
+  });
+
+  const fetchData = async () => {
+    try {
+      const result: any = await admingetCategory();
+      console.log(result.data.categoryDetails,'PPPP');
+      setData(result.data.categoryDetails);
+
+      
+    } catch (error) {
+      // Handle the error appropriately, e.g., log it or show an error message.
+      console.error("Error during admin get all tutors:", error);
+    }
+  };
+
+  useEffect(()=>{
+    console.log('thisd si data',data);
+    
+  },[data])
+  useEffect(() => {
+    fetchData();
+    
+  }, [data]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModal,setIsEditModal]=useState(false)
+
+  const openEditModal=(i:any)=>{
+    setEditModalIndex(i)
+    setEditCategory({categoryName : data[i].categoryName})
+    setIsEditModal(true)
+    
+  }
+  const closeEditModal =()=>{
+
+    setEditModalIndex(null)
+    setIsEditModal(false)
+  }
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  
+
+  const handleAddCategory = async () => {
+    await addCategory(category).then((response: any) => {
+      if (response.status === 200) {
+        fetchData()
+        navigate("/adminCategory");
+      } else{
+        toast.success(response.data.message)
+      }
+    });
+  };
+
+  const handleEditCategory = async () => {
+    const id=data[editModalIndex]._id
+   await editAdminCategory(editCategory,id).then((res:any)=>{  
+    if (res.status === 200) {
+      toast.success(res.data.message)
+
+      fetchData()
+      navigate("/adminCategory");
+      
+    }else{
+      toast.error(res.response.data.error)
+    }
+   })
+  };
+
+
+ 
+  
   return (
     <>
-      {/* component */}
       <div className="md:px-10 py-8 w-full mr-4 flex justify-center items-center">
         {/* <div className="shadow overflow-hidden rounded border-b border-gray-200"> */}
-        <table className="w-full lg:w-1/3 xl:w-1/2 bg-white border border-gray-300 rounded-md">
+        <table className="w-full lg:w-3/6 xl:w-2/2 bg-white border border-gray-300 rounded-md">
           <thead className="bg-gray-800 text-white">
             <tr>
               <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
                 Category Name
               </th>
-              <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
+              <th className="text-center py-3 px-4 uppercase font-semibold text-sm">
                 Action
               </th>
             </tr>
           </thead>
           <tbody className="text-gray-700">
-            <tr>
-              <td className="w-1/3 text-left py-3 px-4">
-                category
-              </td>
-              <td className="text-left py-3 px-4 flex space-x-4">
-                <button className="px-5 py-1 bg-red-500 hover:bg-yellow-600 text-white text-sm font-medium ">
-                  Edit
-                </button>
-                <button className="px-5 py-1 bg-green-500 hover:bg-yellow-600 text-white text-sm font-medium ">
-                  Delete
-                </button>
-              </td>
-            </tr>
+            {data?.map((data:any, index:any) => (
+              <tr key={index}>
+                <td className="w-1/3 text-left py-3 px-4">
+                  {(data as { categoryName?: string })?.categoryName}
+                </td>
+
+                <td className="text-center py-6 px-4">
+                <button 
+                          onClick={()=>openEditModal(index)}
+
+                className="px-5 py-2 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... text-white text-sm uppercase font-medium">
+                    Edit
+                  </button>
+
+                  
+
+                  <button 
+                  // onClick={() => {
+                  //   handleDeleteCategory();
+                  // }}
+                  
+                  className="px-5 py-2 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... text-white text-sm uppercase font-medium ml-6">
+                    Delete
+                  </button>
+                </td>
+                
+
+              </tr>
+              
+            ))}
           </tbody>
         </table>
-
-     
-          <>
-            <button 
-              type="button"
-              className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-              data-hs-overlay="#hs-focus-management-modal" 
-            >
-              Open modal
-            </button>
-           
-            <div
-            id="hs-focus-management-modal"
-            className="hs-overlay z-50 hidden w-full h-full fixed top-0 start-0 overflow-x-hidden overflow-y-auto pointer-events-none"
+        {/* </div> */}
+      </div>
+      {isEditModal && (
+        <div
+          className="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
+          style={{ background: "rgba(0,0,0,.7)" }}
+          onClick={closeEditModal}
+        >
+          <div
+            className="border border-teal-500 shadow-lg modal-container bg-white w-11/12 md:max-w-md mx-auto rounded z-50 overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-              <div className="flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto">
-                <div className="flex justify-between items-center py-3 px-4 border-b">
-                  <h3 className="font-bold text-gray-800">
-                    Modal title
-                  </h3>
-                  <button
-                    type="button"
-                    className="flex justify-center items-center w-7 h-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-                    data-hs-overlay="#hs-focus-management-modal"
+            <div className="modal-content py-4 text-left px-6">
+              <div className="flex justify-between items-center pb-3">
+                <p className="text-2xl font-bold">Edit Category</p>
+                <div
+                  className="modal-close cursor-pointer z-50"
+                  onClick={closeEditModal}
+                >
+                  <svg
+                    className="fill-current text-black"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={18}
+                    height={18}
+                    viewBox="0 0 18 18"
                   >
-                    <span className="sr-only">Close</span>
-                    <svg
-                      className="flex-shrink-0 w-4 h-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={24}
-                      height={24}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M18 6 6 18" />
-                      <path d="m6 6 12 12" />
-                    </svg>
-                  </button>
+                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                  </svg>
                 </div>
-                <div className="p-4 overflow-y-auto">
-                  <label
-                    htmlFor="input-label"
-                    className="block text-sm font-medium mb-2"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="input-label"
-                    className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="you@site.com"
-                    // autoFocus=""
-                  />
-                </div>
-                <div className="flex justify-end items-center gap-x-2 py-3 px-4 border-t">
-                  <button
-                    type="button"
-                    className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                    data-hs-overlay="#hs-focus-management-modal"
-                  >
-                    Close
-                  </button>
-                  <button
-                    type="button"
-                    className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                  >
-                    Save changes
-                  </button>
-                </div>
+              </div>
+              <div className="my-5">
+                <input
+                  onChange={(e) =>
+                    setEditCategory({ categoryName : e.target.value })
+                  }
+                  value={editCategory.categoryName}
+                  type="text"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter your text here"
+                />
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={() => {
+                    closeEditModal(); // Close the modal without creating a category
+                  }}
+                  className="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    handleEditCategory();
+                    closeEditModal(); // Close the modal after confirming
+                  }}
+                  type="submit"
+                  className="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400"
+                >
+                  Confirm
+                </button>
               </div>
             </div>
           </div>
-            
-          </>
         </div>
+      )}
+      <style>
+        {`
+          .animated {
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+          }
+          .animated.faster {
+            -webkit-animation-duration: 500ms;
+            animation-duration: 500ms;
+          }
+          .fadeIn {
+            -webkit-animation-name: fadeIn;
+            animation-name: fadeIn;
+          }
+          .fadeOut {
+            -webkit-animation-name: fadeOut;
+            animation-name: fadeOut;
+          }
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+          @keyframes fadeOut {
+            from {
+              opacity: 1;
+            }
+            to {
+              opacity: 0;
+            }
+          }
+        `}
+      </style>
+      <div className="mt-4">
+        <button
+          onClick={openModal}
+          className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 ... hover:from-pink-500 hover:to-yellow-500 ... text-white px-14 py-1 rounded font-semibold text-sm uppercase"
+        >
+          Add Category
+        </button>
+      </div>
+
+      {isModalOpen && (
+        <div
+          className="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
+          style={{ background: "rgba(0,0,0,.7)" }}
+          onClick={closeModal}
+        >
+          <div
+            className="border border-teal-500 shadow-lg modal-container bg-white w-11/12 md:max-w-md mx-auto rounded z-50 overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-content py-4 text-left px-6">
+              <div className="flex justify-between items-center pb-3">
+                <p className="text-2xl font-bold">Add Category</p>
+                <div
+                  className="modal-close cursor-pointer z-50"
+                  onClick={closeModal}
+                >
+                  <svg
+                    className="fill-current text-black"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={18}
+                    height={18}
+                    viewBox="0 0 18 18"
+                  >
+                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div className="my-5">
+                <input
+                  onChange={(e) =>
+                    setCategory({ categoryName: e.target.value })
+                  }
+                  type="text"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter your text here"
+                />
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={() => {
+                    closeModal(); // Close the modal without creating a category
+                  }}
+                  className="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    handleAddCategory();
+                    closeModal(); // Close the modal after confirming
+                  }}
+                  type="submit"
+                  className="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      
+
+
+
+      
     </>
   );
 }

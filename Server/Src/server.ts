@@ -6,7 +6,7 @@ import { studentRouter } from "./Routes/studentRouter/studentRouter";
 import env from "dotenv";
 import session, { SessionOptions,MemoryStore,SessionData } from "express-session";
 import cors from "cors"
-import tutorRouter from "./Routes/tutorRouter/tutorrouter";
+import tutorRouter from "./Routes/tutorRouter/tutorRouter";
 env.config()
  
 

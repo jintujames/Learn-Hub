@@ -1,30 +1,30 @@
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { studentForgetPassword } from '../../../utils/config/axios.Methode.post'; // Adjust the path accordingly
-import React from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { studentForgetPassword } from "../../../utils/config/axios.Methode.post"; // Adjust the path accordingly
+import React from "react";
+import axios from "axios";
 
 function ForgetPassword() {
-  const [studentEmail, setEmail] = useState('');
+  const [studentEmail, setEmail] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const trimmedEmail = studentEmail.trim();
 
-    if (trimmedEmail === '') {
-      toast.error('Please fill in all required fields.');
+    if (trimmedEmail === "") {
+      toast.error("Please fill in all required fields.");
       return;
     }
 
     try {
       await studentForgetPassword({
         studentEmail: trimmedEmail,
-        password: '',
+        password: "",
       });
 
-      navigate('/otp_verify', {replace:true});
+      navigate("/otp_verify", { replace: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(error.message);
@@ -33,17 +33,16 @@ function ForgetPassword() {
         if (error.response) {
           console.log(error.response.data); // Log more details for debugging
         } else if (error.request) {
-          console.log('Network error:', error.request);
+          console.log("Network error:", error.request);
         }
       } else {
         console.error(error);
       }
 
-      toast.error('An error occurred. Please check the console for details.');
+      toast.error("An error occurred. Please check the console for details.");
     }
   };
 
-  
   // JSX content
   return (
     <>
@@ -69,14 +68,18 @@ function ForgetPassword() {
           >
             <div className="w-72">
               {/* Heading */}
-              <h1 className="text-xl text-center font-semibold">Forgot Password</h1>
+              <h1 className="text-xl text-center font-semibold">
+                Forgot Password
+              </h1>
               <small className="text-gray-500">
                 Please Enter Your Email Address To Receive a Verification Code
               </small>
               {/* Form */}
               <form className="mt-4" onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label className="mb-2 block text-xs font-semibold">Email Address</label>
+                  <label className="mb-2 block text-xs font-semibold">
+                    Email Address
+                  </label>
                   <input
                     type="email"
                     placeholder="Enter your email"

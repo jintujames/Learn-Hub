@@ -1,6 +1,6 @@
-import React from 'react'
-import { Navbar } from 'react-bootstrap'
-import AdminLogin from '../../Components/Admin/AdminLogin/AdminLogin'
+import React from "react";
+import { Navbar } from "react-bootstrap";
+import AdminLogin from "../../Components/Admin/AdminLogin/AdminLogin";
 
 function AdminLoginPage() {
   return (
@@ -8,9 +8,7 @@ function AdminLoginPage() {
       <Navbar />
       <AdminLogin />
     </>
-  )
+  );
 }
 
-export default AdminLoginPage
-
-
+export default AdminLoginPage;

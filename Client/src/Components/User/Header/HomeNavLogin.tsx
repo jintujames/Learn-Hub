@@ -1,49 +1,46 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { Link, useNavigate,} from 'react-router-dom';
-import { studentLogout } from '../../../utils/config/axios.Methode.post';
-import { logout } from '../../../Features/UserSlice/userSlice';
-import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch from react-redux
-
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { studentLogout } from "../../../utils/config/axios.Methode.post";
+import { logout } from "../../../Features/UserSlice/userSlice";
+import { useDispatch, useSelector } from "react-redux"; // Import useDispatch from react-redux
 
 function HomeNavLogin() {
-  const dispatch = useDispatch()
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const dispatch = useDispatch();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const { user } = useSelector( (state:any) => state.user)
+  const { user } = useSelector((state: any) => state.user);
 
-  useEffect ( () =>{
-    if(user){
+  useEffect(() => {
+    if (user) {
       console.log("user is here");
-      navigate('/Home',)
+      navigate("/Home");
     }
-  },[])
+  }, []);
 
-  useEffect(()=>{
-   const data =  localStorage.getItem('Token')
-   if(typeof data === "string"){
-      setIsLoggedIn(true)
-   }
-  },[isLoggedIn])
-  
+  useEffect(() => {
+    const data = localStorage.getItem("Token");
+    if (typeof data === "string") {
+      setIsLoggedIn(true);
+    }
+  }, [isLoggedIn]);
 
-  
   const handleLogout = async () => {
     try {
       await studentLogout();
-      localStorage.removeItem("Token")
+      localStorage.removeItem("Token");
       setIsLoggedIn(false);
-      dispatch(logout())
+      dispatch(logout());
       // window.history.replaceState(null,'','/')
-      navigate("/",{replace:true});  
+      navigate("/", { replace: true });
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
 
   const handleLogin = () => {
-       navigate('/Login')
+    navigate("/Login");
   };
 
   return (
@@ -53,9 +50,7 @@ function HomeNavLogin() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-9 items-center justify-between">
             <div className="flex items-center">
-              <div className="hidden md:block">
-                
-              </div>
+              <div className="hidden md:block"></div>
             </div>
             <div className="hidden md:block">
               <div className="ml-4 flex items-center md:ml-6">
@@ -94,9 +89,18 @@ function HomeNavLogin() {
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
                   {/* Content for the second navbar */}
-                  <Link to="/Home" className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src="public/LearnHub Logo.png" className="h-12" alt="Learn Hub Logo" />
-                    <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">Learn Hub</span>
+                  <Link
+                    to="/Home"
+                    className="flex items-center space-x-3 rtl:space-x-reverse"
+                  >
+                    <img
+                      src="public/LearnHub Logo.png"
+                      className="h-12"
+                      alt="Learn Hub Logo"
+                    />
+                    <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">
+                      Learn Hub
+                    </span>
                   </Link>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
@@ -129,16 +133,28 @@ function HomeNavLogin() {
                       </div>
                     </div>
                   </div>
-                  <Link to="/Home" className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium">
+                  <Link
+                    to="/Home"
+                    className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
+                  >
                     Home
                   </Link>
-                  <Link to="/courses" className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium">
+                  <Link
+                    to="/courses"
+                    className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
+                  >
                     Courses
                   </Link>
-                  <Link to="/" className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium">
+                  <Link
+                    to="/"
+                    className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
+                  >
                     Blogs
                   </Link>
-                  <Link to="/tutorSignup" className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium">
+                  <Link
+                    to="/tutorSignup"
+                    className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
+                  >
                     Become An Instructor
                   </Link>
                 </div>
@@ -147,18 +163,24 @@ function HomeNavLogin() {
 
             {/* Register and Log In Buttons */}
             <div className="space-x-2">
-      {isLoggedIn ? (
-        // Render logout button if user is logged in
-        <button onClick={handleLogout} className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... rounded-md px-4 py-2 text-sm font-medium">
-          Logout
-        </button>
-      ) : (
-        // Render login button if user is not logged in
-        <button onClick={handleLogin} className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... rounded-md px-4 py-2 text-sm font-medium">
-          Login
-        </button>
-      )}
-    </div>
+              {isLoggedIn ? (
+                // Render logout button if user is logged in
+                <button
+                  onClick={handleLogout}
+                  className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... rounded-md px-4 py-2 text-sm font-medium"
+                >
+                  Logout
+                </button>
+              ) : (
+                // Render login button if user is not logged in
+                <button
+                  onClick={handleLogin}
+                  className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... rounded-md px-4 py-2 text-sm font-medium"
+                >
+                  Login
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="-mr-2 flex md:hidden">
@@ -167,8 +189,6 @@ function HomeNavLogin() {
         </div>
       </nav>
 
-      
-
       {/* Main Content */}
       {/* ... (your existing code) */}
     </>
@@ -176,7 +196,6 @@ function HomeNavLogin() {
 }
 
 export default HomeNavLogin;
-function dispatch(arg0: { payload: undefined; type: "user/logout"; }) {
-  throw new Error('Function not implemented.');
+function dispatch(arg0: { payload: undefined; type: "user/logout" }) {
+  throw new Error("Function not implemented.");
 }
-

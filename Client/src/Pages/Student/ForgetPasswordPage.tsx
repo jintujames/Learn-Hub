@@ -1,15 +1,14 @@
-import React from 'react'
-import { Navbar } from 'react-bootstrap'
-import ForgetPassword from '../../Components/User/ForgetPswd/ForgetPassword'
+import React from "react";
+import { Navbar } from "react-bootstrap";
+import ForgetPassword from "../../Components/User/ForgetPswd/ForgetPassword";
 
 function ForgetPasswordPage() {
   return (
     <>
-    <Navbar />
-    <ForgetPassword />
+      <Navbar />
+      <ForgetPassword />
     </>
-  )
+  );
 }
 
-export default ForgetPasswordPage
-
+export default ForgetPasswordPage;

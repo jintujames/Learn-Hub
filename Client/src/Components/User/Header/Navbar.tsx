@@ -3,7 +3,7 @@ import React from 'react';
 const Navbar: React.FC = () => {
   return (
 <nav className="border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-9">
+      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-3">
           <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="public/LearnHub Logo.png" className="h-12" alt="Learn Hub Logo" />
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Learn Hub</span>

@@ -7,8 +7,8 @@ const transporter = nodemailer.createTransport({
   secure: false,
   requireTLS: true,
   auth: {
-    user: 'jintuuu14@gmail.com',
-    pass: 'rkodpchkotisbfhf'
+    user: "jintuuu14@gmail.com",
+    pass: "rkodpchkotisbfhf",
   },
 });
 interface MailResult {
@@ -29,13 +29,12 @@ const sendMail = (userMail: string): Promise<MailResult> => {
 
     transporter.sendMail(mailOptions, (error: Error | null) => {
       if (error) {
-        console.error('this is error  ',error,'PPPPP');
-      resolve({ status: false })
-      
+        console.error("this is error  ", error, "PPPPP");
+        resolve({ status: false });
       } else {
-        resolve({ status: true , otp: otp})
+        resolve({ status: true, otp: otp });
       }
-    })
+    });
   });
 };
 

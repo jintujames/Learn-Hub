@@ -21,7 +21,7 @@ function TutorLogin() {
   useEffect(() => {
     if (tutor) {
       console.log("tutor is here");
-      navigate("/tutorProfile",{ replace: true });
+      navigate("/tutorProfile", { replace: true });
     }
   }, []);
 
@@ -35,7 +35,7 @@ function TutorLogin() {
         dispatch(login(response.data.token));
         localStorage.setItem("Token", `${response.data.token}`);
         // navigate("/", { replace: true });
-        navigate("/tutorProfile",{ replace: true });
+        navigate("/tutorProfile", { replace: true });
       } else {
         if (response.response.status === 404) {
           toast.error(response.response.data.message);
@@ -60,7 +60,7 @@ function TutorLogin() {
             if (res.data.tutorExist) {
               localStorage.setItem("Token", `${res.data.token}`);
               dispatch(login(res.data.token));
-              navigate("/tutorProfile",{ replace: true });
+              navigate("/tutorProfile", { replace: true });
             } else {
               console.log("user not exist");
             }

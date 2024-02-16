@@ -1,8 +1,10 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useSettingNewPassword } from '../../../utils/validations/newPasswordValidation'
-import { reSetPassword, studentForgetPassword } from '../../../utils/config/axios.Methode.post';
-
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSettingNewPassword } from "../../../utils/validations/newPasswordValidation";
+import {
+  reSetPassword,
+  studentForgetPassword,
+} from "../../../utils/config/axios.Methode.post";
 
 export type settingNewPasswordType = {
   newPassword: string;
@@ -10,24 +12,20 @@ export type settingNewPasswordType = {
 };
 
 function NewPassword() {
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const {errors,handleSubmit,register} = useSettingNewPassword()
+  const { errors, handleSubmit, register } = useSettingNewPassword();
 
+  const handleSettingNewPassword = async (data: settingNewPasswordType) => {
+    console.log(data, "datatatatat after validation");
+    await reSetPassword(data.newPassword).then((response: any) => {
+      console.log(response, "yyyyy");
 
-const handleSettingNewPassword=async (data:settingNewPasswordType)=>{
-  console.log(data,"datatatatat after validation");
-  await reSetPassword(data.newPassword).then((response: any) => {
-    console.log(response,"yyyyy");
-    
-    if (response.status === 200) {
-      navigate("/login", {replace:true});
-    }
-  });
-  
-
-}
-
+      if (response.status === 200) {
+        navigate("/login", { replace: true });
+      }
+    });
+  };
 
   return (
     <>
@@ -56,34 +54,41 @@ const handleSettingNewPassword=async (data:settingNewPasswordType)=>{
                 {/* Heading */}
                 <h1 className="text-xl font-semibold">Create New Password</h1>
                 <small className="text-gray-400">
-                  Your New Password Must be Different From Previously Used Password
+                  Your New Password Must be Different From Previously Used
+                  Password
                 </small>
                 {/* Form */}
-                <form onSubmit={handleSubmit(handleSettingNewPassword)} className="mt-4">
+                <form
+                  onSubmit={handleSubmit(handleSettingNewPassword)}
+                  className="mt-4"
+                >
                   <div className="mb-3">
-                  {errors.newPassword ? (
-                                    <span className="text-sm font-normal text-red-600 ">{errors.newPassword?.message}</span>
-                                ) : (
-                                  <label className="mb-2 block text-xs font-semibold">
-                                    New password
-                                </label>
-                                )}
+                    {errors.newPassword ? (
+                      <span className="text-sm font-normal text-red-600 ">
+                        {errors.newPassword?.message}
+                      </span>
+                    ) : (
+                      <label className="mb-2 block text-xs font-semibold">
+                        New password
+                      </label>
+                    )}
                     <input
-                    {...register('newPassword')}
+                      {...register("newPassword")}
                       type="password"
                       placeholder="*****"
                       className="block w-full rounded-md border border-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% focus:border-gradient-to-r focus:from-indigo-700 focus:via-sky-700 focus:to-emerald-700 focus:outline-none focus:ring-1 focus:ring-gradient-200 py-1 px-1.5 text-gray-500"
                     />
-                    
                   </div>
                   <div className="mb-3">
-                  {errors.confirmPassword ? (
-                                    <span className="text-sm font-normal text-red-600 ">{errors.confirmPassword?.message}</span>
-                                ) : (
-                                  <label className="mb-2 block text-xs font-semibold">
-                                    Confirm password
-                                </label>
-                                )}
+                    {errors.confirmPassword ? (
+                      <span className="text-sm font-normal text-red-600 ">
+                        {errors.confirmPassword?.message}
+                      </span>
+                    ) : (
+                      <label className="mb-2 block text-xs font-semibold">
+                        Confirm password
+                      </label>
+                    )}
                     <input
                       type="text"
                       {...register("confirmPassword")}
@@ -100,26 +105,23 @@ const handleSettingNewPassword=async (data:settingNewPasswordType)=>{
                   </div>
                   <div className="mb-3">
                     <button
-                    type='submit'
+                      type="submit"
                       className="mb-1.5 block w-full text-center text-white bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% hover:bg-gradient-to-r hover:from-indigo-700 hover:via-sky-700 hover:to-emerald-700 px-2 py-1.5 rounded-md"
                     >
                       Save
                     </button>
-                    
                   </div>
                 </form>
 
                 {/* Footer */}
-                <div className="text-center">
-                  
-                </div>
+                <div className="text-center"></div>
               </div>
             </div>
           </div>
         </div>
       </>
     </>
-  )
+  );
 }
 
-export default NewPassword
+export default NewPassword;

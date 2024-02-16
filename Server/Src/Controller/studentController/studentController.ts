@@ -55,8 +55,7 @@ const studentSignUp = async (req: Request, res: Response) => {
     const rlst = await User.create(student);
     if (rlst) {
       console.log("created");
-      return res.status(200).json({message: "Registered Successfully"});
-
+      return res.status(200).json({ message: "Registered Successfully" });
     }
   } catch (error) {
     return res.status(500).json({ message: "An Error Occured" });
@@ -71,7 +70,7 @@ const studentLogin = async (req: Request, res: Response) => {
     const user = await studentModel
       .findOne({ studentEmail })
       .where({ isBlocked: false });
-      console.log(user, "user******");
+    console.log(user, "user******");
 
     if (!user) {
       console.log("USER NOT DEFINED RETURNING ERROR");
@@ -99,14 +98,12 @@ const studentLogin = async (req: Request, res: Response) => {
     } else {
       console.log("errrrrrrr");
 
-      
       return res.status(401).json({ message: "Invalid Email or password" });
     }
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 
 const studentLogout = async (req: Request, res: Response) => {
   res.cookie("jwt", "", {
@@ -124,7 +121,7 @@ const forgetData = {
 const forgetPassword = async (req: Request, res: Response) => {
   try {
     const { studentEmail } = req.body;
-    req.session.userEmail=studentEmail
+    req.session.userEmail = studentEmail;
     const userExists = await studentModel.findOne({ studentEmail });
 
     if (userExists) {
@@ -132,17 +129,15 @@ const forgetPassword = async (req: Request, res: Response) => {
       console.log(otpResultObject, "res otp");
 
       if (otpResultObject.status) {
-        console.log(otpResultObject.otp,"otp");
-        
+        console.log(otpResultObject.otp, "otp");
+
         req.session.snotp = otpResultObject.otp;
-        console.log( req.session.snotp,"print session");
-        
-        res
-          .status(200)
-          .json({
-            message: "Email sent successfully",
-            otp: otpResultObject.otp,
-          });
+        console.log(req.session.snotp, "print session");
+
+        res.status(200).json({
+          message: "Email sent successfully",
+          otp: otpResultObject.otp,
+        });
       } else {
         res.status(500).json({ message: "Email sending failed" });
       }
@@ -155,7 +150,7 @@ const forgetPassword = async (req: Request, res: Response) => {
 };
 
 const verifyForgetPassword = async (req: Request, res: Response) => {
-  console.log(req.session,"session");
+  console.log(req.session, "session");
   try {
     const { otp } = req.body;
     console.log(otp, "this is otp");
@@ -173,9 +168,9 @@ const verifyForgetPassword = async (req: Request, res: Response) => {
 const newPassword = async (req: Request, res: Response) => {
   try {
     const { newPassword } = req.body;
-    console.log(req.body,"req.body");
-    
-    const email = req.session.userEmail
+    console.log(req.body, "req.body");
+
+    const email = req.session.userEmail;
     studentModel.findOne({ studentEmail: email }).then((user) => {
       const saltRounds = 10;
       bcrypt.hash(newPassword, saltRounds, (err, hash) => {
@@ -186,20 +181,17 @@ const newPassword = async (req: Request, res: Response) => {
           });
         } else {
           studentModel
-            .findOneAndUpdate(
-              { studentEmail: email },
-              { password: hash }
-            )
+            .findOneAndUpdate({ studentEmail: email }, { password: hash })
             .then((data) => {
-              console.log(data,"datatatat");
+              console.log(data, "datatatat");
               if (!data) {
                 res.status(404).send({
                   message: `Cannot update user with ID: ${email}. User not found.`,
                 });
               } else {
                 if (req.session && req.session.userEmail) {
-                   req.session.userEmail = undefined
-              }
+                  req.session.userEmail = undefined;
+                }
                 res.status(200).send({
                   message: "Successfully updated password",
                 });
@@ -240,7 +232,6 @@ const firebaseGoogleAuthVerication = async (req: Request, res: Response) => {
     }
   }
 };
-
 
 export {
   studentSignUp,

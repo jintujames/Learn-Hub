@@ -8,16 +8,21 @@ export type LoginFormData = {
 };
 
 export const studentAuthSchema: ZodType<LoginFormData> = z.object({
-  studentEmail: z.string().email({ message: "Please provide a valid email address" }),
-  password:z.string().min(5,{message:"Please enter password"})
+  studentEmail: z
+    .string()
+    .email({ message: "Please provide a valid email address" }),
+  password: z.string().min(5, { message: "Please enter password" }),
 });
 
 export const useValidate = () => {
-  const {register,handleSubmit,formState:{errors}} = useForm<LoginFormData>({resolver:zodResolver(studentAuthSchema)})
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({ resolver: zodResolver(studentAuthSchema) });
   return {
     register,
     handleSubmit,
-    errors
-  }
-}
-
+    errors,
+  };
+};

@@ -17,14 +17,14 @@ function Login() {
   const dispatch = useDispatch();
   const { errors, handleSubmit, register } = useValidate();
 
-  const { user } = useSelector( (state:any) => state.user)
+  const { user } = useSelector((state: any) => state.user);
 
-  useEffect ( () =>{
-    if(user){
+  useEffect(() => {
+    if (user) {
       console.log("user is here");
-      navigate('/Home',{replace:true})
+      navigate("/Home", { replace: true });
     }
-  },[])
+  }, []);
   const handleLogin = async (validatedData: signInUser) => {
     console.log(validatedData, "validate");
     try {
@@ -33,19 +33,16 @@ function Login() {
       console.log(response, "response");
       if (response.status === 200) {
         console.log(response.data.token, "res");
-        dispatch(login (response.data.token))
+        dispatch(login(response.data.token));
         localStorage.setItem("Token", `${response.data.token}`);
-        navigate("/Home",{replace:true});
+        navigate("/Home", { replace: true });
       } else {
         if (response.response.status === 404) {
-          toast.error(response.response.data.message)
-        }
-        else if (response.response.status === 401) {
-          toast.error(response.response.data.message)
-        
+          toast.error(response.response.data.message);
+        } else if (response.response.status === 401) {
+          toast.error(response.response.data.message);
         }
       }
-      
     } catch (error) {}
   };
 
@@ -59,8 +56,8 @@ function Login() {
           if (res.status === 200) {
             if (res.data.userExist) {
               localStorage.setItem("Token", `${res.data.token}`);
-              dispatch(login (res.data.token))
-              navigate("/Home",{replace:true});
+              dispatch(login(res.data.token));
+              navigate("/Home", { replace: true });
             } else {
               console.log("user not exist");
             }
@@ -165,7 +162,6 @@ function Login() {
                     >
                       SIGN IN
                     </button>
-                    
                   </div>
                 </form>
                 <div className="flex flex-col items-center">

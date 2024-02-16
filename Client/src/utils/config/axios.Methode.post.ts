@@ -1,12 +1,12 @@
 import { AxiosRequestConfig } from "axios";
-import { signUpUser, signInUser, signInAdmin } from "../api/api.Types";
-import { signUpTutor,signInTutor } from "../api/api.Types";
+import { signUpUser, signInUser, signInAdmin, addAdminCategory } from "../api/api.Types";
+import { signUpTutor, signInTutor } from "../api/api.Types";
 import { apiRequest } from "./axios.Config";
 
 export const studentSignUp = async (signUpPayload: signUpUser) => {
-    console.log(signUpPayload);
+  console.log(signUpPayload);
   const config: AxiosRequestConfig = {
-    method:"POST",
+    method: "POST",
     url: `api/v1/student/signup`,
     data: signUpPayload,
   };
@@ -14,102 +14,92 @@ export const studentSignUp = async (signUpPayload: signUpUser) => {
 };
 
 export const studentLogin = async (signInPayload: signInUser) => {
-  console.log("signInPayload",signInPayload);
-  
+  console.log("signInPayload", signInPayload);
+
   try {
     const config: AxiosRequestConfig = {
-      method: 'POST',
-      url: 'api/v1/student/login',
+      method: "POST",
+      url: "api/v1/student/login",
       data: signInPayload,
     };
 
-   
-    return await apiRequest(config);;  
+    return await apiRequest(config);
   } catch (error) {
     throw error;
   }
-    
-}
-
+};
 
 export const studentLogout = async () => {
   try {
     const config: AxiosRequestConfig = {
-      method: 'POST',
-      url: 'api/v1/student/logout',
+      method: "POST",
+      url: "api/v1/student/logout",
       // You may include additional headers or data if required
     };
-   
+
     return await apiRequest(config); // You may handle the response as needed
   } catch (error) {
     throw error; // Handle any errors occurred during the API call
   }
 };
 
-
-export const tutorSignup =async (SignUpPayload: signUpTutor) => {
+export const tutorSignup = async (SignUpPayload: signUpTutor) => {
   console.log(SignUpPayload);
 
   const config: AxiosRequestConfig = {
-    method:"POST",
-    url: `api/v1/tutor/tutorSignup`, 
+    method: "POST",
+    url: `api/v1/tutor/tutorSignup`,
     data: SignUpPayload,
   };
   return await apiRequest(config);
-}
+};
 
-export const tutorLogin =async (SignInPayload: signInTutor) => {
+export const tutorLogin = async (SignInPayload: signInTutor) => {
   const config: AxiosRequestConfig = {
-    method:"POST",
-    url: `api/v1/tutor/tutorLogin`, 
-    data: SignInPayload
-
+    method: "POST",
+    url: `api/v1/tutor/tutorLogin`,
+    data: SignInPayload,
   };
   return await apiRequest(config);
-}
+};
 
 export const tutorLogout = async () => {
   try {
     const config: AxiosRequestConfig = {
-      method: 'POST',
-      url: 'api/v1/tutor/tutorLogout',
+      method: "POST",
+      url: "api/v1/tutor/tutorLogout",
       // You may include additional headers or data if required
     };
-   
+
     return await apiRequest(config); // You may handle the response as needed
   } catch (error) {
     throw error; // Handle any errors occurred during the API call
   }
 };
 
-
-
-export const studentForgetPassword = async (forgetPasswordPayload: String ) => {
+export const studentForgetPassword = async (forgetPasswordPayload: String) => {
   const config: AxiosRequestConfig = {
-    method: 'POST',
+    method: "POST",
     url: `api/v1/student/forget_password`,
     data: forgetPasswordPayload,
   };
   return await apiRequest(config);
 };
 
+export const reSetPassword = async (newPassword: String) => {
+  console.log(newPassword, "new passwor");
 
-export const reSetPassword = async (newPassword: String ) => {
-  console.log(newPassword,"new passwor");
-  
   const config: AxiosRequestConfig = {
-    method: 'POST',
+    method: "POST",
     url: `api/v1/student/newpassword`,
-    data: {newPassword},
+    data: { newPassword },
   };
   return await apiRequest(config);
 };
 
-
-
 export const adminLogin = async (LoginPayload: signInAdmin) => {
   const config: AxiosRequestConfig = {
-    method: 'POST',
+    method: "POST",
     url: `/api/v1/admin/adminLogin`,
     data: LoginPayload,
   };
@@ -119,11 +109,11 @@ export const adminLogin = async (LoginPayload: signInAdmin) => {
 export const adminLogout = async () => {
   try {
     const config: AxiosRequestConfig = {
-      method: 'POST',
-      url: 'api/v1/admin/adminLogout',
+      method: "POST",
+      url: "api/v1/admin/adminLogout",
       // You may include additional headers or data if required
     };
-   
+
     return await apiRequest(config); // You may handle the response as needed
   } catch (error) {
     throw error; // Handle any errors occurred during the API call
@@ -132,22 +122,53 @@ export const adminLogout = async () => {
 
 
 
-
-
-
-
-export const verifyOTP = async ( otp: string) => {
+export const verifyOTP = async (otp: string) => {
   console.log("calling");
-  
-  console.log(otp,"otp methode caling");
-  
+
+  console.log(otp, "otp methode caling");
+
   const config: AxiosRequestConfig = {
-    method: 'POST',
+    method: "POST",
     url: `/api/v1/student/otp_verify`,
-    data: {  otp },
+    data: { otp },
   };
 
   return await apiRequest(config);
 };
 
 
+export const addCategory = async (categoryPayload: addAdminCategory) => {
+  console.log("categoryPayload", categoryPayload);
+
+  try {
+    const config: AxiosRequestConfig = {
+      method: "POST",
+      url: "api/v1/admin/addCategory",
+      data: categoryPayload,
+    };
+
+    return await apiRequest(config);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const editAdminCategory = async (categoryPayload: addAdminCategory,id:any) => {
+  console.log("categoryPayload", categoryPayload);
+
+  try {
+    const data={
+      id:id,
+      name:categoryPayload
+    }
+    const config: AxiosRequestConfig = {
+      method: "POST",
+      url: "api/v1/admin/editCategory",
+      data: data,
+    };
+
+    return await apiRequest(config);
+  } catch (error) {
+    throw error;
+  }
+};

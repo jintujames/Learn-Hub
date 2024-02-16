@@ -16,7 +16,7 @@ import { signup } from "../../../Features/UserSlice/userSlice";
 
 function Register() {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { errors, handleSubmit, register, reset } = useStudentAuth();
 
   type studentAuth = {
@@ -35,12 +35,11 @@ function Register() {
         try {
           const res: any = await googleAuthVerification(response.userEmail);
           if (res.status === 200) {
-            console.log(res, "ressssssss");
             if (res.data.userExist) {
               console.log(res.data.token, "res");
-              localStorage.setItem("Token",`${res.data.token}`);
-              dispatch(signup (res.data.token))
-              navigate("/Home",{replace:true});
+              localStorage.setItem("Token", `${res.data.token}`);
+              dispatch(signup(res.data.token));
+              navigate("/Home", { replace: true });
             } else {
               console.log("user not exist");
             }
@@ -58,10 +57,9 @@ function Register() {
   const handleSignUP = async (data: studentAuth) => {
     await studentSignUp(data).then((response: any) => {
       if (response.status === 200) {
-        console.log(response.data,"jiiiii");
-        navigate("/login",{replace:true});
+        navigate("/login", { replace: true });
         toast.success(response.data);
-      } 
+      }
     });
   };
   return (
@@ -92,13 +90,15 @@ function Register() {
 
                 <form onSubmit={handleSubmit(handleSignUP)}>
                   <div className="mb-3">
-                  {errors.studentFirstName ? (
-                                    <span className="text-sm font-normal text-red-600 ">{errors.studentFirstName?.message}</span>
-                                ) : (
-                                  <label className="mb-2 block text-xs font-semibold">
-                                   First Name
-                                </label>
-                                )}
+                    {errors.studentFirstName ? (
+                      <span className="text-sm font-normal text-red-600 ">
+                        {errors.studentFirstName?.message}
+                      </span>
+                    ) : (
+                      <label className="mb-2 block text-xs font-semibold">
+                        First Name
+                      </label>
+                    )}
                     <input
                       type="text"
                       {...register("studentFirstName")}
@@ -107,63 +107,71 @@ function Register() {
                     />
                   </div>
                   <div className="mb-3">
-                  {errors.studentLastName ? (
-                                    <span className="text-sm font-normal text-red-600 ">{errors.studentLastName?.message}</span>
-                                ) : (
-                                  <label className="mb-2 block text-xs font-semibold">
-                                 Last Name
-                                </label>
-                                )}
-              
+                    {errors.studentLastName ? (
+                      <span className="text-sm font-normal text-red-600 ">
+                        {errors.studentLastName?.message}
+                      </span>
+                    ) : (
+                      <label className="mb-2 block text-xs font-semibold">
+                        Last Name
+                      </label>
+                    )}
+
                     <input
                       type="text"
-                     {...register('studentLastName')}
+                      {...register("studentLastName")}
                       placeholder="Enter your Last Name"
                       className="block w-full rounded-md border border-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% focus:border-gradient-to-r focus:from-indigo-700 focus:via-sky-700 focus:to-emerald-700 focus:outline-none focus:ring-1 focus:ring-gradient-200 py-1 px-1.5 text-gray-500"
                     />
                   </div>
                   <div className="mb-3">
-                  {errors.studentEmail ? (
-                                    <span className="text-sm font-normal text-red-600 ">{errors.studentEmail?.message}</span>
-                                ) : (
-                                  <label className="mb-2 block text-xs font-semibold">
-                                   Email
-                                </label>
-                                )}
-                      <input
+                    {errors.studentEmail ? (
+                      <span className="text-sm font-normal text-red-600 ">
+                        {errors.studentEmail?.message}
+                      </span>
+                    ) : (
+                      <label className="mb-2 block text-xs font-semibold">
+                        Email
+                      </label>
+                    )}
+                    <input
                       type="email"
-                     {...register('studentEmail')}
+                      {...register("studentEmail")}
                       placeholder="Enter your email"
                       className="block w-full rounded-md border border-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% focus:border-gradient-to-r focus:from-indigo-700 focus:via-sky-700 focus:to-emerald-700 focus:outline-none focus:ring-1 focus:ring-gradient-200 py-1 px-1.5 text-gray-500"
                     />
                   </div>
                   <div className="mb-3">
-                  {errors.phone ? (
-                                    <span className="text-sm font-normal text-red-600 ">{errors.phone?.message}</span>
-                                ) : (
-                                  <label className="mb-2 block text-xs font-semibold">
-                                 Phone
-                                </label>
-                                )}
+                    {errors.phone ? (
+                      <span className="text-sm font-normal text-red-600 ">
+                        {errors.phone?.message}
+                      </span>
+                    ) : (
+                      <label className="mb-2 block text-xs font-semibold">
+                        Phone
+                      </label>
+                    )}
                     <input
                       type="text"
-                      {...register('phone')}
+                      {...register("phone")}
                       placeholder="Enter your phone number"
                       className="block w-full rounded-md border border-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% focus:border-gradient-to-r focus:from-indigo-700 focus:via-sky-700 focus:to-emerald-700 focus:outline-none focus:ring-1 focus:ring-gradient-200 py-1 px-1.5 text-gray-500"
                     />
                   </div>
                   <div className="mb-3">
-                  {errors.password ? (
-                                    <span className="text-sm font-normal text-red-600 ">{errors.password?.message}</span>
-                                ) : (
-                                  <label className="mb-2 block text-xs font-semibold">
-                                Password
-                                </label>
-                                )}
+                    {errors.password ? (
+                      <span className="text-sm font-normal text-red-600 ">
+                        {errors.password?.message}
+                      </span>
+                    ) : (
+                      <label className="mb-2 block text-xs font-semibold">
+                        Password
+                      </label>
+                    )}
                     <input
                       type="password"
                       placeholder="*****"
-                      {...register('password')}         
+                      {...register("password")}
                       className="block w-full rounded-md border border-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% focus:border-gradient-to-r focus:from-indigo-700 focus:via-sky-700 focus:to-emerald-700 focus:outline-none focus:ring-1 focus:ring-gradient-200 py-1 px-1.5 text-gray-500"
                     />
                   </div>
@@ -172,13 +180,12 @@ function Register() {
                     <button
                       type="submit"
                       className="mb-1.5 block w-full text-center text-white bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% hover:bg-gradient-to-r hover:from-indigo-700 hover:via-sky-700 hover:to-emerald-700 px-2 py-1.5 rounded-md"
-                      >
-                        SIGN UP
-                      </button>
+                    >
+                      SIGN UP
+                    </button>
                   </div>
                 </form>
 
-              
                 <div className="flex flex-col items-center">
                   <button
                     onClick={() => googleSignInStudent(authentication)}

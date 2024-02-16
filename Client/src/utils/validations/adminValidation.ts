@@ -8,16 +8,21 @@ export type LoginFormData = {
 };
 
 export const adminAuthSchema: ZodType<LoginFormData> = z.object({
-    adminEmail: z.string().email({ message: "Please provide a valid email address" }),
-    adminPassword:z.string().min(5,{message:"Please enter password"})
+  adminEmail: z
+    .string()
+    .email({ message: "Please provide a valid email address" }),
+  adminPassword: z.string().min(5, { message: "Please enter password" }),
 });
 
 export const adminValidate = () => {
-  const {register,handleSubmit,formState:{errors}} = useForm<LoginFormData>({resolver:zodResolver(adminAuthSchema)})
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({ resolver: zodResolver(adminAuthSchema) });
   return {
     register,
     handleSubmit,
-    errors
-  }
-}
-
+    errors,
+  };
+};

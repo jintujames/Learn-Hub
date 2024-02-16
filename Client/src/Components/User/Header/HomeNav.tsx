@@ -3,17 +3,16 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 function HomeNav() {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  const { user } = useSelector((state: any) => state.user);
 
-  const { user } = useSelector( (state:any) => state.user)
-
-  useEffect ( () =>{
-    if(user){
+  useEffect(() => {
+    if (user) {
       console.log("user is here");
-      navigate('/Home')
+      navigate("/Home");
     }
-  },[])
+  }, []);
 
   return (
     <>
@@ -23,7 +22,7 @@ function HomeNav() {
           <div className="flex h-9 items-center justify-between">
             <div className="flex items-center">
               <div className="hidden md:block">
-                <div className= "width:700px">
+                <div className="width:700px">
                   <div className="ml-10 flex items-baseline space-x-4">
                     {/* Content for the first navbar */}
                     <Link
@@ -73,8 +72,15 @@ function HomeNav() {
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
                   {/* Content for the second navbar */}
-                  <Link to="#" className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src="public/LearnHub Logo.png" className="h-12" alt="Learn Hub Logo" />
+                  <Link
+                    to="#"
+                    className="flex items-center space-x-3 rtl:space-x-reverse"
+                  >
+                    <img
+                      src="public/LearnHub Logo.png"
+                      className="h-12"
+                      alt="Learn Hub Logo"
+                    />
                     <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">
                       Learn Hub
                     </span>
@@ -187,7 +193,8 @@ function HomeNav() {
                 </h1>
                 <br />
                 <p className="mt-3 text-yellow-300">
-                  Empower yourself with the knowledge and skills gained through online education! The key to your future!
+                  Empower yourself with the knowledge and skills gained through
+                  online education! The key to your future!
                 </p>
                 <br />
 
@@ -205,8 +212,10 @@ function HomeNav() {
                 </div>
                 <br />
                 <p className="mt-3 text-white">
-                  500K+ People already trusted us.{' '}
-                  <span className="underline text-yellow-300">View courses</span>
+                  500K+ People already trusted us.{" "}
+                  <span className="underline text-yellow-300">
+                    View courses
+                  </span>
                 </p>
               </div>
             </div>

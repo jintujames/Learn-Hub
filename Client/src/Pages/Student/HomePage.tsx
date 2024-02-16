@@ -1,8 +1,8 @@
-import React from "react"
-import Footer from "../../Components/User/Footer/Footer"
-import FeaturedCard from "../../Components/User/Home/FeaturedCard"
-import Home from "../../Components/User/Home/Home"
-import HomeNav from "../../Components/User/Header/HomeNav"
+import React from "react";
+import Footer from "../../Components/User/Footer/Footer";
+import FeaturedCard from "../../Components/User/Home/FeaturedCard";
+import Home from "../../Components/User/Home/Home";
+import HomeNav from "../../Components/User/Header/HomeNav";
 
 function HomePage() {
   return (
@@ -10,9 +10,9 @@ function HomePage() {
       <HomeNav />
       <Home />
       <FeaturedCard />
-      <Footer /> 
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

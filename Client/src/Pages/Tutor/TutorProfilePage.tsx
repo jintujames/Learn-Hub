@@ -1,19 +1,17 @@
-import React from "react"
+import React from "react";
 
-import Footer from "../../Components/User/Footer/Footer"
-import TutorSidebar from "../../Components/Tutor/TutorNav/TutorSidebar"
-import Navbar from "../../Components/User/Header/Navbar"
-
+import Footer from "../../Components/User/Footer/Footer";
+import TutorSidebar from "../../Components/Tutor/TutorNav/TutorSidebar";
+import Navbar from "../../Components/User/Header/Navbar";
 
 function TutorProfilePage() {
-
   return (
     <div>
       <Navbar />
       <TutorSidebar />
-      <Footer />     
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default TutorProfilePage
+export default TutorProfilePage;

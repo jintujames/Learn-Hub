@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../../Features/TutorSlice/tutorSlice";
 
 function TutorRegister() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { handleSubmit, errors, register } = useTutorAuth();
@@ -29,7 +28,7 @@ function TutorRegister() {
   useEffect(() => {
     if (tutor) {
       console.log("tutor is here");
-      navigate("/tutorLogin",{ replace: true });
+      navigate("/tutorLogin", { replace: true });
     }
   }, []);
 
@@ -47,7 +46,7 @@ function TutorRegister() {
             if (res.data.tutorExist) {
               dispatch(login(res.data.token));
               localStorage.setItem("Token", `${res.data.token}`);
-              navigate("/tutorLogin",{ replace: true });
+              navigate("/tutorLogin", { replace: true });
             } else {
               console.log("user not exist");
             }
@@ -69,7 +68,7 @@ function TutorRegister() {
 
       if (response.status === 200) {
         // navigate("/", { replace: true });
-        navigate("/tutorLogin",{ replace: true });
+        navigate("/tutorLogin", { replace: true });
       }
     });
   };

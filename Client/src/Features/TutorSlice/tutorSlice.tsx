@@ -15,9 +15,8 @@ const tutorSlice = createSlice({
     login: (state, action: PayloadAction<string>) => {
       state.tutor = action.payload;
     },
-    signup:(state, action: PayloadAction<string>) =>{
-        state.tutor = action.payload;
-
+    signup: (state, action: PayloadAction<string>) => {
+      state.tutor = action.payload;
     },
     logout: (state) => {
       state.tutor = null;
@@ -25,7 +24,7 @@ const tutorSlice = createSlice({
   },
 });
 
-export const { login, logout,signup } = tutorSlice.actions;
+export const { login, logout, signup } = tutorSlice.actions;
 export const selectTutor = (state: { tutor: tutorState }) => state.tutor.tutor;
 
 export default tutorSlice.reducer;

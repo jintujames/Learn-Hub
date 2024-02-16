@@ -14,18 +14,15 @@ function TutorSidebar() {
   };
 
   const handleLogout = async () => {
-    
     try {
       await tutorLogout();
       localStorage.removeItem("Token");
       dispatch(logout());
-      navigate("/")
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
-
-
 
   return (
     <>

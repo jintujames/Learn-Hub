@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 function TutorBio() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { tutor } = useSelector((state: any) => state.tutor);
 
   useEffect(() => {
@@ -15,25 +15,26 @@ function TutorBio() {
 
   return (
     <>
-  <section
-  className="py-20 px-4 lg:px-16 overflow-hidden relative z-10"
-  data-aos="fade-up"
-  id="contact"
->
-  <div className="container">
-    
-    <div className="flex flex-col lg:flex-row lg:items-center text-slate-900 dark:text-gray-200 lg:justify-between -mx-4">
-      
-      <div
-        className="w-full lg:w-full xl:w-full px-4"
+      <section
+        className="py-20 px-4 lg:px-16 overflow-hidden relative z-10"
         data-aos="fade-up"
-        data-aos-delay={500}
-        data-aos-duration={2000}
+        id="contact"
       >
-        <div className="bg-gray-100 dark:bg-slate-800 relative rounded-lg p-8 sm:p-12 shadow-lg">
-          <form>
-            <div className="mb-6">
-              <input type="text" placeholder="Your Name" className=" w-full
+        <div className="container">
+          <div className="flex flex-col lg:flex-row lg:items-center text-slate-900 dark:text-gray-200 lg:justify-between -mx-4">
+            <div
+              className="w-full lg:w-full xl:w-full px-4"
+              data-aos="fade-up"
+              data-aos-delay={500}
+              data-aos-duration={2000}
+            >
+              <div className="bg-gray-100 dark:bg-slate-800 relative rounded-lg p-8 sm:p-12 shadow-lg">
+                <form>
+                  <div className="mb-6">
+                    <input
+                      type="text"
+                      placeholder="Your Name"
+                      className=" w-full
                               rounded
                               p-3
                               text-gray-800
@@ -45,15 +46,15 @@ function TutorBio() {
                               focus-visible:shadow-none
                               focus:border-primary
                               "
-                name="full_name"
-                id="full_name"
-              />
-            </div>
-            <div className="mb-6">
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="
+                      name="full_name"
+                      id="full_name"
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <input
+                      type="email"
+                      placeholder="Your Email"
+                      className="
                               w-full
                               rounded
                               p-3
@@ -66,15 +67,15 @@ function TutorBio() {
                               focus-visible:shadow-none
                               focus:border-primary
                               "
-                name="email"
-                id="email"
-              />
-            </div>
-            <div className="mb-6">
-              <input
-                inputMode="numeric"
-                placeholder="Your Phone"
-                className="
+                      name="email"
+                      id="email"
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <input
+                      inputMode="numeric"
+                      placeholder="Your Phone"
+                      className="
                               w-full
                               rounded
                               p-3
@@ -87,15 +88,15 @@ function TutorBio() {
                               focus-visible:shadow-none
                               focus:border-primary
                               "
-                name="phone_number"
-                id="phone_number"
-              />
-            </div>
-            <div className="mb-6">
-              <input
-                inputMode="text"
-                placeholder="Headline"
-                className="
+                      name="phone_number"
+                      id="phone_number"
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <input
+                      inputMode="text"
+                      placeholder="Headline"
+                      className="
                               w-full
                               rounded
                               p-3
@@ -108,15 +109,15 @@ function TutorBio() {
                               focus-visible:shadow-none
                               focus:border-primary
                               "
-                name="headline"
-                id="headline"
-              />
-            </div>
-            <div className="mb-6">
-              <input
-                inputMode="text"
-                placeholder="Bio"
-                className="
+                      name="headline"
+                      id="headline"
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <input
+                      inputMode="text"
+                      placeholder="Bio"
+                      className="
                               w-full
                               rounded
                               p-3
@@ -129,15 +130,15 @@ function TutorBio() {
                               focus-visible:shadow-none
                               focus:border-primary
                               "
-                name="bio"
-                id="bio"
-              />
-            </div>
-            
-            <div>
-              <button
-                type="submit"
-                className="
+                      name="bio"
+                      id="bio"
+                    />
+                  </div>
+
+                  <div>
+                    <button
+                      type="submit"
+                      className="
                               w-full
                               text-gray-100
                               hover:text-gray-700
@@ -151,26 +152,19 @@ function TutorBio() {
                               duration-500
                               hover:bg-cyan-500
                               "
-              >
-                Send Message
-              </button>
+                    >
+                      Send Message
+                    </button>
+                  </div>
+                </form>
+                <div></div>
+              </div>
             </div>
-          </form>
-          <div>
-           
-           
-            
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-</>
-
-
-  )
+      </section>
+    </>
+  );
 }
 
-export default TutorBio
+export default TutorBio;

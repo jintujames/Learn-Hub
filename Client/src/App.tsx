@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import LoginPage from "./Pages/Student/LoginPage"
-import SignUpPage from "./Pages/Student/SignUpPage"
+import LoginPage from "./Pages/Student/LoginPage";
+import SignUpPage from "./Pages/Student/SignUpPage";
 import TutorSignUpPage from "./Pages/Tutor/TutorSignUpPage";
 import TutorLoginPage from "./Pages/Tutor/TutorLoginPage";
 import TutorProfilePage from "./Pages/Tutor/TutorProfilePage";
@@ -20,66 +20,43 @@ import NewPassword from "./Components/User/ForgetPswd/NewPassword";
 import { selectUser } from "./Features/UserSlice/userSlice";
 import { useSelector } from "react-redux";
 import CoursePage from "./Pages/Student/CoursePage";
-import 'react-toastify/dist/ReactToastify.css'
+import "react-toastify/dist/ReactToastify.css";
 import TutorPrivateRoute from "./Components/PrivateRouter/TutorPrivateRoute";
 
-
 function App() {
-
-  const user = useSelector(selectUser)
-
+  const user = useSelector(selectUser);
 
   return (
     <>
-     <ToastContainer/>
-    <Router>
-      <Routes>
-        
-        <Route path="/login" element={<LoginPage/>}/>
-        <Route path="/signup" element={<SignUpPage/>}/>
-        <Route path="/" element={<HomePage/>}/>
-        <Route path="/Home" element={<HomeLoginPage/>}/>
-        <Route path="/forget_password" element={<ForgetPasswordPage/>}/>
-        <Route path="/otp_verify" element={<OtpPage/>}/>
-        <Route path="/newPassword" element={<NewPassword/>}/>
-        <Route path="/courses" element={<CoursePage/>}/>
+      <ToastContainer />
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/Home" element={<HomeLoginPage />} />
+          <Route path="/forget_password" element={<ForgetPasswordPage />} />
+          <Route path="/otp_verify" element={<OtpPage />} />
+          <Route path="/newPassword" element={<NewPassword />} />
+          <Route path="/courses" element={<CoursePage />} />
 
+          <Route element={<TutorPrivateRoute />}>
+            <Route path="/tutorProfile" element={<TutorProfilePage />} />
+          </Route>
+          <Route path="/tutorSignup" element={<TutorSignUpPage />} />
+          <Route path="/tutorLogin" element={<TutorLoginPage />} />
 
+          <Route path="/adminLogin" element={<AdminLoginPage />} />
+          <Route path="/adminDashboard" element={<AdminDashboardPage />} />
+          <Route path="/adminStudent" element={<AdminUserPage />} />
+          <Route path="/adminTutor" element={<AdminTutorPage />} />
+          <Route path="/adminCategory" element={<AdminCategoryPage />} />
+          <Route path="/addCategory" element={<AdminCategoryPage />} />
 
-
-
-        <Route element = {<TutorPrivateRoute />}>
-          <Route path="/tutorProfile" element={<TutorProfilePage/>}/>
-        </Route>
-        <Route path="/tutorSignup" element={<TutorSignUpPage/>}/>
-        <Route path="/tutorLogin" element={<TutorLoginPage/>}/>
-        
-
-
-
-
-        <Route path="/adminLogin" element={<AdminLoginPage/>}/>
-        <Route path="/adminDashboard" element={<AdminDashboardPage/>}/>
-        <Route path="/adminStudent" element={<AdminUserPage/>}/>
-        <Route path="/adminTutor" element={<AdminTutorPage/>}/>
-        <Route path="/adminCategory" element={<AdminCategoryPage/>}/>
-
-
-
-
-
-
-
-
-
-
-
-
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
     </>
-      
-  )
+  );
 }
 
-export default App
+export default App;
