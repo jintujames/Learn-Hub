@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { tutorLogout } from "../../../utils/config/axios.Methode.post";
 import { logout } from "../../../Features/TutorSlice/tutorSlice";
 import TutorBio from "../TutorProfile/TutorBio";
+import AddImage from "../TutorProfile/AddImage";
+import AddCouseBio from "../TutorProfile/AddCourseBio";
+import AddCourseBio from "../TutorProfile/AddCourseBio";
 
 function TutorSidebar() {
   const navigate = useNavigate();
@@ -13,16 +16,16 @@ function TutorSidebar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleLogout = async () => {
-    try {
-      await tutorLogout();
-      localStorage.removeItem("Token");
-      dispatch(logout());
-      navigate("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
+  // const handleLogout = async () => {
+  //   try {
+  //     await tutorLogout();
+  //     localStorage.removeItem("Token");
+  //     dispatch(logout());
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.error("Logout failed:", error);
+  //   }
+  // };
 
   return (
     <>
@@ -115,7 +118,7 @@ function TutorSidebar() {
                 <span className="font-semibold">Sales History</span>
               </li>
 
-              <button className="w-44 mt-12 bg-cyan-500 rounded-full py-1.5 text-white">
+              <button className="w-44 mt-12 border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 rounded-full py-1.5 text-white">
                 Add New Course
               </button>
             </ul>
@@ -189,7 +192,7 @@ function TutorSidebar() {
                             </a>
 
                             <button
-                              onClick={handleLogout}
+                              // onClick={handleLogout}
                               type="button"
                               className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                             >
@@ -204,8 +207,8 @@ function TutorSidebar() {
               </div>
             </nav>
           </main>
-          <div className="w-3/5">
-            <TutorBio />
+          <div className="w-4/5 height--5">
+            <AddCourseBio />
           </div>
         </div>
       </div>

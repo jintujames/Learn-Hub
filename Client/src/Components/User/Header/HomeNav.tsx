@@ -148,13 +148,13 @@ function HomeNav() {
             <div className="space-x-2">
               <Link
                 to={`/signup`}
-                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... rounded-md px-4 py-2 text-sm font-medium"
+                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... rounded-md px-4 py-2 text-white text-sm font-medium"
               >
                 Sign Up
               </Link>
               <Link
                 to={`/login`}
-                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... rounded-md px-4 py-2 text-sm font-medium"
+                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... rounded-md px-4 py-2 text-white text-sm font-medium"
               >
                 Log In
               </Link>
@@ -188,7 +188,7 @@ function HomeNav() {
 
             <div className="w-full lg:w-1/2">
               <div className="lg:max-w-lg">
-                <h1 className="text-3xl font-semibold text-gray-800 dark:text-white lg:text-4xl">
+                <h1 className="text-3xl font-semibold text-white dark:text-white lg:text-4xl">
                   Elevate Your E-Learning Journey Instantly.
                 </h1>
                 <br />

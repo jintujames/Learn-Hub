@@ -142,10 +142,7 @@ function TutorBio() {
                               w-full
                               text-gray-100
                               hover:text-gray-700
-                              bg-cyan-300
-                              rounded
-                              border border-primary
-                              dark:border-slate-600
+                              border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700
                               p-3
                               transition
                               ease-in-out
@@ -153,7 +150,7 @@ function TutorBio() {
                               hover:bg-cyan-500
                               "
                     >
-                      Send Message
+                      Update Profile
                     </button>
                   </div>
                 </form>
