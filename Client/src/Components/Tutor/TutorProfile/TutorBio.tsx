@@ -16,12 +16,12 @@ function TutorBio() {
   return (
     <>
       <section
-        className="py-20 px-4 lg:px-16 overflow-hidden relative z-10"
+        className="py-10 px-2 lg:px-6 overflow-hidden relative z-2"
         data-aos="fade-up"
         id="contact"
       >
         <div className="container">
-          <div className="flex flex-col lg:flex-row lg:items-center text-slate-900 dark:text-gray-200 lg:justify-between -mx-4">
+          <div className="flex flex-col lg:flex-row lg:items-center text-slate-900 dark:text-gray-200 lg:justify-between -mx-2">
             <div
               className="w-full lg:w-full xl:w-full px-4"
               data-aos="fade-up"
@@ -30,7 +30,18 @@ function TutorBio() {
             >
               <div className="bg-gray-100 dark:bg-slate-800 relative rounded-lg p-8 sm:p-12 shadow-lg">
                 <form>
-                  <div className="mb-6">
+                  <div className="mb-2">
+                    <img
+                      className="w-25 h-28 rounded-full mx-auto"
+                      src="https://picsum.photos/200"
+                      alt="Profile picture"
+                    />
+                    <h2 className="text-center text-2xl font-semibold mt-3">
+                      John Doe
+                    </h2>
+                    <p className="text-center text-gray-600 mt-1">
+                      Software Engineer
+                    </p>
                     <input
                       type="text"
                       placeholder="Your Name"
@@ -71,69 +82,7 @@ function TutorBio() {
                       id="email"
                     />
                   </div>
-                  <div className="mb-6">
-                    <input
-                      inputMode="numeric"
-                      placeholder="Your Phone"
-                      className="
-                              w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                      name="phone_number"
-                      id="phone_number"
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <input
-                      inputMode="text"
-                      placeholder="Headline"
-                      className="
-                              w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                      name="headline"
-                      id="headline"
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <input
-                      inputMode="text"
-                      placeholder="Bio"
-                      className="
-                              w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                      name="bio"
-                      id="bio"
-                    />
-                  </div>
+                  
 
                   <div>
                     <button

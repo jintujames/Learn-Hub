@@ -9,6 +9,7 @@ import {
   newPassword,
   firebaseGoogleAuthVerication,
   studentLogout,
+  userGetAllCategory,
 } from "../../Controller/studentController/studentController";
 
 import { protect } from "../../Middleware/authMiddleware";
@@ -18,6 +19,7 @@ studentRouter.get("/", (req, res) => {
   res.json({ status: true });
 });
 
+studentRouter.get("/", userGetAllCategory);
 studentRouter.post("/signup", studentSignUp);
 studentRouter.post("/login", studentLogin);
 studentRouter.post("/logout", studentLogout);

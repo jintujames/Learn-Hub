@@ -1,14 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { userGetAllCategory } from "../../../utils/config/axios.Method.Get";
 
 function FeaturedCard() {
+  const [data, setData] = useState<{ categoryName?: string }[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result: any = await userGetAllCategory();
+        console.log(result.data.categoryDetails, 'PPPP');
+
+        setData(result.data.categoryDetails);
+      } catch (error) {
+        // Handle the error appropriately, e.g., log it or show an error message.
+        console.error("Error during admin get all tutors:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       {/* Featured Courses */}
-      <br></br>
+
       <h1 className="text-center text-blue-600 font-medium mb-2">
         Featured Courses
       </h1>
-      <br></br>
       <h4 className="text-center text-lg font-bold mb-2">
         Find Yours From The Featured
       </h4>
@@ -233,7 +251,6 @@ function FeaturedCard() {
 
       <br></br>
 
-      <br></br>
 
       <h1 className="text-center text-blue-600 font-medium mb-2">
         Top Categories
@@ -246,11 +263,13 @@ function FeaturedCard() {
       <>
         {/* component */}
 
-        <div className="flex flex-col justify-center items-center h-[60vh]">
-          <button className="rounded-xl bg-gradient-to-br from-[#6025F5] to-[#FF5555] px-8 py-7 text-base font-medium text-white transition duration-200 hover:shadow-lg hover:shadow-[#6025F5]/50">
-            Button 16
-          </button>
+        <div className="grid items-center max-w-4xl grid-cols-2 gap-4 mx-auto mt-12 md:mt-20 md:grid-cols-4">
+      {data?.map((category, index) => (
+        <div key={index} className="bg-slate-200 h-12 flex shadow-lg items-center justify-center">
+          <p className="text-black">{category?.categoryName}</p>
         </div>
+      ))}
+    </div>
       </>
     </>
   );

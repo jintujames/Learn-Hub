@@ -11,7 +11,6 @@ function Home() {
         <h1 className="text-center text-blue-600 font-medium mb-2">
           What We Offer
         </h1>
-        <br></br>
         <h4 className="text-center text-lg font-bold mb-2">
           Invest In Your Professional
         </h4>
@@ -20,7 +19,7 @@ function Home() {
         </h4>
         <div style={{ backgroundColor: "rgb(255, 255, 255)" }}>
           <div
-            className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 pt-20 pb-10 lg:pt-40 lg:pb-20"
+            className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 pt-20 pb-10 lg:pt-34 lg:pb-20"
             style={{ cursor: "auto" }}
           >
             <div className="p-6 bg-gray-100 rounded-lg">

@@ -7,14 +7,29 @@ import TutorBio from "../TutorProfile/TutorBio";
 import AddImage from "../TutorProfile/AddImage";
 import AddCouseBio from "../TutorProfile/AddCourseBio";
 import AddCourseBio from "../TutorProfile/AddCourseBio";
+import AddCourse from "../TutorProfile/AddCourse";
 
-function TutorSidebar() {
+function  TutorSidebar({children}:any) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  const handleNavigate=(data:any)=>{
+    console.log(data,'this is data');
+    
+    if(data=="Profile"){
+      navigate('/tutorProfile')
+    }else if(data=='Image'){
+      navigate('/tutorProfile/image')
+    }else if (data=='NewCourse'){
+      console.log('hhhh');
+      
+      navigate('/tutorProfile/addNewCourse')
+    }
+
+  }
 
   // const handleLogout = async () => {
   //   try {
@@ -47,7 +62,7 @@ function TutorSidebar() {
             <div className="flex items-center space-x-2 mx-auto py-2"></div>
 
             <ul>
-              <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
+              <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150" onClick={()=>handleNavigate("Profile")}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -64,7 +79,7 @@ function TutorSidebar() {
                 </svg>
                 <span className="font-semibold">Profile</span>
               </li>
-              <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
+              <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150" onClick={()=>handleNavigate("Image")} >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -79,7 +94,7 @@ function TutorSidebar() {
                     d="M16 4v12l-4-2-4 2V4M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                <span className="font-semibold">Image</span>
+                <span className="font-semibold">Students</span>
               </li>
               <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
                 <svg
@@ -115,10 +130,27 @@ function TutorSidebar() {
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-                <span className="font-semibold">Sales History</span>
+                <span className="font-semibold">Coupons</span>
+              </li>
+              <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                <span className="font-semibold">Enrollments</span>
               </li>
 
-              <button className="w-44 mt-12 border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 rounded-full py-1.5 text-white">
+              <button className="w-44 mt-12 border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 rounded-full py-1.5 text-white" onClick={()=>handleNavigate("NewCourse")}>
                 Add New Course
               </button>
             </ul>
@@ -155,13 +187,9 @@ function TutorSidebar() {
                   onClick={toggleMenu}
                   className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                 >
-                  <img
-                    className="w-10 h-10 rounded-full"
-                    src="https://picsum.photos/200"
-                    alt="Profile picture"
-                  />
+                  
                   <div className="ml-2">
-                    <h2 className="text-sm font-medium">John Doe</h2>
+                    <h2 className="text-sm font-medium">Settings</h2>
                   </div>
                   <svg
                     className="-mr-1 h-5 w-5 text-gray-400"
@@ -208,7 +236,7 @@ function TutorSidebar() {
             </nav>
           </main>
           <div className="w-4/5 height--5">
-            <AddCourseBio />
+           {children}
           </div>
         </div>
       </div>

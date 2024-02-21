@@ -17,52 +17,7 @@ function HomeNav() {
   return (
     <>
       {/* First Navbar */}
-      <nav className="bg-cyan-600">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-9 items-center justify-between">
-            <div className="flex items-center">
-              <div className="hidden md:block">
-                <div className="width:700px">
-                  <div className="ml-10 flex items-baseline space-x-4">
-                    {/* Content for the first navbar */}
-                    <Link
-                      to="/tutorLogin"
-                      className="text-white hover:text-green-400 rounded-md px-3 py-2 text-sm font-medium ml-auto"
-                    >
-                      Become An Instructor
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="hidden md:block">
-              <div className="ml-4 flex items-center md:ml-6">
-                {/* Profile dropdown */}
-                <div className="relative ml-3">
-                  {/* Content for the profile dropdown */}
-                </div>
-              </div>
-            </div>
-            <div className="-mr-2 flex md:hidden">
-              {/* Mobile menu button */}
-              <button
-                type="button"
-                className="relative inline-flex items-center justify-center rounded-md bg-cyan-600 p-2 text-gray-400 hover:bg-cyan-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                aria-controls="mobile-menu"
-                aria-expanded="false"
-              >
-                {/* Content for the mobile menu button */}
-              </button>
-            </div>
-          </div>
-        </div>
-        {/* Mobile menu, show/hide based on menu state. */}
-        <div className="md:hidden" id="mobile-menu">
-          <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-            {/* Content for the mobile menu */}
-          </div>
-        </div>
-      </nav>
+      <nav className="bg-cyan-600"></nav>
 
       {/* Second Navbar */}
       <nav className="bg-white">
@@ -85,61 +40,58 @@ function HomeNav() {
                       Learn Hub
                     </span>
                   </Link>
+                  <div className="ml-14 flex self-center text-3xl  font-semibold space-x-6">
+                    <Link
+                      to="/courses"
+                      className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
+                    >
+                      Courses
+                    </Link>
+                  </div>
                   <div className="hidden md:block">
-                    <div className="ml-4 flex items-center md:ml-6">
+                    <div className="ml-12 flex items-center md:ml-6">
                       {/* Search bar */}
-                      <div className="max-w-md mx-auto">
-                        <div className="relative flex items-center w-full h-9 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
-                          <div className="grid place-items-center h-full w-15 text-gray-300">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-6 w-6"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                              />
-                            </svg>
-                          </div>
-                          <input
-                            className="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
-                            type="text"
-                            id="search"
-                            placeholder="Search something.."
-                          />
-                        </div>
-                      </div>
+                      <div className="max-w-xl mx-auto">
+  <div className="relative flex items-center w-full h-9 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
+    <div className="grid place-items-center h-full w-15 text-gray-300">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+    </div>
+    <input
+      className="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
+      type="text"
+      id="search"
+      placeholder="Search something.."
+    />
+  </div>
+</div>
+
                     </div>
                   </div>
-                  <Link
-                    to="#"
-                    className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
-                  >
-                    Home
-                  </Link>
-                  <Link
-                    to="/courses"
-                    className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
-                  >
-                    Courses
-                  </Link>
-                  <Link
-                    to="/courses"
-                    className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
-                  >
-                    Blogs
-                  </Link>
-                  <Link
-                    to="/tutorSignup"
-                    className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
-                  >
-                    Become An Instructor
-                  </Link>
+                  
+                  <div className="ml-14 flex self-center text-3xl  font-semibold space-x-6">
+  <div className="ml-auto">
+    <Link
+      to="/courses"
+      className="text-black hover:text-blue-700 rounded-md px-3 py-2 text-sm font-medium"
+    >
+      Become An Instructor
+    </Link>
+  </div>
+</div>
+
                 </div>
               </div>
             </div>

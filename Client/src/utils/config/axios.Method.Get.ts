@@ -51,3 +51,11 @@ export const getTutorProfile = async () => {
   };
   return await apiRequest(config);
 };
+
+export const userGetAllCategory = async () => {
+  const config: AxiosRequestConfig = {
+    method: "GET",
+    url: `/api/v1/student/`,
+  };
+  return await apiRequest(config);
+};

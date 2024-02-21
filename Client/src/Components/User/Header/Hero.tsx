@@ -46,8 +46,9 @@ function Hero() {
                 <br />
                 <p className="mt-3 text-white">
                   500K+ People already trusted us.{' '}
-                  <span className="underline text-yellow-300">View courses</span>
-                </p>
+                  <button className="bg-yellow-300 text-black px-4 py-2 rounded hover:bg-yellow-400 focus:outline-none focus:ring focus:border-blue-300">
+  Enroll Courses
+</button>                </p>
               </div>
             </div>
           </div>

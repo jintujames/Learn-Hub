@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import studentModel from "../../Models/studentModel";
+import categoryModel from "../../Models/categoryModel"
 import generateToken from "../../Utlitis/generateToken";
 import "dotenv/config";
 import User from "../../Models/studentModel";
@@ -233,6 +234,23 @@ const firebaseGoogleAuthVerication = async (req: Request, res: Response) => {
   }
 };
 
+const userGetAllCategory = async (req: Request, res: Response) => {
+  try {
+    const categoryDetails = await categoryModel.find().exec();
+    if (categoryDetails) {
+      res.status(200).json({
+        categoryDetails,
+      });
+    } else {
+      return res.status(400).json({
+        message: "no users in this table",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   studentSignUp,
   studentLogin,
@@ -241,4 +259,5 @@ export {
   verifyForgetPassword,
   newPassword,
   firebaseGoogleAuthVerication,
+  userGetAllCategory
 };
