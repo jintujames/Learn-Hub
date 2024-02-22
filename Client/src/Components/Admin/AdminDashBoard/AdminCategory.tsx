@@ -5,11 +5,13 @@ import { addCategory, editAdminCategory } from "../../../utils/config/axios.Meth
 import { addAdminCategory } from "../../../utils/api/api.Types";
 import { admingetCategory } from "../../../utils/config/axios.Method.Get";
 import { deleteAdminCategory } from "../../../utils/config/axios.Method.Delete";
+import { useCategoryValidate } from "../../../utils/validations/categoryValidation";
 
 
 
 function AdminCategory() {
   const navigate = useNavigate();
+  const { errors, handleSubmit, register } = useCategoryValidate()
 
   const [data, setData]:any = useState([]);
 

@@ -19,5 +19,8 @@ tutorRouter.post("/tutorLogout", tutorLogout);
 
 tutorRouter.post("/firebseAuthVerify", firebaseGoogleTutorAuthVerication);
 tutorRouter.get("/tutorProfile");
+tutorRouter.post("/addLesson",);
+tutorRouter.post("/addCourse");
+
 
 export default tutorRouter;

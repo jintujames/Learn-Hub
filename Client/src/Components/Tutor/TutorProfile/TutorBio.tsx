@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { getTutorBio } from "../../../utils/config/axios.Method.Get";
 
 function TutorBio() {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+
   const { tutor } = useSelector((state: any) => state.tutor);
 
   useEffect(() => {
@@ -12,6 +15,25 @@ function TutorBio() {
       navigate("/tutorProfile");
     }
   }, []);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result : any = await getTutorBio()
+        console.log(result.data.instructorBioDetails);
+
+        setData(result.data.instructorBioDetails);
+
+        
+
+      } catch (error) {
+        console.log("Error in tutor Bio:", error);
+        
+      }
+    }
+    fetchData();
+  }, [])
 
   return (
     <>

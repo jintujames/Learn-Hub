@@ -7,9 +7,9 @@ enum CourseLevel {
 }
 
 interface ICourse extends Document {
-  coursename: string;
-  courseduration: Date;
-  coursedescription: string;
+  courseName: string;
+  courseDuration: Date;
+  courseDescription: string;
   isApproved: boolean;
   category: mongoose.Schema.Types.ObjectId;
   coursefee: number;
@@ -28,15 +28,15 @@ interface ICourse extends Document {
 
 const courseSchema = new Schema<ICourse>(
   {
-    coursename: {
+    courseName: {
       type: String,
       required: true,
     },
-    courseduration: {
+    courseDuration: {
       type: Date,
       required: true,
     },
-    coursedescription: {
+    courseDescription: {
       type: String,
       required: true,
     },
@@ -83,14 +83,7 @@ const courseSchema = new Schema<ICourse>(
             type: String,
             required: true,
           },
-          duration: {
-            type: Number,
-            required: true,
-          },
-          description: {
-            type: String,
-            required: true,
-          },
+          
           video: {
             type: String,
             required: true,
@@ -112,5 +105,5 @@ const courseSchema = new Schema<ICourse>(
 );
 
 // Define the model using the model function and export it
-const CourseModel: Model<ICourse> = model<ICourse>("Course", courseSchema);
-export default CourseModel;
+const courseModel: Model<ICourse> = model<ICourse>("Course", courseSchema);
+export default courseModel;

@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios";
-import { signUpUser, signInUser, signInAdmin, addAdminCategory } from "../api/api.Types";
+import { signUpUser, signInUser, signInAdmin, addAdminCategory, courseBio } from "../api/api.Types";
 import { signUpTutor, signInTutor } from "../api/api.Types";
 import { apiRequest } from "./axios.Config";
 
@@ -170,5 +170,24 @@ export const editAdminCategory = async (categoryPayload: addAdminCategory,id:any
     return await apiRequest(config);
   } catch (error) {
     throw error;
+  }
+};
+
+export const addCourseBio = async (coursePayload: courseBio) => {
+  console.log('Adding course with payload:', coursePayload);
+
+  const config: AxiosRequestConfig = {
+    method: "POST",
+    url: `api/v1/tutor/addCourse`,
+    data: coursePayload,
+  };
+
+  try {
+    const response = await apiRequest(config);
+    console.log('API Response:', response);
+    return response;
+  } catch (error) {
+    console.error('Error in API request:', error);
+    throw error; // Re-throw the error to propagate it up the call stack
   }
 };

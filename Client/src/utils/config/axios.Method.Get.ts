@@ -59,3 +59,12 @@ export const userGetAllCategory = async () => {
   };
   return await apiRequest(config);
 };
+
+
+export const getTutorBio = async () => {
+  const config: AxiosRequestConfig = {
+    method: "GET",
+    url: `/api/v1/tutor/tutorProfile`,
+  };
+  return await apiRequest(config);
+};

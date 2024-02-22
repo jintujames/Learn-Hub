@@ -26,7 +26,7 @@ function  TutorSidebar({children}:any) {
     }else if (data=='NewCourse'){
       console.log('hhhh');
       
-      navigate('/tutorProfile/addNewCourse')
+      navigate('/tutorProfile/addCourse')
     }
 
   }

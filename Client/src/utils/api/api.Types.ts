@@ -32,3 +32,11 @@ export type signInAdmin = {
 export type addAdminCategory = {
   categoryName: string;
 }
+
+export type courseBio = {
+  courseName: string;
+  courseDescription: string;
+  isApproved: boolean;
+  category: string;
+  coursefee: number;
+}

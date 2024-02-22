@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
+  import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import instructorModel from "../../Models/instructorModel";
 import generateToken from "../../Utlitis/generateToken";
 import "dotenv/config";
 import Tutor from "../../Models/instructorModel";
+import courseModel from "../../Models/courseModel";
 
 //Instructor Register
 
@@ -116,9 +117,99 @@ const firebaseGoogleTutorAuthVerication = async (
   }
 };
 
+const addLesson = async (req: Request, res: Response) => {
+  try {
+    const { video, coursename, title, duration, description } = req.body;
+
+    const updatedCourse = await courseModel.findOneAndUpdate(
+      { _id: coursename },
+      {
+        $push: {
+          courseLessons: {
+            video,
+            title: title,
+            duration: duration,
+            description: description,
+          },
+        },
+      },
+      { new: true }
+    );
+    if (updatedCourse) {
+      res.status(201).json(updatedCourse);
+    } else {
+      res.status(404).json({ error: "Course not found" });
+    }
+  } catch (error) {
+    res.status(500); // Internal server error
+    throw error;
+  }
+};
+
+const addCourses = async (req: Request, res: Response) => {
+  try {
+    const {
+      courseName,
+      courseDescription,
+      category,
+      coursefee,
+      courseLevel,
+    } = req.body;
+
+    console.log(req.body);
+
+    const createdCourse = await courseModel.create({
+      courseName,
+      instructor: req.user?._id,
+      courseDescription,
+      category,
+      coursefee,
+      courseLevel,
+    });
+
+    if (createdCourse) {
+      res.status(200).json({
+        courseName,
+        courseDescription,
+        category,
+        coursefee,
+        courseLevel,
+      });
+    } else {
+      res.status(400).json({ message: "Invalid data" });
+    }
+  } catch (error) {
+    res.status(500); // Internal server error
+    throw error;
+  }
+};
+
+const instructorBio = async (req: Request, res: Response) => {
+  try {
+    const instructorBioDetails = await instructorModel.find().exec();
+    if (instructorBioDetails) {
+      res.status(200).json({
+        instructorBioDetails,
+      });
+    } else {
+      return res.status(400).json({
+        message: "no users in this table",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+
 export {
   instructorSignup,
   loginInstructor,
   tutorLogout,
   firebaseGoogleTutorAuthVerication,
+  addLesson,
+  addCourses,
+  instructorBio
 };

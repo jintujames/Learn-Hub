@@ -7,6 +7,8 @@ import { Routes, Route } from "react-router-dom";
 import AddCourse from "../../Components/Tutor/TutorProfile/AddCourse";
 import AddImage from "../../Components/Tutor/TutorProfile/AddImage";
 import TutorBio from "../../Components/Tutor/TutorProfile/TutorBio";
+import AddCourseBio from "../../Components/Tutor/TutorProfile/AddCourseBio";
+
 function TutorProfilePage() {
   const [state, setState] = useState(0);
   return (
@@ -15,14 +17,18 @@ function TutorProfilePage() {
 
       <Routes>
         <Route path="/" element={<TutorSidebar children={<TutorBio />} />} />
+
         <Route
           path="/image"
           element={<TutorSidebar children={<AddImage />} />}
         />
-        {/* <Route path="/course" element={<TutorSidebar children={<AddImage/>} />}/> */}
 
         <Route
-          path="/addNewCourse"
+          path="/addCourse"
+          element={<TutorSidebar children={<AddCourseBio />} />}
+        />
+        <Route
+          path="/addLesson"
           element={<TutorSidebar children={<AddCourse />} />}
         />
       </Routes>
