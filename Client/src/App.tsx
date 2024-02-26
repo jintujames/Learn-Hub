@@ -41,13 +41,15 @@ function App() {
           <Route path="/newPassword" element={<NewPassword />} />
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/courseDetails" element={<CourseDetailsPage />} />
+          <Route path="/cart" element={<CourseDetailsPage />} />
+
 
 
           {/* <Route element={<TutorPrivateRoute />}> */}
             <Route path="/tutorProfile/*" element={<TutorProfilePage />} />
             <Route path="/tutorImage" element={<TutorProfilePage />} />
             <Route path="/addCourse" element={<TutorProfilePage />} />
-            <Route path="/addLesson" element={<TutorProfilePage />} />
+            
 
 
 

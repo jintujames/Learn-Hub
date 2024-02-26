@@ -33,7 +33,7 @@ function TutorBio() {
       }
     }
     fetchData();
-  }, [])
+  }, [getTutorBio])
 
   return (
     <>
@@ -58,11 +58,8 @@ function TutorBio() {
                       src="https://picsum.photos/200"
                       alt="Profile picture"
                     />
-                    <h2 className="text-center text-2xl font-semibold mt-3">
-                      John Doe
-                    </h2>
+                  
                     <p className="text-center text-gray-600 mt-1">
-                      Software Engineer
                     </p>
                     <input
                       type="text"
@@ -81,6 +78,29 @@ function TutorBio() {
                               "
                       name="full_name"
                       id="full_name"
+                    />
+                  </div>
+                  <div className="mb-2">
+                  <p className="text-center text-gray-600 mt-1">
+                    </p>
+                    <input
+                      type="email"
+                      placeholder="Your Email"
+                      className="
+                              w-full
+                              rounded
+                              p-3
+                              text-gray-800
+                              dark:text-gray-50
+                              dark:bg-slate-700
+                              border-gray-500
+                              dark:border-slate-600
+                              outline-none
+                              focus-visible:shadow-none
+                              focus:border-primary
+                              "
+                      name="email"
+                      id="email"
                     />
                   </div>
                   <div className="mb-6">
@@ -104,8 +124,24 @@ function TutorBio() {
                       id="email"
                     />
                   </div>
-                  
-
+                  <div className="">
+                  <div className="mb-6">
+                  <label
+                    className="block text-sm text-gray-600"
+                    htmlFor="fileInput"
+                  >
+                    Choose Image or Video
+                  </label>
+                  <input
+                    className="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
+                    id="fileInput"
+                    name="fileInput"
+                    type="file"
+                    accept="image/*, video/*"
+                    aria-label="fileInput"
+                  />
+                </div>
+              </div>
                   <div>
                     <button
                       type="submit"

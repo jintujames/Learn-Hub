@@ -8,6 +8,7 @@ import AddCourse from "../../Components/Tutor/TutorProfile/AddCourse";
 import AddImage from "../../Components/Tutor/TutorProfile/AddImage";
 import TutorBio from "../../Components/Tutor/TutorProfile/TutorBio";
 import AddCourseBio from "../../Components/Tutor/TutorProfile/AddCourseBio";
+import AddLesson from "../../Components/Tutor/TutorProfile/AddLesson";
 
 function TutorProfilePage() {
   const [state, setState] = useState(0);
@@ -29,7 +30,7 @@ function TutorProfilePage() {
         />
         <Route
           path="/addLesson"
-          element={<TutorSidebar children={<AddCourse />} />}
+          element={<TutorSidebar children={< AddLesson/>} />}
         />
       </Routes>
 

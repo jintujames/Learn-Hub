@@ -150,15 +150,36 @@ const editCategory = async (req: Request, res: Response) => {
 
 
 const deleteCategory = async (req: Request, res: Response) => {
-  const { id, categoryName } = req.body;
-  const deleted = await categoryModel.findByIdAndDelete(categoryName, id)
-  if(deleted){
-      res.status(200).json({success:true,message:'Category Deleted Succesfully'})
-  }else{
-      res.status(404).json({success:false,message:'Category deletion Failed'})
-  }
-}
+  try {
+    const { id } = req.body;
+    const item: any = await categoryModel.findOne({ _id: id });
 
+    if (!item) {
+      // If item is null, return a 404 response
+      return res.status(404).json({ success: false, message: 'Category not found' });
+    }
+
+    console.log(item, "iiiiiiiiiiiiii");
+    
+    // Check if 'isDeleted' property exists on the item before updating
+    if ('isDeleted' in item) {
+      item.isDeleted = true;
+      const deleted = await item.save();
+
+      if (deleted) {
+        res.status(200).json({ success: true, message: 'Category Deleted Successfully' });
+      } else {
+        res.status(500).json({ success: false, message: 'Category deletion failed' });
+      }
+    } else {
+      // If 'isDeleted' property is not present on the item, return a 500 response
+      res.status(500).json({ success: false, message: 'Category deletion failed - Property not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
 
 
 

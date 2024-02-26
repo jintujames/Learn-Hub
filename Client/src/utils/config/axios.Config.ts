@@ -7,10 +7,9 @@ export const api = axios.create({
 });
 
 export const apiRequest = async (config: AxiosRequestConfig) => {
-  console.log("config", config);
 
   try {
-    const response = await api(config);
+    const response = await api(config);    
     return response;
   } catch (error) {
     console.error(error, "errr");

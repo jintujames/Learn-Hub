@@ -53,7 +53,7 @@ function CourseDetails() {
                   </div>
 
                   <button className="px-20 py-2 bg-yellow-300 text-gray-900 text-sm font-medium rounded hover:bg-yellow-500 focus:outline-none focus:bg-yellow-300">
-                    Buy this course
+                    Add to Cart
                   </button>
                   <button className="rounded-full w-10 h-10 bg-red-600 hover:bg-red-500 p-0 border-0 inline-flex items-center justify-center text-white ml-4">
                     <svg
@@ -67,7 +67,23 @@ function CourseDetails() {
                       <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
                     </svg>
                   </button>
-
+                      {/* <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="100%"
+                        height="100%"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="feather feather-shopping-cart w-6 h-6 mt-2"
+                      >
+                        <circle cx={9} cy={21} r={1} />
+                        <circle cx={20} cy={21} r={1} />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                      </svg> */}
+                  
                 </div>
               </div>
             </div>

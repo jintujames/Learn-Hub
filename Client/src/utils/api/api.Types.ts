@@ -36,7 +36,9 @@ export type addAdminCategory = {
 export type courseBio = {
   courseName: string;
   courseDescription: string;
-  isApproved: boolean;
+  isApproved: any;
   category: string;
-  coursefee: number;
+  coursefee: any;
+  image:any;
+  courseLevel: any;
 }

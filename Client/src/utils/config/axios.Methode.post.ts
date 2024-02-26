@@ -174,13 +174,25 @@ export const editAdminCategory = async (categoryPayload: addAdminCategory,id:any
 };
 
 export const addCourseBio = async (coursePayload: courseBio) => {
-  console.log('Adding course with payload:', coursePayload);
-
+  console.log(coursePayload,"coursePayload");
+  
+  const formData = new FormData();
+  formData.append('image', coursePayload.image);
+  formData.append('courseName', coursePayload.courseName);
+  formData.append('courseDescription', coursePayload.courseDescription);
+  formData.append('courseLevel', coursePayload.courseLevel);
+  formData.append('isApproved', coursePayload.isApproved);
+  formData.append('category', coursePayload.category);
+  formData.append('coursefee', coursePayload.coursefee);
+  
   const config: AxiosRequestConfig = {
     method: "POST",
     url: `api/v1/tutor/addCourse`,
-    data: coursePayload,
-  };
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }; 
 
   try {
     const response = await apiRequest(config);
@@ -188,6 +200,6 @@ export const addCourseBio = async (coursePayload: courseBio) => {
     return response;
   } catch (error) {
     console.error('Error in API request:', error);
-    throw error; // Re-throw the error to propagate it up the call stack
+    throw error; 
   }
 };

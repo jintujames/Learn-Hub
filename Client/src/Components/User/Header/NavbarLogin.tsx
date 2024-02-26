@@ -19,16 +19,10 @@ Change class "fixed" to "sticky" in "navbar" (l. 33) so the navbar doesn't hide 
     className="flex w-full flex-row justify-end border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 px-1 sm:justify-between"
   >
     <div className="flex flex-wrap gap-4 w-full py-2">
-            <span className="px-2 p-1 hover:bg-blue-400 text-white">Experience</span>
-            <span className="px-2 p-1 hover:bg-blue-400 text-white">Quality</span>
-            <span className="px-2 p-1 hover:bg-blue-400 text-white">Design</span>
-            <span className="px-2 p-1 hover:bg-blue-400 text-white">Size</span>
-            <span className="px-2 p-1 hover:bg-blue-400 text-white">Features</span>
-            <span className="px-2 p-1 hover:bg-blue-400 text-white">Value</span>
-            <span className="px-2 p-1 hover:bg-blue-400 text-white">Relplacement</span>
         </div>
     
   </nav>
+  
   {/* Navbar end */}
   {/* Sidebar start*/}
   <div id="containerSidebar" className="z-40">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function CourseCards() {
   return (
@@ -21,11 +22,15 @@ function CourseCards() {
             alt="The complete HTML & CSS boot-camp 2023 edition"
           />
           <div className="px-4 py-2">
-            <h2 className="text-gray-900 font-bold text-xl">The Complete HTML & CSS Bootcamp 2023 Edition</h2>
-            <p className="text-gray-600 text-sm mt-1">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi quos quidem sequi illum facere recusandae voluptatibus
-            </p>
-          </div>
+  <Link to="/courseDetails">
+    <h2 className="text-gray-900 font-bold text-xl">
+      The Complete HTML & CSS Bootcamp 2023 Edition
+    </h2>
+  </Link>
+  <p className="text-gray-600 text-sm mt-1">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi quos quidem sequi illum facere recusandae voluptatibus
+  </p>
+</div>
          
           <div className="flex items-center justify-between px-4 py-2">
             <h2 className="text-sky-500 font-bold text-lg">$129</h2>

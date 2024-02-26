@@ -11,7 +11,7 @@ interface ICourse extends Document {
   courseDuration: Date;
   courseDescription: string;
   isApproved: boolean;
-  category: mongoose.Schema.Types.ObjectId;
+  category:string,
   coursefee: number;
   rating: {
     start: number;
@@ -19,7 +19,7 @@ interface ICourse extends Document {
   }[];
   totalRating: string | number;
   courseLevel: CourseLevel;
-  photo: string[];
+  image: string[];
   instructor: mongoose.Schema.Types.ObjectId;
   courseLessons:string[];
   createdAt: Date;
@@ -34,15 +34,13 @@ const courseSchema = new Schema<ICourse>(
     },
     courseDuration: {
       type: Date,
-      required: true,
     },
     courseDescription: {
       type: String,
       required: true,
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "categorycollection", // Replace with your actual category collection name
+      type: String,
       required: true,
     },
     coursefee: {
@@ -55,10 +53,9 @@ const courseSchema = new Schema<ICourse>(
     },
     courseLevel: {
       type: String,
-      enum: Object.values(CourseLevel),
       required: true,
     },
-    photo: [
+    image: [
       {
         type: String,
       },
@@ -66,7 +63,6 @@ const courseSchema = new Schema<ICourse>(
     instructor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "instructorcollection", // Replace with your actual instructor collection name
-      required: true,
     },
     rating: [
       {
@@ -81,23 +77,23 @@ const courseSchema = new Schema<ICourse>(
         {
           title: {
             type: String,
-            required: true,
+           
           },
           
           video: {
             type: String,
-            required: true,
+           
           },
           
           isActive: {
             type: Boolean,
-            required: true,
+           
             default: true,
           },
         },
       ],
     totalRating: {
-      type: Number, // Change the type to Number
+      type: Number, 
       default: 0,
     },
   },

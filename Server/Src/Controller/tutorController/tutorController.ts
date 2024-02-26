@@ -1,4 +1,4 @@
-  import { Request, Response } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import instructorModel from "../../Models/instructorModel";
 import generateToken from "../../Utlitis/generateToken";
@@ -146,39 +146,43 @@ const addLesson = async (req: Request, res: Response) => {
   }
 };
 
-const addCourses = async (req: Request, res: Response) => {
+const addCourses = async (req: any, res: Response) => {
   try {
+    console.log(req.body, "BODY");
+    
     const {
       courseName,
       courseDescription,
+      isApproved,
       category,
       coursefee,
       courseLevel,
     } = req.body;
 
-    console.log(req.body);
+    const {filename} = req.file
 
     const createdCourse = await courseModel.create({
-      courseName,
-      instructor: req.user?._id,
-      courseDescription,
-      category,
-      coursefee,
-      courseLevel,
+      instructor: req?.user?._id,
+      courseName:courseName,
+      courseDescription:courseDescription,
+      isApproved:isApproved,
+      category:category,
+      coursefee :coursefee,
+      courseLevel:courseLevel,
+      image:filename
     });
 
+    console.log(createdCourse,'this is create Course');
+    
+
     if (createdCourse) {
-      res.status(200).json({
-        courseName,
-        courseDescription,
-        category,
-        coursefee,
-        courseLevel,
-      });
+      res.status(200).json({ createdCourse });
     } else {
       res.status(400).json({ message: "Invalid data" });
     }
   } catch (error) {
+    console.log('this  si eroor ',error);
+    
     res.status(500); // Internal server error
     throw error;
   }
@@ -201,9 +205,6 @@ const instructorBio = async (req: Request, res: Response) => {
   }
 };
 
-
-
-
 export {
   instructorSignup,
   loginInstructor,
@@ -211,5 +212,5 @@ export {
   firebaseGoogleTutorAuthVerication,
   addLesson,
   addCourses,
-  instructorBio
+  instructorBio,
 };

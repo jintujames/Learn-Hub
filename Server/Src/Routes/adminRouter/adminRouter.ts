@@ -1,4 +1,5 @@
 import express from "express";
+// import {uploadMedia} from '../../../s3/s3'  uploadMedia.single('file') 
 const adminRouter = express.Router();
 
 import {
@@ -19,8 +20,8 @@ adminRouter.get("/adminStudent", getAllStudent);
 adminRouter.get("/adminTutor", getAllInstructor);
 adminRouter.post("/addCategory", addCategory);
 adminRouter.get("/adminCategory", getAllCategory);
-adminRouter.post("/editCategory", editCategory);
-adminRouter.delete("/deleteCategory", deleteCategory);
+adminRouter.post("/editCategory",editCategory);
+adminRouter.put("/deleteCategory", deleteCategory);
 
 
 

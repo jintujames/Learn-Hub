@@ -17,33 +17,31 @@ function AddCourseBio() {
     isApproved: boolean;
     category: string;
     coursefee: number;
+    image: any;
+    courseLevel: string;
   };
 
-  const data: course = {
-    courseName,
-    courseDescription,
-    isApproved: true, // You can set isApproved to true or false based on your logic
-    category,
-    coursefee: Number(coursefee),
-  };
+  let file: any;
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setPhoto(file);
+  const handleChange = (e: any) => {
+    // formData = new FormData()
+    file = e?.target?.files?.[0];
+    // formData.append("image", file )
   };
 
   const handleAddCourse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const data: course = {
+      image: file,
       courseName,
       courseDescription,
-      isApproved: true, // You can set isApproved to true or false based on your logic
+      isApproved: true,
       category,
       coursefee: Number(coursefee),
+      courseLevel,
     };
-
-    console.log("Form data", data);
+    console.log(data, "dataaa");
 
     try {
       await addCourseBio(data);
@@ -54,11 +52,16 @@ function AddCourseBio() {
     }
   };
 
+  const handleAddLesson = () => {
+    navigate("/tutorProfile/addLesson");
+  };
+
   return (
     <>
       <div className="leading-loose">
         <form
           onSubmit={handleAddCourse}
+          encType="multipart/form-data"
           className="max-w-xl m-4 p-10 bg-white rounded shadow-xl"
         >
           <p className="text-gray-800 font-medium">Course Bio </p>
@@ -111,14 +114,14 @@ function AddCourseBio() {
               Difficulty Level
             </label>
             <select
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => setCourseLevel(e.target.value)}
               id="countries"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">Choose category</option>
-              <option value="US">Easy</option>
-              <option value="CA">Medium</option>
-              <option value="FR">Hard</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
             </select>
           </div>
           <div className="inline-block mt-2 w-1/2 pr-1">
@@ -136,7 +139,7 @@ function AddCourseBio() {
             />
           </div>
 
-          <p className="mt-4 text-gray-800 font-medium">Payment information</p>
+          <p className="mt-4 text-gray-800 font-medium">Image</p>
           <div className="rounded-md border border-gray-100 bg-white p-4 shadow-md">
             <label
               htmlFor="upload"
@@ -156,12 +159,13 @@ function AddCourseBio() {
                 />
               </svg>
               <span className="text-gray-600 font-medium">
-                Upload Thumbnail
+                Upload Image
               </span>
             </label>
             <input
               id="upload"
               type="file"
+              name="image"
               className="hidden"
               onChange={handleChange}
             />
@@ -169,10 +173,11 @@ function AddCourseBio() {
 
           <div className="flex items-center justify-between">
             <button
+              onClick={handleAddLesson}
               type="submit"
               className="w-44 mt-2 border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 border-2 rounded-md py-1.5 text-white"
             >
-              Add Lesson
+              Create Course
             </button>
           </div>
         </form>
