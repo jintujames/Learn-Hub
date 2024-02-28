@@ -6,13 +6,10 @@ function CourseCards() {
     <>
    
       <div className="my-8">
-        <h1 className="text-center text-blue-600 font-medium mb-2">Featured Courses</h1>
-        <h4 className="text-center text-lg font-bold mb-2">Find Yours From The Featured</h4>
+       
       </div>
 
-<button className="bg-transparent mx-auto flex space hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-  Button
-</button>
+
 
       <div className="container mx-auto px-20 flex space-x-10">
         <div className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden">
@@ -33,9 +30,10 @@ function CourseCards() {
 </div>
          
           <div className="flex items-center justify-between px-4 py-2">
-            <h2 className="text-sky-500 font-bold text-lg">$129</h2>
+            <h2 className="text-sky-500 font-bold text-lg">Rs.129</h2>
             <button className="px-3 py-1 bg-yellow-300 text-sm text-gray-900 font-semibold rounded">
-              Add to Cart
+            View Course
+
             </button>
           </div>
         </div>
@@ -55,9 +53,9 @@ function CourseCards() {
           </div>
           
           <div className="flex items-center justify-between px-4 py-2">
-            <h2 className="text-sky-500 font-bold text-lg">$129</h2>
+            <h2 className="text-sky-500 font-bold text-lg">Rs.129</h2>
             <button className="px-3 py-1 bg-yellow-300 text-sm text-gray-900 font-semibold rounded">
-              Add to Cart
+              View Course
             </button>
           </div>
         </div>

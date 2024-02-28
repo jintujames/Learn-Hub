@@ -1,10 +1,10 @@
 import { AxiosRequestConfig } from "axios";
-import { signUpUser, signInUser, signInAdmin, addAdminCategory, courseBio } from "../api/api.Types";
+import { signUpUser, signInUser, signInAdmin, addAdminCategory, courseBio, LessonData } from "../api/api.Types";
 import { signUpTutor, signInTutor } from "../api/api.Types";
 import { apiRequest } from "./axios.Config";
 
 export const studentSignUp = async (signUpPayload: signUpUser) => {
-  console.log(signUpPayload);
+  console.log(signUpPayload,"PAYLOAD");
   const config: AxiosRequestConfig = {
     method: "POST",
     url: `api/v1/student/signup`,
@@ -184,6 +184,7 @@ export const addCourseBio = async (coursePayload: courseBio) => {
   formData.append('isApproved', coursePayload.isApproved);
   formData.append('category', coursePayload.category);
   formData.append('coursefee', coursePayload.coursefee);
+  formData.append('tutorId' , coursePayload.tutorId)
   
   const config: AxiosRequestConfig = {
     method: "POST",
@@ -197,6 +198,43 @@ export const addCourseBio = async (coursePayload: courseBio) => {
   try {
     const response = await apiRequest(config);
     console.log('API Response:', response);
+    return response;
+  } catch (error) {
+    console.error('Error in API request:', error);
+    throw error; 
+  }
+};
+
+export const addCourseLesson = async (coursePayload: LessonData) => {
+  console.log(coursePayload,"coursePayload");
+  
+  const formData = new FormData();
+  formData.append('courseName', coursePayload?.courseName);
+  formData.append('title', coursePayload?.title);
+  formData.append('Description', coursePayload?.Description);
+  formData.append('isApproved', coursePayload?.isApproved);
+  formData.append('category', coursePayload?.category);
+  formData.append('courseLevel', coursePayload?.courseLevel);
+  formData.append('tutorId' , coursePayload?.tutorId)
+  formData.append('video', coursePayload?.video);
+
+
+console.log(formData , 'hahhaahhahahaha');
+  
+  const config: AxiosRequestConfig = {
+    method: "POST",
+    url: `api/v1/tutor/addLesson`,
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }; 
+
+  try {
+
+    console.log(formData)
+    const response = await apiRequest(config);
+    console.log('Lesson API Response:', response);
     return response;
   } catch (error) {
     console.error('Error in API request:', error);

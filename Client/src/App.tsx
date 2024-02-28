@@ -49,6 +49,10 @@ function App() {
             <Route path="/tutorProfile/*" element={<TutorProfilePage />} />
             <Route path="/tutorImage" element={<TutorProfilePage />} />
             <Route path="/addCourse" element={<TutorProfilePage />} />
+            <Route path="/myCourse" element={<TutorProfilePage />} />
+            <Route path="/myCourseView" element={<TutorProfilePage />} />
+
+
             
 
 

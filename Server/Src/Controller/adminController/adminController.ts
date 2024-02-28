@@ -71,7 +71,7 @@ const getAllInstructor = async (req: Request, res: Response) => {
 
 const getAllCategory = async (req: Request, res: Response) => {
   try {
-    const categoryDetails = await categoryModel.find().exec();
+    const categoryDetails = await categoryModel.find({isDeleted: false}).exec();
     if (categoryDetails) {
       res.status(200).json({
         categoryDetails,
@@ -96,8 +96,10 @@ const addCategory = async (req: Request, res: Response, next: NextFunction) => {
 
 
     if (categoryExists) {
+      console.log(categoryExists,"yyyyyyy");
+      
 
-      return res.status(400).json({ message: "Category already exists" });
+      return res.status(400).json({ error: "Category already exists" });
       
     }
 
@@ -107,7 +109,7 @@ const addCategory = async (req: Request, res: Response, next: NextFunction) => {
 
     if (category) {
       console.log(categoryName, "created");
-      return res.status(201).json({ message: "Category created" });
+      return res.status(200).json({ message: "Category created" });
     } else {
       res.status(400).json({ message: "Invalid category data" });
     }
@@ -150,29 +152,29 @@ const editCategory = async (req: Request, res: Response) => {
 
 
 const deleteCategory = async (req: Request, res: Response) => {
+  console.log("deletye Category")
   try {
-    const { id } = req.body;
+    console.log("body", req.params)
+    const { id } =  req.params; 
+    console.log(id,"idddddddddddddd")
     const item: any = await categoryModel.findOne({ _id: id });
 
     if (!item) {
-      // If item is null, return a 404 response
       return res.status(404).json({ success: false, message: 'Category not found' });
     }
 
     console.log(item, "iiiiiiiiiiiiii");
     
-    // Check if 'isDeleted' property exists on the item before updating
-    if ('isDeleted' in item) {
+    if (item && 'isDeleted' in item) {
       item.isDeleted = true;
-      const deleted = await item.save();
+      const updatedItem = await item.save();
 
-      if (deleted) {
+      if (updatedItem) {
         res.status(200).json({ success: true, message: 'Category Deleted Successfully' });
       } else {
         res.status(500).json({ success: false, message: 'Category deletion failed' });
       }
     } else {
-      // If 'isDeleted' property is not present on the item, return a 500 response
       res.status(500).json({ success: false, message: 'Category deletion failed - Property not found' });
     }
   } catch (error) {

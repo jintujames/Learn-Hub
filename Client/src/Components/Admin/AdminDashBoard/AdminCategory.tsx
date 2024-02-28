@@ -5,15 +5,15 @@ import { addCategory, editAdminCategory } from "../../../utils/config/axios.Meth
 import { addAdminCategory } from "../../../utils/api/api.Types";
 import { admingetCategory } from "../../../utils/config/axios.Method.Get";
 import { deleteAdminCategory } from "../../../utils/config/axios.Method.Delete";
-import { useCategoryValidate } from "../../../utils/validations/categoryValidation";
 
 
 
 function AdminCategory() {
   const navigate = useNavigate();
-  const { errors, handleSubmit, register } = useCategoryValidate()
 
   const [data, setData]:any = useState([]);
+
+  console.log(data,"dataaaaaaaaaaaaaaaa")
 
   const [category, setCategory] = useState<addAdminCategory>({
     categoryName: "",
@@ -37,15 +37,17 @@ function AdminCategory() {
       console.error("Error during admin get all tutors:", error);
     }
   };
-
-  useEffect(()=>{
-    console.log('thisd si data',data);
+  // useEffect(()=>{
+  //   console.log('thisd si data',data);
     
-  },[data])
+  // },[data])
+  
   useEffect(() => {
     fetchData();
     
   }, []);
+
+ 
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModal,setIsEditModal]=useState(false)
@@ -74,10 +76,12 @@ function AdminCategory() {
   const handleAddCategory = async () => {
     await addCategory(category).then((response: any) => {
       if (response.status === 200) {
+        toast.success(response.data.message)
+
         fetchData()
         navigate("/adminCategory");
       } else{
-        toast.success(response.data.message)
+        toast.error(response.data.error)
       }
     });
   };
@@ -97,19 +101,29 @@ function AdminCategory() {
    })
   };
 
-const handleDeleteCategory = async (id: any) => {
-  await deleteAdminCategory(id).then((res:any)=>{  
-    if (res.status === 200) {
-      toast.success(res.data.message)
-
-      navigate("/adminCategory");
-      
-    }else{
-      toast.error(res.response.data.error)
-    }
-   })
+  const handleDeleteCategory = async (_id: any) => {
+    console.log("Deleting category with id:", _id);
+    await deleteAdminCategory(_id)
+      .then((res: any) => {
+        console.log("Delete response:", res);
   
-}
+        if (res.status === 200) {
+          toast.success(res.data.message);
+          navigate("/adminCategory");
+        } else {
+          toast.error(res.response.data.error);
+        }
+      })
+      .catch((error: any) => {
+        console.error("Error deleting category:", error);
+      });
+  };
+  
+  useEffect(() => {
+   
+    console.log(data)
+  }, [handleDeleteCategory])
+  
  
   
   return (
@@ -128,10 +142,10 @@ const handleDeleteCategory = async (id: any) => {
             </tr>
           </thead>
           <tbody className="text-gray-700">
-            {data?.map((data:any, index:any) => (
+          {data.filter((category: any) => category.isDeleted === false).map((category: any, index: any) => (            
               <tr key={index}>
-                <td className="w-1/3 text-left py-3 px-4">
-                  {(data as { categoryName?: string })?.categoryName}
+                <td  className="w-1/3 text-left py-3 px-4">
+                {category?.categoryName}
                 </td>
                 
 
@@ -147,7 +161,7 @@ const handleDeleteCategory = async (id: any) => {
 
                   <button 
                  
-                  onClick={() => handleDeleteCategory((data as {_id?: string })?._id)}
+                 onClick={() => handleDeleteCategory(data?.[index]?._id)}
 
                   
                   className="px-5 py-2 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 ... text-white text-sm uppercase font-medium ml-6">

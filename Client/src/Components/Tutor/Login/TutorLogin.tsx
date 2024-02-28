@@ -31,8 +31,16 @@ function TutorLogin() {
 
       console.log(response, "response");
       if (response.status === 200) {
-        console.log(response.data.token, "res");
-        dispatch(login(response.data.token));
+        console.log(response.data , '%%%%')
+        const userData = {
+          tutorName : response.data.instructorFirstName,
+          tutorId : response.data._id,
+          tutorEmail : response.data.instructorEmail,
+          tutorToken : response.data.token
+        }
+        console.log("after login",response.data.token, "res");
+        dispatch(login(userData));
+        localStorage.setItem('tutorId',response.data._id)
         localStorage.setItem("Token", `${response.data.token}`);
         // navigate("/", { replace: true });
         navigate("/tutorProfile", { replace: true });

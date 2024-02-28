@@ -1,6 +1,8 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addCourseBio } from "../../../utils/config/axios.Methode.post";
+import { getCatagory } from "../../../utils/config/axios.Method.Get";
+import { useSelector } from "react-redux";
 
 function AddCourseBio() {
   const [courseName, setCourseName] = useState<string>("");
@@ -9,7 +11,15 @@ function AddCourseBio() {
   const [coursefee, setCoursefee] = useState<string>("");
   const [courseLevel, setCourseLevel] = useState<string>("");
   const [photo, setPhoto] = useState<File | null>(null);
+  const [catagory,setCatagory]:any=useState({})
   const navigate = useNavigate();
+
+  const tutorData = useSelector((state : any) => state.tutor.tutor);
+
+  const storedTutorId = tutorData?.tutorId;
+
+  console.log(tutorData, storedTutorId , 'storile tutorData')
+
 
   type course = {
     courseName: string;
@@ -17,8 +27,10 @@ function AddCourseBio() {
     isApproved: boolean;
     category: string;
     coursefee: number;
+    instructor : string;
     image: any;
     courseLevel: string;
+    tutorId : string
   };
 
   let file: any;
@@ -29,6 +41,23 @@ function AddCourseBio() {
     // formData.append("image", file )
   };
 
+  useEffect(()=>{
+    console.log('hihiihi');
+    
+    (async ()=>{
+        const response:any=await getCatagory()
+        console.log('this is catogary',response?.data);
+        
+        if(response){
+          setCatagory(response?.data?.categoryDetails)
+        }
+    })()
+  },[])
+
+  const tutorId = localStorage.getItem("tutorId");
+
+  console.log("tutorId",tutorId)
+
   const handleAddCourse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -38,23 +67,23 @@ function AddCourseBio() {
       courseDescription,
       isApproved: true,
       category,
+      instructor: tutorId||"",
       coursefee: Number(coursefee),
       courseLevel,
+      tutorId : storedTutorId
     };
     console.log(data, "dataaa");
 
     try {
       await addCourseBio(data);
       console.log("Course added successfully");
-      navigate("/addLesson", { replace: true });
+      navigate("/myCourse", { replace: true });
     } catch (error) {
       console.error("Error adding course:", error);
     }
   };
 
-  const handleAddLesson = () => {
-    navigate("/tutorProfile/addLesson");
-  };
+  
 
   return (
     <>
@@ -64,7 +93,7 @@ function AddCourseBio() {
           encType="multipart/form-data"
           className="max-w-xl m-4 p-10 bg-white rounded shadow-xl"
         >
-          <p className="text-gray-800 font-medium">Course Bio </p>
+          <p className="text-gray-800 text-center font-medium">Create Course</p>
           <div className="">
             <label className="block text-sm text-gray-00" htmlFor="cus_name">
               Course Title
@@ -86,11 +115,11 @@ function AddCourseBio() {
             <input
               onChange={(e) => setCourseDescription(e.target.value)}
               className="w-full px-5  py-4 text-gray-700 bg-gray-200 rounded"
-              id="cus_email"
-              name="cus_email"
+              id="description"
+              name="description"
               type="text"
-              placeholder="Your Email"
-              aria-label="Email"
+              placeholder="Description"
+              aria-label="Description"
             />
           </div>
           <div className="inline-block mt-2 w-1/2 pr-1">
@@ -98,18 +127,23 @@ function AddCourseBio() {
               Category
             </label>
             <select
-              onChange={(e) => setCategory(e.target.value)}
-              id="countries"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option value="">Choose category</option>
-              <option value="US">Web Development</option>
-              <option value="CA">Design</option>
-              <option value="FR">Business</option>
-              <option value="DE">Finance</option>
-            </select>
+  onChange={(e) => setCategory(e.target.value)}
+  id="categories"
+  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+>
+  <option value="">Choose category</option>
+  {catagory.length > 0 ? (
+    catagory.map((item: any) => (
+      <option key={item._id} value={item.categoryName}>
+        {item.categoryName}
+      </option>
+    ))
+  ) : (
+    <option value="NoCategory">No category</option>
+  )}
+</select>
           </div>
-          <div className="inline-block mt-2 w-1/2 pr-1">
+          {/* <div className="inline-block mt-2 w-1/2 pr-1">
             <label className="block text-sm text-gray-600" htmlFor="cus_email">
               Difficulty Level
             </label>
@@ -123,7 +157,7 @@ function AddCourseBio() {
               <option value="Medium">Medium</option>
               <option value="Hard">Hard</option>
             </select>
-          </div>
+          </div> */}
           <div className="inline-block mt-2 w-1/2 pr-1">
             <label className="block text-sm text-gray-600" htmlFor="cus_email">
               Price
@@ -140,40 +174,28 @@ function AddCourseBio() {
           </div>
 
           <p className="mt-4 text-gray-800 font-medium">Image</p>
-          <div className="rounded-md border border-gray-100 bg-white p-4 shadow-md">
-            <label
-              htmlFor="upload"
-              className="flex flex-col items-center gap-2 cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 fill-white stroke-indigo-500"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              <span className="text-gray-600 font-medium">
-                Upload Image
-              </span>
-            </label>
-            <input
-              id="upload"
-              type="file"
-              name="image"
-              className="hidden"
-              onChange={handleChange}
-            />
-          </div>
+          <div className="">
+                <div className="mt-2">
+                  <label
+                    className="block text-sm text-gray-600"
+                    htmlFor="fileInput"
+                  >
+                    Choose Image
+                  </label>
+                  <input
+                    className="w-full px-5 py-4 text-gray-700 bg-gray-200 rounded"
+                    onChange={handleChange}
+                    id="fileInput"
+                    name="fileInput"
+                    type="file"
+                    accept="image/*, video/*"
+                    aria-label="fileInput"
+                  />
+                </div>
+              </div>
 
           <div className="flex items-center justify-between">
             <button
-              onClick={handleAddLesson}
               type="submit"
               className="w-44 mt-2 border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 border-2 rounded-md py-1.5 text-white"
             >

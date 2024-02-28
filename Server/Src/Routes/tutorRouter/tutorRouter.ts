@@ -5,10 +5,12 @@ const tutorRouter = express.Router();
 import {
   addCourses,
   firebaseGoogleTutorAuthVerication,
+  getCourses,
   instructorBio,
   instructorSignup,
   loginInstructor,
   tutorLogout,
+  addLesson
 } from "../../Controller/tutorController/tutorController";
 import { upload } from "../../Multer/upload";
 
@@ -22,9 +24,10 @@ tutorRouter.post("/tutorLogin", loginInstructor);
 tutorRouter.post("/tutorLogout", tutorLogout);
 
 tutorRouter.post("/firebseAuthVerify", firebaseGoogleTutorAuthVerication);
-tutorRouter.get("/tutorProfile", instructorBio);
-tutorRouter.post("/addLesson",);
-tutorRouter.post('/addCourse',upload.single('image'), addCourses);
+tutorRouter.get("/tutorProfile/:id", instructorBio);
+tutorRouter.post("/addLesson",addLesson);
+tutorRouter.post('/addCourse', upload.single('image'), addCourses);
+tutorRouter.get('/courses/:id',getCourses)
 
 
 export default tutorRouter;

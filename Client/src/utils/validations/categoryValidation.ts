@@ -8,12 +8,16 @@ export type categoryData = {
 
 export const categoryAuthSchema: ZodType<categoryData> = z.object({
     categoryName: z
-        .string()
-        .min(5, { message: "category Name atleast 5 character" })
-        .max(20, { message: "category Name cannot exceed 20 characters" }),
+    .string()
+    .refine((value) => value.trim() !== "", {
+      message: "categoryName cannot be empty",
+    })
+    .refine((value) => /^[a-zA-Z ]+$/.test(value), {
+      message: "categoryName must contain only alphabetic characters",
+    }),
 });
 
-export const useCategoryValidate = () => {
+export const CategoryValidate = () => {
     const {
         reset,
         register,

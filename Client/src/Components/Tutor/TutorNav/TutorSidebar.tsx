@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { tutorLogout } from "../../../utils/config/axios.Methode.post";
 import { logout } from "../../../Features/TutorSlice/tutorSlice";
 import TutorBio from "../TutorProfile/TutorBio";
@@ -8,14 +8,48 @@ import AddImage from "../TutorProfile/AddImage";
 import AddCouseBio from "../TutorProfile/AddCourseBio";
 import AddCourseBio from "../TutorProfile/AddCourseBio";
 import AddCourse from "../TutorProfile/AddCourse";
+import { getTutorBio } from "../../../utils/config/axios.Method.Get";
 
 function  TutorSidebar({children}:any) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showCourseDropdown, setShowCourseDropdown] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  interface InstructorBioDetails {
+    instructorFirstName: string;
+    instructorLastName: string;
+    instructorEmail: string;
+    photo: any;
+  
+    // Add other properties as needed
+  }
+  const [data, setData] = useState<InstructorBioDetails>();
+  const tutorId = localStorage.getItem("tutorId");
+  console.log("aaaaaaaaa",tutorId);
+  console.log(typeof tutorId);
+  
+  const { tutor } = useSelector((state: any) => state.tutor);
+  console.log("tuto",tutor);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result : any = await getTutorBio(tutorId)
+        console.log("tutordetails",result.data.instructorBioDetails);
+        setData(result.data.instructorBioDetails);
+
+      } catch (error) {
+        console.log("Error in tutor Bio:", error);
+        
+      }
+    }
+    fetchData();
+  }, [getTutorBio])
+
   const handleNavigate=(data:any)=>{
     console.log(data,'this is data');
     
@@ -27,20 +61,32 @@ function  TutorSidebar({children}:any) {
       console.log('hhhh');
       
       navigate('/tutorProfile/addCourse')
+    }else if (data =='myCourse'){
+      console.log("working")
+      navigate('/tutorProfile/myCourse')
+
+    }else if (data =='myCourseView'){
+      console.log("working")
+      navigate('/tutorProfile/myCourse')
     }
 
   }
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await tutorLogout();
-  //     localStorage.removeItem("Token");
-  //     dispatch(logout());
-  //     navigate("/");
-  //   } catch (error) {
-  //     console.error("Logout failed:", error);
-  //   }
-  // };
+  const handleLogout = async () => {
+    try {
+      await tutorLogout();
+      localStorage.removeItem("Token");
+      dispatch(logout());
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const handleCourseClick = () => {
+    setShowCourseDropdown(!showCourseDropdown);
+    };
+
 
   return (
     <>
@@ -54,10 +100,14 @@ function  TutorSidebar({children}:any) {
               src="https://picsum.photos/200"
               alt="Profile picture"
             />
-            <h2 className="text-center text-2xl font-semibold mt-3">
-              John Doe
+            <h2 className="text-center text-2xl font-semibold mt-3" >                     
+            {`${data?.instructorFirstName} ${data?.instructorLastName}`}
             </h2>
-            <p className="text-center text-gray-600 mt-1">Software Engineer</p>
+            <p className="text-center text-gray-600 mt-1">
+            {data?.instructorEmail}
+
+
+            </p>
 
             <div className="flex items-center space-x-2 mx-auto py-2"></div>
 
@@ -96,7 +146,7 @@ function  TutorSidebar({children}:any) {
                 </svg>
                 <span className="font-semibold">Students</span>
               </li>
-              <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
+              <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150"  onClick={()=>handleNavigate("myCourse")}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -115,6 +165,7 @@ function  TutorSidebar({children}:any) {
                 </svg>
                 <span className="font-semibold">My Course</span>
               </li>
+              
               <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -130,29 +181,43 @@ function  TutorSidebar({children}:any) {
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-                <span className="font-semibold">Coupons</span>
+                <li>
+                <Link
+                  to=""
+                  className={`text-md font-semibold text-left text-black uppercase md:p-0 dark:text-white ${
+                    showCourseDropdown ? "hover:text-blue-700" : ""
+                  }`}
+                  onClick={handleCourseClick}
+                >
+                  Course
+                </Link>
+                {showCourseDropdown && (
+                  <ul className="absolute z-10 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg dark:bg-gray-800">
+                    <li>
+                      <Link
+                        to="/tutorProfile/addCourse"
+                        className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        Create Course
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/tutorProfile/addLesson"
+                        className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        Add Lesson
+                      </Link>
+                    </li>
+                    
+                  </ul>
+                )}
               </li>
-              <li className="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                <span className="font-semibold">Enrollments</span>
               </li>
 
-              <button className="w-44 mt-12 border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 rounded-full py-1.5 text-white" onClick={()=>handleNavigate("NewCourse")}>
-                Add New Course
-              </button>
+ 
+  
+
             </ul>
           </div>
         </div>
@@ -160,26 +225,9 @@ function  TutorSidebar({children}:any) {
         <div className="w-4/5">
           <main className=" w-full bg-white border-l">
             <nav className="flex items-center justify-between px-10 bg-white py-6 border-b">
-              <div className="flex items-center bg-gray-100 px-4 py-2 rounded-md space-x-3 w-96">
-                <input
-                  type="text"
-                  placeholder="search"
-                  className="bg-gray-100 outline-none w-full"
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 cursor-pointer text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
+              <div className="flex items-center px-4 py-2 rounded-md space-x-3 w-96">
+                
+                
               </div>
 
               <div className="relative">
@@ -220,7 +268,7 @@ function  TutorSidebar({children}:any) {
                             </a>
 
                             <button
-                              // onClick={handleLogout}
+                              onClick={handleLogout}
                               type="button"
                               className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                             >

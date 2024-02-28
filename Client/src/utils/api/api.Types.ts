@@ -41,4 +41,17 @@ export type courseBio = {
   coursefee: any;
   image:any;
   courseLevel: any;
+  tutorId : string
+}
+
+export type LessonData = {
+  
+  courseName: string;
+  Description: string;
+  isApproved: any;
+  category: string;
+  title: string;
+  video: any;
+  courseLevel: any;
+  tutorId : string
 }

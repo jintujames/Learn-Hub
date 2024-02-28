@@ -119,17 +119,21 @@ const firebaseGoogleTutorAuthVerication = async (
 
 const addLesson = async (req: Request, res: Response) => {
   try {
-    const { video, coursename, title, duration, description } = req.body;
+    console.log(req.body, "hhhhhhhhhhhhhhhhh");
+    const { courseName, Description, title, category, courseLevel, video } = req.body;
 
+
+    console.log(courseName,"nammmmmmmmmmmmmmmmm")
     const updatedCourse = await courseModel.findOneAndUpdate(
-      { _id: coursename },
+      { _id: courseName },
       {
         $push: {
           courseLessons: {
             video,
-            title: title,
-            duration: duration,
-            description: description,
+            title,
+            Description, // Corrected property name
+            category,    // Corrected property name
+            courseLevel,
           },
         },
       },
@@ -146,29 +150,34 @@ const addLesson = async (req: Request, res: Response) => {
   }
 };
 
+
 const addCourses = async (req: any, res: Response) => {
   try {
-    console.log(req.body, "BODY");
-    
+
     const {
       courseName,
       courseDescription,
       isApproved,
       category,
       coursefee,
-      courseLevel,
+     
+      tutorId 
     } = req.body;
+
+    
+  
 
     const {filename} = req.file
 
+
+
     const createdCourse = await courseModel.create({
-      instructor: req?.user?._id,
+      instructor : tutorId ,
       courseName:courseName,
       courseDescription:courseDescription,
       isApproved:isApproved,
       category:category,
       coursefee :coursefee,
-      courseLevel:courseLevel,
       image:filename
     });
 
@@ -190,7 +199,8 @@ const addCourses = async (req: any, res: Response) => {
 
 const instructorBio = async (req: Request, res: Response) => {
   try {
-    const instructorBioDetails = await instructorModel.find().exec();
+    const userId = req.params.id;
+    const instructorBioDetails = await instructorModel.findById(userId).exec();
     if (instructorBioDetails) {
       res.status(200).json({
         instructorBioDetails,
@@ -205,6 +215,27 @@ const instructorBio = async (req: Request, res: Response) => {
   }
 };
 
+const getCourses = async (req: Request, res: Response) => {
+  try{
+    const { id } = req.params
+
+    console.log(id,"tutor Id")
+
+    const AllCourses = await courseModel.find({instructor:id}).populate('instructor')
+    console.log(AllCourses,"coursessss");
+
+
+    if(AllCourses){
+      res.status(200).json({AllCourses})
+    }    
+
+  }catch(err){
+    res.status(500)
+    console.log(err)
+
+  }
+}
+
 export {
   instructorSignup,
   loginInstructor,
@@ -213,4 +244,5 @@ export {
   addLesson,
   addCourses,
   instructorBio,
+  getCourses
 };

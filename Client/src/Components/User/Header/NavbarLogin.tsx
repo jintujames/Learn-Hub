@@ -14,14 +14,14 @@ Change class "fixed" to "sticky" in "navbar" (l. 33) so the navbar doesn't hide 
     }}
   />
   {/* Navbar start */}
-  <nav
+  {/* <nav
     id="navbar"
     className="flex w-full flex-row justify-end border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 px-1 sm:justify-between"
   >
     <div className="flex flex-wrap gap-4 w-full py-2">
         </div>
     
-  </nav>
+  </nav> */}
   
   {/* Navbar end */}
   {/* Sidebar start*/}

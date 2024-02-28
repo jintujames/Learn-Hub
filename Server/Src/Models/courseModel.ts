@@ -51,10 +51,6 @@ const courseSchema = new Schema<ICourse>(
       type: Boolean,
       default: false,
     },
-    courseLevel: {
-      type: String,
-      required: true,
-    },
     image: [
       {
         type: String,
@@ -62,7 +58,7 @@ const courseSchema = new Schema<ICourse>(
     ],
     instructor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "instructorcollection", // Replace with your actual instructor collection name
+      ref: "Tutor", // Replace with your actual instructor collection name
     },
     rating: [
       {
@@ -74,24 +70,35 @@ const courseSchema = new Schema<ICourse>(
       },
     ],
     courseLessons: [
-        {
-          title: {
-            type: String,
-           
-          },
-          
-          video: {
-            type: String,
-           
-          },
-          
-          isActive: {
-            type: Boolean,
-           
-            default: true,
-          },
+      {
+        courseName: {
+          type: String,
+          required: true,
         },
-      ],
+        title: {
+          type: String,
+        },
+        Description: {
+          type: String,
+        },
+        category: {
+          type: String,
+          required: true,
+        },
+        courseLevel: {
+          type: String,
+          required: true,
+        },
+        video: {
+          type: String,
+        },
+        isActive: {
+          type: Boolean,
+          default: true,
+        },
+      },
+    ],
+    
     totalRating: {
       type: Number, 
       default: 0,

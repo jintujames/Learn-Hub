@@ -9,7 +9,7 @@ function AddCourse() {
           encType="multipart/form-data"
           className="max-w-xl m-4 p-10 bg-white rounded shadow-xl"
         >
-          <p className="text-gray-800 font-medium">Course Bio </p>
+          <p className="text-gray-800 font-medium">Create Course</p>
           <div className="inline-block mt-2 w-1/2 pr-1">
             <label className="block text-sm text-gray-600" htmlFor="cus_email">
               Course Name

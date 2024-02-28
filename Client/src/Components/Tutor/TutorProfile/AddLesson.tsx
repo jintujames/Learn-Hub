@@ -1,25 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import {
+  addCourseBio,
+  addCourseLesson,
+} from "../../../utils/config/axios.Methode.post";
+import {
+  getCatagory,
+  getTutorCourses,
+} from "../../../utils/config/axios.Method.Get";
 
 function AddLesson() {
-  const [courseName, setCourseName] = useState<string>("");
-  const [courseDescription, setCourseDescription] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
-  const [coursefee, setCoursefee] = useState<string>("");
+  const tutorId = localStorage.getItem("tutorId");
+
+  const [courseNames, setCourseNames] = useState<[]>([]);
+
+  const [title, setTitle] = useState<string>("");
+  const [Description, setDescription] = useState<string>("");
+  const [category, setCategory] = useState("");
+  const [categoryOptions, setCategoryOptions] = useState<[]>([]);
   const [courseLevel, setCourseLevel] = useState<string>("");
   const [video, setVideo] = useState<File | null>(null);
   const [CloudanaryURL, setCloudanaryURL] = useState("");
+  const [selectedCourseName, setSelectedCourseName] = useState<string>("");
+
+  const navigate = useNavigate();
 
   type lesson = {
     courseName: string;
-    courseDescription: string;
+    Description: string;
+    title: string;
     isApproved: boolean;
     category: string;
-    coursefee: number;
-    video: any;
     courseLevel: string;
+    video: any;
   };
+  
+
+  let file: any;
 
   const handlevideoUpload = async () => {
     try {
@@ -40,6 +59,7 @@ function AddLesson() {
         if (response.data && response.data.url) {
           console.log("Video uploaded successfully. URL:", response.data.url);
           setCloudanaryURL(response.data.url);
+          return;
         } else {
           console.error("Invalid response from Cloudinary", response.data);
           toast.error(
@@ -62,12 +82,80 @@ function AddLesson() {
     }
   };
 
+  useEffect(() => {
+
+    (async () => {
+      const response: any = await getCatagory();
+      console.log("this is catogary", response?.data);
+
+      if (response) {
+        setCategoryOptions(response?.data?.categoryDetails || []);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:4001/api/v1/tutor/courses/${tutorId}`)
+      .then((res) => {
+        console.log(res, "ffffffffff");
+        setCourseNames(res.data.AllCourses);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   const handleAddLesson = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  
+    try {
+      // Wait for the video to be uploaded
+      await handlevideoUpload();
 
-    await handlevideoUpload();
+      if (!CloudanaryURL) {
+        toast.error("Error occur While Uploading the Video");
+        return;
+      }
+  
+      const data: lesson = {
+        courseName: selectedCourseName,
+        Description,
+        title,
+        isApproved: true,
+        category,
+        courseLevel,
+        video: CloudanaryURL,
+      };
+  
+      console.log(data, "dataaassssssss");
+  
+      // Send the request to the backend
+    axios.post(
+        `http://localhost:4001/api/v1/tutor/addLesson`,
+        {
+          courseName: data.courseName,
+          title,
+          description: data.Description,
+          category,
+          courseLevel,
+          tutor: tutorId,
+          video: data.video,
+        }
+      );
+  
+      
+      setTimeout(() => {
+        toast.success("Lesson Added Successfully");
+        navigate("/myCourse");
+      }, 3000);
+    } catch (error) {
+      console.error(error);
+      toast.error("Error Occurred While Adding");
+    }
   };
-
+  
+  
   return (
     <div>
       <div>
@@ -78,7 +166,9 @@ function AddLesson() {
               encType="multipart/form-data"
               className="max-w-xl m-4 p-10 bg-white rounded shadow-xl"
             >
-              <p className="text-gray-800 font-medium">Course Bio </p>
+              <p className="text-gray-800 text-center font-medium">
+                Add Lesson
+              </p>
               <div className="inline-block mt-2 w-1/2 pr-1">
                 <label
                   className="block text-sm text-gray-600"
@@ -87,14 +177,16 @@ function AddLesson() {
                   Course Name
                 </label>
                 <select
+                  onChange={(e) => setSelectedCourseName(e.target.value)}
                   id="countries"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                   <option value="">Choose Course</option>
-                  <option value="US">Web Development</option>
-                  <option value="CA">Design</option>
-                  <option value="FR">Business</option>
-                  <option value="DE">Finance</option>
+                  {courseNames?.map((course: any) => (
+                    <option key={course._id} value={course._id}>
+                      {course.courseName}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="mt-2">
@@ -105,6 +197,7 @@ function AddLesson() {
                   Description
                 </label>
                 <input
+                  onChange={(e) => setDescription(e.target.value)}
                   className="w-full px-5  py-4 text-gray-700 bg-gray-200 rounded"
                   id="description"
                   name="description"
@@ -116,31 +209,36 @@ function AddLesson() {
               <div className="inline-block mt-2 w-1/2 pr-1">
                 <label
                   className="block text-sm text-gray-600"
-                  htmlFor="cus_email"
+                  htmlFor="category"
                 >
                   Category
                 </label>
                 <select
-                  id="countries"
+                  onChange={(e) => setCategory(e.target.value)}
+                  id="category"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                   <option value="">Choose category</option>
-                  <option value="US">Web Development</option>
-                  <option value="CA">Design</option>
-                  <option value="FR">Business</option>
-                  <option value="DE">Finance</option>
+                  {category.length > 0 ? (
+                    categoryOptions.map((item: any) => (
+                      <option key={item._id} value={item.categoryName}>
+                        {item.categoryName}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="NoCategory">No category</option>
+                  )}
                 </select>
               </div>
               <div className="inline-block mt-2 w-1/2 pr-1">
-                <label
-                  className="block text-sm text-gray-600"
-                  htmlFor="cus_email"
-                >
+                <label className="block text-sm text-gray-600" htmlFor="level">
                   Difficulty Level
                 </label>
                 <select
-                  id="countries"
+                  id="level"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  value={courseLevel}
+                  onChange={(e) => setCourseLevel(e.target.value)}
                 >
                   <option value="">Choose Level</option>
                   <option value="Easy">Easy</option>
@@ -148,38 +246,37 @@ function AddLesson() {
                   <option value="Hard">Hard</option>
                 </select>
               </div>
+
               <div className="inline-block mt-2 w-1/2 pr-1">
-                <label
-                  className="block text-sm text-gray-600"
-                  htmlFor="cus_email"
-                >
-                  Price
+                <label className="block text-sm text-gray-600" htmlFor="price">
+                  Title
                 </label>
                 <input
                   className="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"
-                  id="cus_email"
-                  name="cus_email"
+                  id="title"
+                  name="title"
                   type="text"
-                  placeholder="price"
-                  aria-label="Email"
+                  value={title}
+                  placeholder="title"
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
-              <div className="inline-block mt-2 w-1/2 pr-1">
+              {/* <div className="inline-block mt-2 w-1/2 pr-1">
                 <label
                   className="block text-sm text-gray-600"
-                  htmlFor="cus_email"
+                  htmlFor="duration"
                 >
                   Course Duration
                 </label>
                 <input
                   className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
-                  id="cus_email"
-                  name="cus_email"
+                  id="duration"
+                  name="duration"
                   type="text"
                   placeholder="duration"
-                  aria-label="Email"
+                  aria-label="duration  "
                 />
-              </div>
+              </div> */}
 
               <p className="mt-4 text-gray-800 font-medium">Video</p>
               <div className="">

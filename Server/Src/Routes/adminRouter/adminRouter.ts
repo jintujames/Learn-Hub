@@ -21,7 +21,7 @@ adminRouter.get("/adminTutor", getAllInstructor);
 adminRouter.post("/addCategory", addCategory);
 adminRouter.get("/adminCategory", getAllCategory);
 adminRouter.post("/editCategory",editCategory);
-adminRouter.put("/deleteCategory", deleteCategory);
+adminRouter.put("/deleteCategory/:id", deleteCategory);
 
 
 
