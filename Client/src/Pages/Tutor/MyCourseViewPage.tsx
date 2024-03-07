@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
+import { Link } from "react-router-dom";
+import CourseView from "../../Components/Tutor/TutorProfile/courseView";
 
 function MyCourseViewPage() {
   return (
-    <div>
-      
-    </div>
-  )
+    <CourseView />
+  );
 }
 
-export default MyCourseViewPage
+export default MyCourseViewPage;

@@ -6,6 +6,7 @@ import generateToken from "../../Utlitis/generateToken";
 import "dotenv/config";
 import User from "../../Models/studentModel";
 import { sendMail } from "../../Middleware/mailSender";
+import courseModel from "../../Models/courseModel";
 
 // Student Register
 
@@ -251,6 +252,27 @@ const userGetAllCategory = async (req: Request, res: Response) => {
   }
 };
 
+
+const userGetCourses = async (req:Request,res:Response)=>{
+  try{
+    const courseDetails = await courseModel.find().exec();
+  console.log("Fetched Course Details:", courseDetails);
+    if(courseDetails){
+      res.status(200).json({
+        courseDetails,message:"courseDetails"
+      })
+    }else{
+      return res.status(400).json({
+        error:"no course available "
+      })
+    }
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+
+
 export {
   studentSignUp,
   studentLogin,
@@ -259,5 +281,6 @@ export {
   verifyForgetPassword,
   newPassword,
   firebaseGoogleAuthVerication,
-  userGetAllCategory
+  userGetAllCategory,
+  userGetCourses
 };

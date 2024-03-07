@@ -6,6 +6,7 @@ import { studentRouter } from "./Routes/studentRouter/studentRouter";
 import env from "dotenv";
 import session, { SessionOptions,MemoryStore,SessionData } from "express-session";
 import cors from "cors"
+import path from "path";
 import tutorRouter from "./Routes/tutorRouter/tutorRouter";
 import morgan from "morgan"
 env.config()
@@ -36,6 +37,8 @@ app.use(
     store: store,
   } as SessionOptions)
 );
+
+app.use(express.static(path.join(__dirname, "./public/images")));
 app.use(morgan("dev"))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

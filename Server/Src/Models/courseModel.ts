@@ -8,7 +8,7 @@ enum CourseLevel {
 
 interface ICourse extends Document {
   courseName: string;
-  courseDuration: Date;
+  courseDuration: string;
   courseDescription: string;
   isApproved: boolean;
   category:string,
@@ -24,6 +24,7 @@ interface ICourse extends Document {
   courseLessons:string[];
   createdAt: Date;
   updatedAt: Date;
+  video: string;
 }
 
 const courseSchema = new Schema<ICourse>(
@@ -33,7 +34,7 @@ const courseSchema = new Schema<ICourse>(
       required: true,
     },
     courseDuration: {
-      type: Date,
+      type: String,
     },
     courseDescription: {
       type: String,
@@ -75,6 +76,10 @@ const courseSchema = new Schema<ICourse>(
           type: String,
           required: true,
         },
+        duration:{
+          type:Number,
+          required:true
+      },
         title: {
           type: String,
         },

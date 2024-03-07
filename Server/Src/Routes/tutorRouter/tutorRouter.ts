@@ -26,7 +26,7 @@ tutorRouter.post("/tutorLogout", tutorLogout);
 tutorRouter.post("/firebseAuthVerify", firebaseGoogleTutorAuthVerication);
 tutorRouter.get("/tutorProfile/:id", instructorBio);
 tutorRouter.post("/addLesson",addLesson);
-tutorRouter.post('/addCourse', upload.single('image'), addCourses);
+tutorRouter.post('/addCourse', addCourses);
 tutorRouter.get('/courses/:id',getCourses)
 
 

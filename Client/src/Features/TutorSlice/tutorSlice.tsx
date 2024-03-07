@@ -3,12 +3,15 @@ import { stat } from "fs";
 
 interface tutorState {
   tutor: any; // You should replace 'any' with the actual type of your user object
-  course:any
+  course:any;
+  image:any;
 }
 
 const initialState: tutorState = {
   tutor: null,
-  course:null
+  course:null,
+  image: null,
+
 };
 
 const tutorSlice = createSlice({
@@ -25,10 +28,17 @@ const tutorSlice = createSlice({
       state.tutor = null;
       localStorage.removeItem('tutorId')
     },
+    updateProfileImage: (state, action: PayloadAction<string>) => {
+      // Update the user's profile image
+      if (state.tutor) {
+        state.tutor.image = action.payload;
+        localStorage.setItem("tutorData", JSON.stringify(state.tutor));
+      }
+    },
   },
 });
 
-export const { login, logout, signup} = tutorSlice.actions;
+export const { login, logout, signup, updateProfileImage} = tutorSlice.actions;
 export const selectTutor = (state: { tutor: tutorState }) => state.tutor.tutor;
 
 export default tutorSlice.reducer;

@@ -71,7 +71,9 @@ const getAllInstructor = async (req: Request, res: Response) => {
 
 const getAllCategory = async (req: Request, res: Response) => {
   try {
-    const categoryDetails = await categoryModel.find({isDeleted: false}).exec();
+    const categoryDetails = await categoryModel
+      .find({ isDeleted: false })
+      .exec();
     if (categoryDetails) {
       res.status(200).json({
         categoryDetails,
@@ -89,18 +91,17 @@ const getAllCategory = async (req: Request, res: Response) => {
 const addCategory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id, categoryName } = req.body;
-    console.log(req.body,"rrrrrr");
-    
+    console.log(req.body, "rrrrrr");
 
-    const categoryExists = await categoryModel.findOne({ categoryName: { $regex: new RegExp(`^${categoryName}$`, 'i') }, _id: { $ne: id } });
-
+    const categoryExists = await categoryModel.findOne({
+      categoryName: { $regex: new RegExp(`^${categoryName}$`, "i") },
+      _id: { $ne: id },
+    });
 
     if (categoryExists) {
-      console.log(categoryExists,"yyyyyyy");
-      
+      console.log(categoryExists, "yyyyyyy");
 
       return res.status(400).json({ error: "Category already exists" });
-      
     }
 
     const category = await categoryModel.create({
@@ -118,71 +119,127 @@ const addCategory = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-
-
 const editCategory = async (req: Request, res: Response) => {
-  const { id,name } = req.body;
-  console.log('this is new name',id,name);
-  
+  const { id, name } = req.body;
+  console.log("this is new name", id, name);
+
   try {
-    const categoryNameDetails = await categoryModel.findById(id)
-    const existingCategory = await categoryModel.findOne({ categoryName: { $regex: new RegExp(`^${name.categoryName}$`, 'i') }, _id: { $ne: id } });
+    const categoryNameDetails = await categoryModel.findById(id);
+    const existingCategory = await categoryModel.findOne({
+      categoryName: { $regex: new RegExp(`^${name.categoryName}$`, "i") },
+      _id: { $ne: id },
+    });
 
+    if (existingCategory) {
+      console.log("here");
 
-   if(existingCategory){
-    console.log('here');
-    
-
-   return  res.status(400).json({error:'Category already exist'})
-   }
+      return res.status(400).json({ error: "Category already exist" });
+    }
     if (categoryNameDetails) {
-      categoryNameDetails.categoryName =  name.categoryName
+      categoryNameDetails.categoryName = name.categoryName;
 
       const editedCategory = await categoryNameDetails.save();
 
-      return res.status(200).json({message: 'Category updated'});
+      return res.status(200).json({ message: "Category updated" });
     } else {
-     return res.status(404).json({ error: 'Category not found' });
+      return res.status(404).json({ error: "Category not found" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-
 const deleteCategory = async (req: Request, res: Response) => {
-  console.log("deletye Category")
+  console.log("deletye Category");
   try {
-    console.log("body", req.params)
-    const { id } =  req.params; 
-    console.log(id,"idddddddddddddd")
+    console.log("body", req.params);
+    const { id } = req.params;
+    console.log(id, "idddddddddddddd");
     const item: any = await categoryModel.findOne({ _id: id });
 
     if (!item) {
-      return res.status(404).json({ success: false, message: 'Category not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
     }
 
     console.log(item, "iiiiiiiiiiiiii");
-    
-    if (item && 'isDeleted' in item) {
+
+    if (item && "isDeleted" in item) {
       item.isDeleted = true;
       const updatedItem = await item.save();
 
       if (updatedItem) {
-        res.status(200).json({ success: true, message: 'Category Deleted Successfully' });
+        res
+          .status(200)
+          .json({ success: true, message: "Category Deleted Successfully" });
       } else {
-        res.status(500).json({ success: false, message: 'Category deletion failed' });
+        res
+          .status(500)
+          .json({ success: false, message: "Category deletion failed" });
       }
     } else {
-      res.status(500).json({ success: false, message: 'Category deletion failed - Property not found' });
+      res
+        .status(500)
+        .json({
+          success: false,
+          message: "Category deletion failed - Property not found",
+        });
     }
   } catch (error) {
-    console.error('Error deleting category:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    console.error("Error deleting category:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
+const blockUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    console.log(id, "id");
+    const user = await studentModel.findById(id);
+    console.log(user, "user");
+
+    if (!user) {
+      return res.status(400).json({ message: "User not Found" });
+    }
+
+    user.isBlocked = true;
+
+    await user.save();
+
+    return res.status(200).json({ message: "User Blocked Successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+const unblockUser =async(req:Request,res:Response)=>{
+  try {
+      const {id} =req.params;
+
+      const user =await studentModel.findById(id)
+
+      if(!user){
+          return res.status(400).json({message:"User not Found"})
+      }
+
+      user.isBlocked =false;
+
+      await user.save();
+
+      return res.status(200).json({message:"User UnBlocked SuccessFully"})
+
+  } catch (error) {
+      console.log(error)
+      return res.status(400).json({message:"Server Error"})
+      
+  }
+}
 
 
 export {
@@ -193,7 +250,7 @@ export {
   getAllCategory,
   addCategory,
   editCategory,
-  deleteCategory
+  deleteCategory,
+  blockUser,
+  unblockUser
 };
-  
-

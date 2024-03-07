@@ -11,6 +11,8 @@ import {
   adminLogout,
   editCategory,
   deleteCategory,
+  blockUser,
+  unblockUser,
 } from "../../Controller/adminController/adminController";
 
 adminRouter.post("/adminLogin", loginAdmin);
@@ -22,6 +24,10 @@ adminRouter.post("/addCategory", addCategory);
 adminRouter.get("/adminCategory", getAllCategory);
 adminRouter.post("/editCategory",editCategory);
 adminRouter.put("/deleteCategory/:id", deleteCategory);
+adminRouter.put('/blockUser/:id',blockUser)
+adminRouter.put('/unBlockUser/:id',unblockUser)
+
+
 
 
 

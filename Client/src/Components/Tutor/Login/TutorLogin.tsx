@@ -42,7 +42,7 @@ function TutorLogin() {
         dispatch(login(userData));
         localStorage.setItem('tutorId',response.data._id)
         localStorage.setItem("Token", `${response.data.token}`);
-        // navigate("/", { replace: true });
+        navigate("/", { replace: true });
         navigate("/tutorProfile", { replace: true });
       } else {
         if (response.response.status === 404) {

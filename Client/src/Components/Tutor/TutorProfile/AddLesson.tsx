@@ -96,10 +96,10 @@ function AddLesson() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4001/api/v1/tutor/courses/${tutorId}`)
-      .then((res) => {
+    getTutorCourses(tutorId)
+      .then((res: any) => {
         console.log(res, "ffffffffff");
-        setCourseNames(res.data.AllCourses);
+        setCourseNames(res.data.courseDetails);
       })
       .catch((err) => {
         console.log(err);
@@ -219,15 +219,14 @@ function AddLesson() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                   <option value="">Choose category</option>
-                  {category.length > 0 ? (
+                  {
                     categoryOptions.map((item: any) => (
                       <option key={item._id} value={item.categoryName}>
                         {item.categoryName}
                       </option>
                     ))
-                  ) : (
-                    <option value="NoCategory">No category</option>
-                  )}
+                  
+                  }
                 </select>
               </div>
               <div className="inline-block mt-2 w-1/2 pr-1">

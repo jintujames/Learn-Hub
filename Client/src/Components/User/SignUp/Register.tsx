@@ -59,6 +59,8 @@ function Register() {
       if (response.status === 200) {
         navigate("/login", { replace: true });
         toast.success(response.data);
+      } else {
+        toast.error(response.data); 
       }
     });
   };

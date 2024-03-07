@@ -10,6 +10,7 @@ import {
   firebaseGoogleAuthVerication,
   studentLogout,
   userGetAllCategory,
+  userGetCourses,
 } from "../../Controller/studentController/studentController";
 
 import { protect } from "../../Middleware/authMiddleware";
@@ -29,6 +30,6 @@ studentRouter.post("/otp_verify", verifyForgetPassword);
 studentRouter.post("/newpassword", newPassword);
 studentRouter.get("/firebseAuthVerify", firebaseGoogleAuthVerication);
 
-studentRouter.get("/courses");
+studentRouter.get("/courses", userGetCourses);
 
 export { studentRouter };

@@ -2,6 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import userReducer from "../Features/UserSlice/userSlice"
 import tutorReducer from "../Features/TutorSlice/tutorSlice";
+import courseReducer from "../Features/TutorSlice/courseSlice"
+
 import adminReducer from "../Features/AdminSlice/adminSlice"
 import {persistReducer , persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage'

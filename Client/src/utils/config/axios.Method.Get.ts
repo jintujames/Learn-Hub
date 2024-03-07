@@ -78,10 +78,20 @@ export const getCatagory=async()=>{
   return await apiRequest(config);
 }
 
-export const getTutorCourses=async()=>{
+export const getTutorCourses = async (tutorId: any) => {
   const config: AxiosRequestConfig = {
     method: "GET",
-    url: `/api/v1/tutor/courses`,
+    url: `/api/v1/tutor/courses/${tutorId}`,
   };
   return await apiRequest(config);
-}
+
+  
+};
+
+export const getAllCourses = async () => {
+  const config: AxiosRequestConfig = {
+    method: "GET",
+    url: "/api/v1/student/courses", // Assuming this endpoint returns all courses
+  };
+  return await apiRequest(config);
+};

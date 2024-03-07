@@ -11,6 +11,7 @@ import AddCourseBio from "../../Components/Tutor/TutorProfile/AddCourseBio";
 import AddLesson from "../../Components/Tutor/TutorProfile/AddLesson";
 import MyCourses from "../../Components/Tutor/TutorProfile/MyCourses";
 import ViewCourse from "../../Components/Tutor/TutorProfile/ViewCourse";
+import MyCourseViewPage from "./MyCourseViewPage";
 
 function TutorProfilePage() {
   const [state, setState] = useState(0);
@@ -24,7 +25,7 @@ function TutorProfilePage() {
         <Route
           path="/image"
           element={<TutorSidebar children={<AddImage />} />}
-        />
+        />        
 
         <Route
           path="/addCourse"
@@ -40,7 +41,7 @@ function TutorProfilePage() {
         />
         <Route
           path="/myCourseView"
-          element={<TutorSidebar children={< ViewCourse />} />}
+          element={<TutorSidebar children={< MyCourseViewPage />} />}
         />
       </Routes>
 

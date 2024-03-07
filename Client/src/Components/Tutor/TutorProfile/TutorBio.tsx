@@ -17,15 +17,12 @@ function TutorBio() {
   const navigate = useNavigate();
   const [data, setData] = useState<InstructorBioDetails>();
 
-  
-
   const tutorId = localStorage.getItem("tutorId");
-  console.log("aaaaaaaaa",tutorId);
+  console.log("aaaaaaaaa", tutorId);
   console.log(typeof tutorId);
-  
+
   const { tutor } = useSelector((state: any) => state.tutor);
-  console.log("tuto",tutor);
-  
+  console.log("tuto", tutor);
 
   useEffect(() => {
     if (tutor) {
@@ -34,21 +31,18 @@ function TutorBio() {
     }
   }, []);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result : any = await getTutorBio(tutorId)
-        console.log("tutordetails",result.data.instructorBioDetails);
+        const result: any = await getTutorBio(tutorId);
+        console.log("tutordetails", result.data.instructorBioDetails);
         setData(result.data.instructorBioDetails);
-
       } catch (error) {
         console.log("Error in tutor Bio:", error);
-        
       }
-    }
+    };
     fetchData();
-  }, [getTutorBio])
+  }, [getTutorBio]);
 
   return (
     <>
@@ -73,9 +67,8 @@ function TutorBio() {
                       src="https://picsum.photos/200"
                       alt="Profile picture"
                     />
-                  
-                    <p className="text-center text-gray-600 mt-1">
-                    </p>
+
+                    <p className="text-center text-gray-600 mt-1"></p>
                     <input
                       type="text"
                       placeholder="Your Name"
@@ -97,8 +90,7 @@ function TutorBio() {
                     />
                   </div>
                   <div className="mb-2">
-                  <p className="text-center text-gray-600 mt-1">
-                    </p>
+                    <p className="text-center text-gray-600 mt-1"></p>
                     <input
                       type="email"
                       placeholder="Your Email"
@@ -118,7 +110,6 @@ function TutorBio() {
                       name="email"
                       id="email"
                       value={data?.instructorEmail}
-
                     />
                   </div>
                   <div className="mb-6">
@@ -144,59 +135,58 @@ function TutorBio() {
                     />
                   </div>
                   <div className="">
-                  <div className="mb-6">
-                  <label
-                    className="block text-sm text-gray-600"
-                    htmlFor="fileInput"
-                  >
-                    Choose Image
-                  </label>
-                  <input
-                    className="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
-                    id="fileInput"
-                    name="fileInput"
-                    type="file"
-                    accept="image/*, video/*"
-                    aria-label="fileInput"
-                  />
-                </div>
-              </div>  
-              <div className="flex">
-  <button
-    type="submit"
-    className="
-      flex-1
-      text-gray-100
-      hover:text-gray-700
-      border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700
-      p-3
-      transition
-      ease-in-out
-      duration-500
-      hover:bg-cyan-500
-    "
-  >
-    Update
-  </button>
-  <div className="mx-4"></div> {/* Add space between buttons */}
-  <button
-    type="submit"
-    className="
-      flex-1
-      text-gray-100
-      hover:text-gray-700
-      border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700
-      p-3
-      transition
-      ease-in-out
-      duration-500
-      hover:bg-cyan-500
-    "
-  >
-    Edit
-  </button>
-</div>
-
+                    <div className="mb-6">
+                      <label
+                        className="block text-sm text-gray-600"
+                        htmlFor="fileInput"
+                      >
+                        Choose Image
+                      </label>
+                      <input
+                        className="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
+                        id="fileInput"
+                        name="fileInput"
+                        type="file"
+                        accept="image/*, video/*"
+                        aria-label="fileInput"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <button
+                      type="submit"
+                      className="
+                        flex-1
+                        text-gray-100
+                        hover:text-gray-700
+                        border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700
+                        p-3
+                        transition
+                        ease-in-out
+                        duration-500
+                        hover:bg-cyan-500"
+                    >
+                      Update
+                    </button>
+                    <div className="mx-4"></div>{" "}
+                    {/* Add space between buttons */}
+                    <button
+                      type="submit"
+                      className="
+                        flex-1
+                        text-gray-100
+                        hover:text-gray-700
+                        border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700
+                        p-3
+                        transition
+                        ease-in-out
+                        duration-500
+                        hover:bg-cyan-500
+                      "
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </form>
                 <div></div>
               </div>

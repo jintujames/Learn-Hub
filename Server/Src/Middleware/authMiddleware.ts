@@ -1,9 +1,9 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
-import asyncHandler from "express-async-handler";
-import User from "../Models/studentModel";
-import * as dotenv from "dotenv";
-import { Document } from "mongoose";
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import asyncHandler from 'express-async-handler';
+import User from '../Models/studentModel';
+import * as dotenv from 'dotenv';
+import { Document } from 'mongoose';
 dotenv.config();
 
 interface CustomUser {
@@ -13,7 +13,6 @@ interface CustomUser {
 }
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user?: CustomUser;
@@ -22,9 +21,9 @@ declare global {
 }
 
 const protect = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization?.split(" ")[1]; // Use optional chaining to handle potential undefined headers
-    const JWT_SECRET = process.env.JWT_SECRET as string; // Assuming JWT_SECRET is a string in your .env file
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const token = req.headers.authorization?.split(' ')[1];
+    const JWT_SECRET = process.env.JWT_SECRET as string;
 
     if (token) {
       try {
@@ -33,25 +32,22 @@ const protect = asyncHandler(
         const userId: string = decoded.user_id;
 
         const user: Document | null = await User.findById(userId).select(
-          "-password"
+          '-password'
         );
 
         if (user) {
           req.user = user as unknown as CustomUser;
-          next();
+          return next();
         } else {
-          res.status(404);
-          throw new Error("User not found");
+          res.status(404).json({ error: 'User not found' });
         }
       } catch (error) {
-        res.status(401);
-        throw new Error("Not authorized, invalid token");
+        res.status(401).json({ error: 'Not authorized, invalid token' });
       }
     }
 
-    if (!token) {
-      res.status(401);
-    }
+    // No token provided
+    res.status(403).json({ error: 'No token provided' });
   }
 );
 

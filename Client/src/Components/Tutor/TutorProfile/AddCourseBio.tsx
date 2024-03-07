@@ -3,87 +3,147 @@ import { useNavigate } from "react-router-dom";
 import { addCourseBio } from "../../../utils/config/axios.Methode.post";
 import { getCatagory } from "../../../utils/config/axios.Method.Get";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function AddCourseBio() {
   const [courseName, setCourseName] = useState<string>("");
   const [courseDescription, setCourseDescription] = useState<string>("");
+  const [courseDuration, setCourseDuration] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [coursefee, setCoursefee] = useState<string>("");
   const [courseLevel, setCourseLevel] = useState<string>("");
-  const [photo, setPhoto] = useState<File | null>(null);
-  const [catagory,setCatagory]:any=useState({})
+  const [image, setImage] = useState<File | null>(null);
+  const [catagory, setCatagory]: any = useState({});
+  const [CloudanaryURL, setCloudanaryURL] = useState("");
+
   const navigate = useNavigate();
 
-  const tutorData = useSelector((state : any) => state.tutor.tutor);
+  const tutorData = useSelector((state: any) => state.tutor.tutor);
 
   const storedTutorId = tutorData?.tutorId;
 
-  console.log(tutorData, storedTutorId , 'storile tutorData')
-
+  console.log(tutorData, storedTutorId, "storile tutorData");
 
   type course = {
     courseName: string;
     courseDescription: string;
+    courseDuration: string;
     isApproved: boolean;
     category: string;
     coursefee: number;
-    instructor : string;
+    instructor: string;
     image: any;
     courseLevel: string;
-    tutorId : string
+    tutorId: string;
   };
 
   let file: any;
 
-  const handleChange = (e: any) => {
-    // formData = new FormData()
-    file = e?.target?.files?.[0];
-    // formData.append("image", file )
+
+  const handleImageUpload = async () => {
+    try {
+      if (image) {
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("upload_preset", "LearnHub");
+        formData.append("cloud_name", "dhghmzt8b");
+
+        console.log("Before axios.post");
+        const response = await axios.post(
+          "https://api.cloudinary.com/v1_1/dhghmzt8b/image/upload",
+          formData
+        );
+        console.log("After axios.post");
+        console.log(response, "response");
+
+        if (response.data && response.data.url) {
+          console.log("Video uploaded successfully. URL:", response.data.url);
+          setCloudanaryURL(response.data.url);
+          return;
+        } else {
+          console.error("Invalid response from Cloudinary", response.data);
+          toast.error(
+            "Error uploading image: Invalid response from Cloudinary"
+          );
+        }
+      } else {
+        toast.error("No image selected");
+      }
+    } catch (error) {
+      console.error("Error while Uploading Image:", error);
+      toast.error("Error uploading image: Please try again later");
+    }
   };
 
-  useEffect(()=>{
-    console.log('hihiihi');
-    
-    (async ()=>{
-        const response:any=await getCatagory()
-        console.log('this is catogary',response?.data);
-        
-        if(response){
-          setCatagory(response?.data?.categoryDetails)
-        }
-    })()
-  },[])
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+    }
+  };
+  useEffect(() => {
+    console.log("hihiihi");
+
+    (async () => {
+      const response: any = await getCatagory();
+      console.log("this is catogary", response?.data);
+
+      if (response) {
+        setCatagory(response?.data?.categoryDetails);
+      }
+    })();
+  }, []);
 
   const tutorId = localStorage.getItem("tutorId");
 
-  console.log("tutorId",tutorId)
+  console.log("tutorId", tutorId);
 
   const handleAddCourse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    try {
+      // Wait for the video to be uploaded
+      await handleImageUpload();
+
+      if (!CloudanaryURL) {
+        toast.error("Error occur While Uploading the Video");
+        return;
+      }
+
     const data: course = {
-      image: file,
+      image: CloudanaryURL,
       courseName,
       courseDescription,
       isApproved: true,
       category,
-      instructor: tutorId||"",
+      instructor: tutorId || "",
       coursefee: Number(coursefee),
       courseLevel,
-      tutorId : storedTutorId
+      tutorId: storedTutorId,
+      courseDuration: ""
     };
     console.log(data, "dataaa");
 
-    try {
-      await addCourseBio(data);
-      console.log("Course added successfully");
-      navigate("/myCourse", { replace: true });
+    axios.post(`http://localhost:4001/api/v1/tutor/addCourse`, {
+      courseName,
+      courseDescription,
+        category,
+        courseLevel,
+        instructor: tutorId,
+        coursefee,
+         image: data.image
+      });
+
+      setTimeout(() => {
+        toast.success("Course Added Successfully");
+        navigate("/myCourse");
+      }, 3000);
     } catch (error) {
-      console.error("Error adding course:", error);
+      console.error(error);
+      toast.error("Error Occurred While Adding");
     }
   };
-
-  
 
   return (
     <>
@@ -127,37 +187,23 @@ function AddCourseBio() {
               Category
             </label>
             <select
-  onChange={(e) => setCategory(e.target.value)}
-  id="categories"
-  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
->
-  <option value="">Choose category</option>
-  {catagory.length > 0 ? (
-    catagory.map((item: any) => (
-      <option key={item._id} value={item.categoryName}>
-        {item.categoryName}
-      </option>
-    ))
-  ) : (
-    <option value="NoCategory">No category</option>
-  )}
-</select>
-          </div>
-          {/* <div className="inline-block mt-2 w-1/2 pr-1">
-            <label className="block text-sm text-gray-600" htmlFor="cus_email">
-              Difficulty Level
-            </label>
-            <select
-              onChange={(e) => setCourseLevel(e.target.value)}
-              id="countries"
+              onChange={(e) => setCategory(e.target.value)}
+              id="categories"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">Choose category</option>
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Hard">Hard</option>
+              {catagory.length > 0 ? (
+                catagory.map((item: any) => (
+                  <option key={item._id} value={item.categoryName}>
+                    {item.categoryName}
+                  </option>
+                ))
+              ) : (
+                <option value="NoCategory">No category</option>
+              )}
             </select>
-          </div> */}
+          </div>
+          
           <div className="inline-block mt-2 w-1/2 pr-1">
             <label className="block text-sm text-gray-600" htmlFor="cus_email">
               Price
@@ -172,27 +218,41 @@ function AddCourseBio() {
               aria-label="Email"
             />
           </div>
+          <div className="inline-block mt-2 w-1/2 pr-1">
+            <label className="block text-sm text-gray-600" htmlFor="cus_email">
+            Course Duration
+            </label>
+            <input
+              onChange={(e) => setCourseDuration(e.target.value)}
+              className="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"
+              id="duration"
+              name="duration"
+              type="text"
+              placeholder="Duration"
+              aria-label="Duration"
+            />
+          </div>
 
           <p className="mt-4 text-gray-800 font-medium">Image</p>
           <div className="">
-                <div className="mt-2">
-                  <label
-                    className="block text-sm text-gray-600"
-                    htmlFor="fileInput"
-                  >
-                    Choose Image
-                  </label>
-                  <input
-                    className="w-full px-5 py-4 text-gray-700 bg-gray-200 rounded"
-                    onChange={handleChange}
-                    id="fileInput"
-                    name="fileInput"
-                    type="file"
-                    accept="image/*, video/*"
-                    aria-label="fileInput"
-                  />
-                </div>
-              </div>
+            <div className="mt-2">
+              <label
+                className="block text-sm text-gray-600"
+                htmlFor="fileInput"
+              >
+                Choose Image
+              </label>
+              <input
+                className="w-full px-5 py-4 text-gray-700 bg-gray-200 rounded"
+                onChange={handleImage}
+                id="fileInput"
+                name="fileInput"
+                type="file"
+                accept="image/*, video/*"
+                aria-label="fileInput"
+              />
+            </div>
+          </div>
 
           <div className="flex items-center justify-between">
             <button

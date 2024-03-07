@@ -117,13 +117,54 @@ const firebaseGoogleTutorAuthVerication = async (
   }
 };
 
+const addCourses = async (req: Request, res: Response) => {
+  console.log("I'm adding course");
+
+  try {
+    const {
+      courseName,
+      courseDescription,
+      isApproved,
+      category,
+      coursefee,
+      tutorId,
+      image, // Assuming you have this in your req.body
+    } = req.body;
+
+    console.log(req.body, "Body data");
+
+    const course = await courseModel.create({
+      courseName,
+      courseDescription,
+      isApproved,
+      category,
+      coursefee,
+      tutorId,
+      image, // Use CloudanaryURL for the image property
+    });
+
+    await course.save();
+
+    console.log(course, "Course");
+
+    if (course) {
+      res.status(200).json(course);
+      console.log("sending req to frnd");
+    } else {
+      res.status(400).json({ message: "Invalid Data Entry" });
+    }
+  } catch (error) {
+    console.error(error); // Log the specific error for debugging
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
 const addLesson = async (req: Request, res: Response) => {
   try {
-    console.log(req.body, "hhhhhhhhhhhhhhhhh");
-    const { courseName, Description, title, category, courseLevel, video } = req.body;
+    const { courseName, Description, title, category, courseLevel, video } =
+      req.body;
 
-
-    console.log(courseName,"nammmmmmmmmmmmmmmmm")
     const updatedCourse = await courseModel.findOneAndUpdate(
       { _id: courseName },
       {
@@ -131,8 +172,8 @@ const addLesson = async (req: Request, res: Response) => {
           courseLessons: {
             video,
             title,
-            Description, // Corrected property name
-            category,    // Corrected property name
+            Description,
+            category,
             courseLevel,
           },
         },
@@ -145,57 +186,49 @@ const addLesson = async (req: Request, res: Response) => {
       res.status(404).json({ error: "Course not found" });
     }
   } catch (error) {
-    res.status(500); // Internal server error
+    res.status(500);
     throw error;
   }
 };
 
+// const addCourses = async (req: any, res: Response) => {
+//   try {
+//     const {
+//       courseName,
+//       courseDescription,
+//       isApproved,
+//       category,
+//       coursefee,
 
-const addCourses = async (req: any, res: Response) => {
-  try {
+//       tutorId,
+//     } = req.body;
 
-    const {
-      courseName,
-      courseDescription,
-      isApproved,
-      category,
-      coursefee,
-     
-      tutorId 
-    } = req.body;
+//     const { filename } = req.file;
 
-    
-  
+//     const createdCourse = await courseModel.create({
+//       instructor: tutorId,
+//       courseName: courseName,
+//       courseDescription: courseDescription,
+//       isApproved: isApproved,
+//       category: category,
+//       coursefee: coursefee,
+//       image: filename,
+//     });
 
-    const {filename} = req.file
+//     console.log(createdCourse, "this is create Course");
 
+//     if (createdCourse) {
+//       res.status(200).json({ createdCourse });
+//     } else {
+//       res.status(400).json({ message: "Invalid data" });
+//     }
+//   } catch (error) {
+//     console.log("this  si eroor ", error);
 
-
-    const createdCourse = await courseModel.create({
-      instructor : tutorId ,
-      courseName:courseName,
-      courseDescription:courseDescription,
-      isApproved:isApproved,
-      category:category,
-      coursefee :coursefee,
-      image:filename
-    });
-
-    console.log(createdCourse,'this is create Course');
-    
-
-    if (createdCourse) {
-      res.status(200).json({ createdCourse });
-    } else {
-      res.status(400).json({ message: "Invalid data" });
-    }
-  } catch (error) {
-    console.log('this  si eroor ',error);
-    
-    res.status(500); // Internal server error
-    throw error;
-  }
-};
+//     res.status(500); // Internal server error
+//     throw error;
+//   }
+// };
 
 const instructorBio = async (req: Request, res: Response) => {
   try {
@@ -215,24 +248,22 @@ const instructorBio = async (req: Request, res: Response) => {
   }
 };
 
-const getCourses = async (req: Request, res: Response) => {
+const getCourses = async (req:Request,res:Response)=>{
   try{
-    const { id } = req.params
-
-    console.log(id,"tutor Id")
-
-    const AllCourses = await courseModel.find({instructor:id}).populate('instructor')
-    console.log(AllCourses,"coursessss");
-
-
-    if(AllCourses){
-      res.status(200).json({AllCourses})
-    }    
-
-  }catch(err){
-    res.status(500)
-    console.log(err)
-
+    const courseDetails = await courseModel.find().exec();
+  console.log("Fetched Course Details:", courseDetails);
+    if(courseDetails){
+      res.status(200).json({
+        courseDetails,message:"courseDetails"
+      })
+    }else{
+      return res.status(400).json({
+        error:"no course available "
+      })
+    }
+  }
+  catch(error){
+    console.log(error);
   }
 }
 
@@ -244,5 +275,5 @@ export {
   addLesson,
   addCourses,
   instructorBio,
-  getCourses
+  getCourses,
 };

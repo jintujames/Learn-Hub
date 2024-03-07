@@ -24,6 +24,7 @@ export const CategoryValidate = () => {
         handleSubmit,
         formState: { errors },
     } = useForm<categoryData>({ resolver: zodResolver(categoryAuthSchema) });
+console.log("i am validation");
 
     return {
         register,
