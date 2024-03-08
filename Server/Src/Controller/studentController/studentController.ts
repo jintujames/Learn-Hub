@@ -272,6 +272,26 @@ const userGetCourses = async (req:Request,res:Response)=>{
   }
 }
 
+const studentProfile = async (req: Request, res: Response) => {
+  try {
+    const studentId = req.params.id;
+    console.log("Request received for studentId:", studentId);
+
+    const studentProfileDetails = await studentModel.findById(studentId).exec();
+    if (studentProfileDetails) {
+      res.status(200).json({
+        studentProfileDetails,
+      });
+    } else {
+      return res.status(400).json({
+        message: "no users in this table",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 export {
   studentSignUp,
@@ -282,5 +302,6 @@ export {
   newPassword,
   firebaseGoogleAuthVerication,
   userGetAllCategory,
-  userGetCourses
+  userGetCourses,
+  studentProfile
 };

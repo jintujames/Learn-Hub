@@ -11,6 +11,7 @@ import {
   studentLogout,
   userGetAllCategory,
   userGetCourses,
+  studentProfile,
 } from "../../Controller/studentController/studentController";
 
 import { protect } from "../../Middleware/authMiddleware";
@@ -24,6 +25,8 @@ studentRouter.get("/", userGetAllCategory);
 studentRouter.post("/signup", studentSignUp);
 studentRouter.post("/login", studentLogin);
 studentRouter.post("/logout", studentLogout);
+studentRouter.get("/userProfile/:id", studentProfile);
+
 
 studentRouter.post("/forget_password", forgetPassword);
 studentRouter.post("/otp_verify", verifyForgetPassword);

@@ -95,3 +95,13 @@ export const getAllCourses = async () => {
   };
   return await apiRequest(config);
 };
+
+export const getUserProfile = async (studentId: any) => {
+  console.log("getUserProfile called with userId:", studentId);
+  const config: AxiosRequestConfig = {
+    method: "GET",
+    url: `/api/v1/student/userProfile/${studentId}`,
+  };
+  return await apiRequest(config);
+};
+

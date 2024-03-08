@@ -53,13 +53,8 @@ function HomeNavLogin() {
   }, []);
   
 
-  useEffect(() => {
-    if (user) {
-      console.log("user is here");
-      navigate("/Home");
-    }
-  }, []);
 
+  
 
   useEffect(() => {
     const data = localStorage.getItem("Token");
@@ -249,12 +244,13 @@ function HomeNavLogin() {
       {DropdownOpen && (
         <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {/* Dropdown content */}
-          <a href="#" className="block px-4 py-2 text-sm text-gray-700" onClick={closeDropdown}>
-            Your Profile
-          </a>
-          <a href="#" className="block px-4 py-2 text-sm text-gray-700" onClick={closeDropdown}>
-            Settings
-          </a>
+          <Link to="/userProfile" className="block px-4 py-2 text-sm text-gray-700" onClick={closeDropdown}>
+  Your Profile
+</Link>
+
+<Link to="/Home" className="block px-4 py-2 text-sm text-gray-700" onClick={closeDropdown}>
+  Settings
+</Link>
           {isLoggedIn ? (
     // Render logout button if user is logged in
     <a

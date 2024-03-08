@@ -7,6 +7,7 @@ interface NewStudent extends Document {
   studentEmail: string;
   phone: string;
   password: string;
+  photo: string;
   createdAt: Date;
   updatedAt: Date;
   isBlocked: boolean;
@@ -31,6 +32,10 @@ const userSchema = new Schema<NewStudent>(
     },
     password: {
       type: String,
+    },
+
+    photo: {
+      type: String
     },
     isBlocked: {
       type: Boolean,

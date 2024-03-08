@@ -8,7 +8,7 @@ type VideoPlayerProps = {
 
 function VideoPlayer({ videoUrl, onClose }: VideoPlayerProps) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -22,10 +22,10 @@ function VideoPlayer({ videoUrl, onClose }: VideoPlayerProps) {
 
   const togglePlay = () => {
     if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
+      if (!isPlaying) {
         videoRef.current.play();
+      } else {
+        videoRef.current.pause();
       }
       setIsPlaying(!isPlaying);
     }
@@ -54,10 +54,10 @@ function VideoPlayer({ videoUrl, onClose }: VideoPlayerProps) {
           width="100%"
           height="100%"
           ref={videoRef}
-        >
-          <source src={videoUrl} type="video/mp4" />
-          Your browser does not support the video.
-        </video>
+          src={videoUrl}
+        />
+         
+     
         <div
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           style={{ display: isPlaying ? 'none' : 'block' }}
