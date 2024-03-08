@@ -54,10 +54,15 @@ const loginInstructor = async (req: Request, res: Response) => {
   const { instructorEmail, password } = req.body;
 
   try {
-    const instructor = await instructorModel.findOne({ instructorEmail });
+    const instructor = await instructorModel.findOne({ instructorEmail })
+    .where({isBlocked: false})
 
     if (!instructor) {
       return res.status(401).json({ message: "User not logged in" });
+    }
+
+    if (instructor?.isBlocked === true) {
+      return res.status(401).json({ message: "User is blocked" });
     }
 
     if (instructor && (await instructor.matchPassword(password))) {
@@ -266,6 +271,8 @@ const getCourses = async (req:Request,res:Response)=>{
     console.log(error);
   }
 }
+
+
 
 export {
   instructorSignup,

@@ -216,8 +216,6 @@ const blockUser = async (req: Request, res: Response) => {
   }
 };
 
-
-
 const unblockUser =async(req:Request,res:Response)=>{
   try {
       const {id} =req.params;
@@ -241,6 +239,52 @@ const unblockUser =async(req:Request,res:Response)=>{
   }
 }
 
+const blockTutor = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const tutor = await instructorModel.findById(id);
+
+    if (!tutor) {
+      return res.status(400).json({ message: "Tutor Not Found" });
+    }
+
+    tutor.isBlocked = true;
+    await tutor.save();
+
+    console.log(`Tutor ${id} Blocked Successfully`);
+
+    return res.status(200).json({ message: "Tutor Blocked Successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+const unblockTutor =async(req:Request,res:Response)=>{
+  try {
+      const {id} =req.params;
+      console.log(id, "id");
+
+      const tutor =await instructorModel.findById(id)
+console.log(tutor, "tutor");
+
+      if(!tutor){
+          return res.status(400).json({message:"Tutor not Found"})
+      }
+
+      tutor.isBlocked =false;
+
+      await tutor.save();
+
+      return res.status(200).json({message:"Tutor UnBlocked SuccessFully"})
+
+  } catch (error) {
+      console.log(error)
+      return res.status(400).json({message:"Server Error"})
+      
+  }
+}
+
 
 export {
   loginAdmin,
@@ -252,5 +296,8 @@ export {
   editCategory,
   deleteCategory,
   blockUser,
-  unblockUser
+  unblockUser,
+  blockTutor,
+  unblockTutor
+
 };

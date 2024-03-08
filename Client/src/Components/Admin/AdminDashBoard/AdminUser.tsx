@@ -63,12 +63,11 @@ function AdminUser() {
         console.log(user, "user found");
         console.log(user._id, "user id");
   
-        // Pass the user ID to adminBlockStudent function
         await adminBlockStudent(user._id);
   
         user.isBlocked = true;
         toast.success("User Blocked Successfully", {
-          style: { background: "#ef4444", color: "black" },
+          style: { background: "#e0a7e8", color: "black" },
         });
       } else {
         // Pass the user ID to adminUnblockStudent function
@@ -76,7 +75,7 @@ function AdminUser() {
   
         user.isBlocked = false;
         toast.success("User Unblocked Successfully", {
-          style: { background: "#bef264", color: "black" },
+          style: { background: "#aef2ef", color: "black" },
         });
       }
   
@@ -98,7 +97,7 @@ function AdminUser() {
     <>
   <div className="md:px-10 py-8 w-full mr-4 flex justify-center items-center">
     <table className="w-full lg:w-2/3 xl:w-2/2 bg-white border border-gray-300 rounded-md">
-      <thead className="bg-gray-800 text-white">
+      <thead className="bg-pink-950 text-white">
         <tr>
           <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Name
@@ -141,7 +140,7 @@ function AdminUser() {
             {(data as { phone?: string })?.phone}
             </td>
             <td className="text-left py-3 px-4">
-            <button onClick={() => userStatus(data)} type="button" className={data.isBlocked === false ? "text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 font-medium rounded-lg text-sm px-7 py-2.5 text-center mr-2 mb-2" : "text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"}>
+            <button onClick={() => userStatus(data)} type="button" className={data.isBlocked === false ? "text-white bg-gradient-to-r from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 font-medium rounded-lg text-sm px-7 py-2.5 text-center mr-2 mb-2" : "text-gray-900 bg-gradient-to-r from-teal-200 via-teal-400 to-teal-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"}>
         {data.isBlocked === false ? "Block " : "UnBlock"}
       </button>
  
@@ -163,7 +162,7 @@ function AdminUser() {
           key={index + 1}
           className={`w-10 h-10 ${
             currentPage === index + 1
-              ? "bg-teal-600 text-white"
+              ? "bg-black text-white"
               : "text-gray-500 hover:text-teal-600"
           } p-4 inline-flex items-center text-sm font-medium rounded-full`}
           onClick={() => handlePageChange(index + 1)}

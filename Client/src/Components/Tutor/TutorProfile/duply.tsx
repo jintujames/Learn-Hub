@@ -1,237 +1,105 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import { getTutorBio } from "../../../utils/config/axios.Method.Get";
-import { signUpTutor } from "../../../utils/api/api.Types";
+import { Link } from "react-router-dom";
+import { getAllCourses, getTutorCourses } from "../../../utils/config/axios.Method.Get";
+import { toast } from "react-toastify";
 
-interface InstructorBioDetails {
-  instructorFirstName: string;
-  instructorLastName: string;
-  instructorEmail: string;
-  phone: string;
-  photo: any;
 
-  // Add other properties as needed
-}
-
-function TutorBio() {
-  const navigate = useNavigate();
+interface Course {
+  _id: string;
+  courseName: string;
+  courseDuration: string;
+  courseDescription: string;
+  category:string,
+  coursefee: number;
+  image: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  }
   
-  const [data, setData]: any = useState<InstructorBioDetails>();
-
-  const [editModalIndex, setEditModalIndex] = useState<number | null>(null);
-const [editTutorBio, setEditTutorBio] = useState<signUpTutor>({
-  instructorFirstName: "",
-  instructorEmail: "",
-  phone: "",
-});
-
-const [isEditModal, setIsEditModal] = useState(false);
-
-const openEditModal = (i: number) => {
-  setEditModalIndex(i);
-  setEditTutorBio({
-    instructorFirstName: data[i].instructorFirstName,
-    instructorEmail: data[i].instructorEmail,
-    phone: data[i].phone,
-  });
-  setIsEditModal(true);
-};
-
-const closeEditModal = () => {
-  setEditModalIndex(null);
-  setIsEditModal(false);
-};
-
-
-
-  const tutorId = localStorage.getItem("tutorId");
-  console.log("aaaaaaaaa",tutorId);
-  console.log(typeof tutorId);
   
-  const { tutor } = useSelector((state: any) => state.tutor);
-  console.log("tuto",tutor);
-  
+function CourseCards() {
+
+
+  const [courseDetails, setCourseDetails] =  useState<Course[]>([])
+   
+  // const tutorId = localStorage.getItem("tutorId");
+  // console.log(tutorId, "user");
 
   useEffect(() => {
-    if (tutor) {
-      console.log("tutor is here");
-      navigate("/tutorProfile");
-    }
+
+    (async () => {
+      const response: any = await getAllCourses();
+      console.log("this is catogary", response?.data);
+
+      if (response) {
+        setCourseDetails(response?.data?.courseDetails || []);
+      }
+    })();
   }, []);
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result : any = await getTutorBio(tutorId)
-        console.log("tutordetails",result.data.instructorBioDetails);
-        setData(result.data.instructorBioDetails);
-
-      } catch (error) {
-        console.log("Error in tutor Bio:", error);
-        
-      }
-    }
-    fetchData();
-  }, [getTutorBio])
-
   return (
     <>
-      <section
-        className="py-10 px-2 lg:px-6 overflow-hidden relative z-2"
-        data-aos="fade-up"
-        id="contact"
-      >
-        <div className="container">
-          <div className="flex flex-col lg:flex-row lg:items-center text-slate-900 dark:text-gray-200 lg:justify-between -mx-2">
-            <div
-              className="w-full lg:w-full xl:w-full px-4"
-              data-aos="fade-up"
-              data-aos-delay={500}
-              data-aos-duration={2000}
-            >
-              <div className="bg-gray-100 dark:bg-slate-800 relative rounded-lg p-8 sm:p-12 shadow-lg">
-                <form>
-                  <div className="mb-2">
-                    <img
-                      className="w-25 h-28 rounded-full mx-auto"
-                      src="https://picsum.photos/200"
-                      alt="Profile picture"
-                    />
-                  
-                    <p className="text-center text-gray-600 mt-1">
-                    </p>
-                    <input
-                      type="text"
-                      placeholder="Your Name"
-                      className=" w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                      name="full_name"
-                      id="full_name"
-                      value={`${data?.instructorFirstName} ${data?.instructorLastName}`}
-                    />
-                  </div>
-                  <div className="mb-2">
-                  <p className="text-center text-gray-600 mt-1">
-                    </p>
-                    <input
-                      type="email"
-                      placeholder="Your Email"
-                      className="
-                              w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                      name="email"
-                      id="email"
-                      value={data?.instructorEmail}
-
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <input
-                      type="phone"
-                      placeholder="Your Phone"
-                      className="
-                              w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                      name="phone"
-                      id="phone"
-                      value={data?.phone}
-                    />
-                  </div>
-                  <div className="">
-                  <div className="mb-6">
-                  <label
-                    className="block text-sm text-gray-600"
-                    htmlFor="fileInput"
-                  >
-                    Choose Image
-                  </label>
-                  <input
-                    className="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
-                    id="fileInput"
-                    name="fileInput"
-                    type="file"
-                    accept="image/*, video/*"
-                    aria-label="fileInput"
-                  />
-                </div>
-              </div>  
-              <div className="flex">
-  <button
-    type="submit"
-    className="
-      flex-1
-      text-gray-100
-      hover:text-gray-700
-      border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700
-      p-3
-      transition
-      ease-in-out
-      duration-500
-      hover:bg-cyan-500
-    "
-  >
-    Update
-  </button>
-  <div className="mx-4"></div> {/* Add space between buttons */}
-  <button
-    type="submit"
-    className="
-      flex-1
-      text-gray-100
-      hover:text-gray-700
-      border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700
-      p-3
-      transition
-      ease-in-out
-      duration-500
-      hover:bg-cyan-500
-    "
-  >
-    Edit
-  </button>
-</div>
-
-                </form>
-                <div></div>
-              </div>
-            </div>
+    <div className="my-8"></div>
+    <div className="container mx-auto px-4 md:px-8 lg:px-20 flex flex-wrap space-x-4">
+      {courseDetails.map((course) => (
+        <div key={course._id} className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden mb-4">
+          <img
+            className="h-56 w-full object-cover mt-2"
+            src={course?.image[0]}
+            alt='fegrthgthb'
+          />
+          <div className="px-4 py-2">
+            <Link to={`/courseDetails/${course._id}`}>
+              <h2 className="text-gray-900 font-bold text-xl">
+                {course?.courseName}
+              </h2>
+            </Link>
+            <p className="text-gray-600 text-sm mt-1">
+             
+            </p>
+          </div>
+  
+          <div className="flex items-center justify-between px-4 py-2">
+            <h2 className="text-sky-500 font-bold text-lg">Rs. {course?.coursefee}</h2>
+            <Link to="/courseDetails">
+              <button className="px-3 py-1 bg-yellow-300 text-sm text-gray-900 font-semibold rounded">
+                View Course
+              </button>
+            </Link>
           </div>
         </div>
-      </section>
-    </>
+      ))}
+    </div>
+
+    <div className="w-[75rem] mt-14 ml-3 rounded-lg  mr-16 h-20">
+                  <nav className="flex justify-center  bg-white items-center rounded-lg  space-x-2">
+                    <span
+                      className="text-gray-500 hover:text-teal-600 p-4 inline-flex items-center gap-2 rounded-md"
+                       >
+                      <span aria-hidden="true">«</span>
+                      <span className="sr-only">Previous</span>
+                    </span>
+                 <span
+                 className={`w-10 h-10 
+                   "bg-teal-600 text-white"
+                  "text-gray-500 hover:text-teal-600"
+                 } p-4 inline-flex items-center text-sm font-medium rounded-full`}
+                  >
+                 </span>
+                    <span
+                      className="text-gray-500 hover:text-teal-600 p-4 inline-flex items-center gap-2 rounded-md"
+                    >
+                      <span className="sr-only">Next</span>
+                      <span aria-hidden="true">»</span>
+                    </span>
+                  </nav>
+                </div>
+
+
+  </>
+  
   );
 }
 
-export default TutorBio;
+export default CourseCards;

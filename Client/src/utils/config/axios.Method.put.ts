@@ -17,4 +17,20 @@ export const adminBlockStudent = async (userId: string) => {
     };
     return await apiRequest(config);
   };
+
+  export const adminBlockTutor = async (tutorId: string) => {
+    const config: AxiosRequestConfig = {
+      method: "PUT",
+      url: `/api/v1/admin/blockTutor/${tutorId}`,
+    };
+    return await apiRequest(config);
+  };
+  
+  export const adminUnblockTutor = async (tutorId: string) => {
+    const config: AxiosRequestConfig = {
+      method: "PUT",
+      url: `/api/v1/admin/unBlockTutor/${tutorId}`,
+    };
+    return await apiRequest(config);
+  };
   

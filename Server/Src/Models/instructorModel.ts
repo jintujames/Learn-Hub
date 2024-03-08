@@ -11,6 +11,7 @@ interface ITUTOR extends Document {
   courses: mongoose.Schema.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
+  isBlocked: boolean;
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
@@ -44,6 +45,12 @@ const instructorSchema = new Schema<ITUTOR>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
     },
+
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+
     createdAt: {
       type: Date,
       required: true,

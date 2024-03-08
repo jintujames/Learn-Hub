@@ -146,7 +146,7 @@ function AdminCategory() {
     <>
       <div className="md:px-10 py-8 w-full mr-4 flex justify-center items-center">
       <table className="w-full lg:w-3/6 xl:w-2/2 bg-white border border-gray-300 rounded-md">
-  <thead className="bg-gray-800 text-white">
+  <thead className="bg-pink-950 text-white">
     <tr>
       <th className="w-1/2 text-left py-3 px-4 uppercase font-semibold text-sm">
         Category Name
@@ -185,7 +185,7 @@ function AdminCategory() {
 
   <nav className="flex justify-start items-center rounded-lg space-x-2">
       <span
-        className="text-gray-500 hover:text-teal-600 p-4 inline-flex items-center gap-2 rounded-md"
+        className="text-black hover:text-teal-600 p-4 inline-flex items-center gap-2 rounded-md"
         onClick={handlePrev}
       >
         <span aria-hidden="true">«</span>
@@ -196,7 +196,7 @@ function AdminCategory() {
           key={index + 1}
           className={`w-10 h-10 ${
             currentPage === index + 1
-              ? "bg-teal-600 text-white"
+              ? "bg-black text-white"
               : "text-gray-500 hover:text-teal-600"
           } p-4 inline-flex items-center text-sm font-medium rounded-full`}
           onClick={() => handlePageChange(index + 1)}

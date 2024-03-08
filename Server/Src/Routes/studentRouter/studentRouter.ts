@@ -29,7 +29,6 @@ studentRouter.post("/forget_password", forgetPassword);
 studentRouter.post("/otp_verify", verifyForgetPassword);
 studentRouter.post("/newpassword", newPassword);
 studentRouter.get("/firebseAuthVerify", firebaseGoogleAuthVerication);
-
 studentRouter.get("/courses", userGetCourses);
 
 export { studentRouter };

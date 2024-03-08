@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { adminGetAllInstructor } from "../../../utils/config/axios.Method.Get";
+import { adminBlockTutor, adminUnblockTutor } from "../../../utils/config/axios.Method.put";
+import { toast } from "react-toastify";
 
 function AdminTutor() {
+
+  interface Tutor  {
+_id:any;
+instructorFirstName: string;
+  instructorLastName: string;
+  instructorEmail: string;
+  phone: string;
+  password: string;
+  isBlocked: boolean;
+
+  }
+
   const [data, setData] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +48,6 @@ function AdminTutor() {
 
         setData(result.data.instructorDetails);
       } catch (error) {
-        // Handle the error appropriately, e.g., log it or show an error message.
         console.error("Error during admin get all tutors:", error);
       }
     };
@@ -42,13 +55,48 @@ function AdminTutor() {
     fetchData();
   }, [adminGetAllInstructor]);
 
+
+  const tutorStatus = async (tutor: Tutor) => {
+    console.log("Button Clicked");
+    try {
+      if (tutor.isBlocked === false) {
+        console.log(tutor, "tutor found");
+        console.log(tutor._id, "tutor id");
+  
+        await adminBlockTutor(tutor._id);
+  
+        tutor.isBlocked = true;
+        toast.success("Tutor Blocked Successfully", {
+          style: { background: "#e0a7e8", color: "black" },
+        });
+      } else {
+        await adminUnblockTutor(tutor._id);
+  
+        tutor.isBlocked = false;
+        toast.success("Tutor Unblocked Successfully", {
+          style: { background: "#aef2ef", color: "black" },
+        });
+      }
+  
+      localStorage.setItem(
+        `tutor_${tutor._id}_status`,
+        tutor.isBlocked ? "Blocked" : "Unblocked"
+      );
+  
+      setData(prevData => [...prevData]);
+    } catch (error) {
+      console.error("Error in tutorStatus:", error);
+      toast.error(error instanceof Error ? error.message : "Unknown error");
+    }
+  };
+
   return (
     <>
   {/* component */}
   <div className="md:px-10 py-8 w-full mr-4 flex justify-center items-center">
     {/* <div className="shadow overflow-hidden rounded border-b border-gray-200"> */}
     <table className="w-full lg:w-2/3 xl:w-2/2 bg-white border border-gray-300 rounded-md">
-      <thead className="bg-gray-800 text-white">
+      <thead className="bg-pink-950 text-white">
         <tr>
           <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Name
@@ -57,7 +105,7 @@ function AdminTutor() {
             Email
           </th>
           <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Status
+            Phone
           </th>
           <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
             Action
@@ -65,7 +113,7 @@ function AdminTutor() {
         </tr>
       </thead>
       <tbody className="text-gray-700">
-        {paginateddata?.map((data, index) => (
+        {paginateddata?.map((data: Tutor, index) => (
           <tr key={index} className="border-b border-gray-300">
             <td className="w-1/3 text-left py-3 px-4">
               {`${
@@ -88,19 +136,13 @@ function AdminTutor() {
               {(data as { instructorEmail?: string })?.instructorEmail}
             </td>
             <td className="text-left py-3 px-4">
-              <button className="px-1 py-1 bg-blue-300 hover:bg-yellow-600 text-white text-sm font-medium rounded-full">
-                Active
-              </button>
+            {(data as { phone?: string })?.phone}
             </td>
             <td className="text-left py-3 px-4">
-              <label className="relative inline-flex items-center mb-5 cursor-pointer">
-                <input
-                  type="checkbox"
-                  defaultValue=""
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600" />
-              </label>
+            <button onClick={() => tutorStatus(data)} type="button" className={data.isBlocked === false ? "text-white bg-gradient-to-r from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 font-medium rounded-lg text-sm px-7 py-2.5 text-center mr-2 mb-2" : "text-gray-900 bg-gradient-to-r from-teal-200 via-teal-400 to-teal-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"}>
+        {data.isBlocked === false ? "Block " : "UnBlock"}
+      </button>
+ 
             </td>
           </tr>
         ))}
@@ -119,7 +161,7 @@ function AdminTutor() {
           key={index + 1}
           className={`w-10 h-10 ${
             currentPage === index + 1
-              ? "bg-teal-600 text-white"
+              ? "bg-black text-white"
               : "text-gray-500 hover:text-teal-600"
           } p-4 inline-flex items-center text-sm font-medium rounded-full`}
           onClick={() => handlePageChange(index + 1)}

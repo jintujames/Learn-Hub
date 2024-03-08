@@ -45,7 +45,6 @@ function App() {
 
 
 
-          {/* <Route element={<TutorPrivateRoute />}> */}
             <Route path="/tutorProfile/*" element={<TutorProfilePage />} />
             <Route path="/tutorImage" element={<TutorProfilePage />} />
             <Route path="/addCourse" element={<TutorProfilePage />} />
@@ -56,8 +55,7 @@ function App() {
 
 
 
-            
-          {/* </Route> */}
+      
           <Route path="/tutorSignup" element={<TutorSignUpPage />} />
           <Route path="/tutorLogin" element={<TutorLoginPage />} />
 

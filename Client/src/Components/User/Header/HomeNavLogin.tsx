@@ -11,10 +11,11 @@ import { ShoppingCart } from "react-feather";
 
 function HomeNavLogin() {
   const dispatch = useDispatch();
+  const { user } = useSelector((state: any) => state.user);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const { user } = useSelector((state: any) => state.user);
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
@@ -38,9 +39,6 @@ function HomeNavLogin() {
   
   const [catagory, setCatagory]: any = useState({});
 
-
-
-
   useEffect(() => {
     console.log("hihiihi");
 
@@ -53,6 +51,7 @@ function HomeNavLogin() {
       }
     })();
   }, []);
+  
 
   useEffect(() => {
     if (user) {
@@ -90,7 +89,7 @@ function HomeNavLogin() {
     <>
       <header className="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02">
         <Link
-          to="#"
+          to="/Home"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
           <img
@@ -115,19 +114,16 @@ function HomeNavLogin() {
             </li>
             <li className="p-4  hover:text-green-500 duration-200 cursor-pointer">
               <Link
-                to="/Home"
+                to="/courses"
                 className="p-4  hover:text-green-500 duration-200 cursor-pointer"
               >
                 Tutor
               </Link>
             </li>
              <li className="p-4  hover:text-green-500 duration-200 cursor-pointer">
-              <Link
-                to="/courses"
-                className="p-4  hover:text-green-500 duration-200 cursor-pointer"
-              >
-                Courses
-              </Link>
+             <Link to="/courses" className="p-4 hover:text-green-500 duration-200 cursor-pointer">
+  Courses
+</Link>
             </li>
             <li
               className="p-4 hover:text-green-500 duration-200 cursor-pointer"

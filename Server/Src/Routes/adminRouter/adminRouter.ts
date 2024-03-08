@@ -13,6 +13,8 @@ import {
   deleteCategory,
   blockUser,
   unblockUser,
+  blockTutor,
+  unblockTutor,
 } from "../../Controller/adminController/adminController";
 
 adminRouter.post("/adminLogin", loginAdmin);
@@ -26,6 +28,8 @@ adminRouter.post("/editCategory",editCategory);
 adminRouter.put("/deleteCategory/:id", deleteCategory);
 adminRouter.put('/blockUser/:id',blockUser)
 adminRouter.put('/unBlockUser/:id',unblockUser)
+adminRouter.put('/blockTutor/:id',blockTutor)
+adminRouter.put('/unBlockTutor/:id',unblockTutor)
 
 
 

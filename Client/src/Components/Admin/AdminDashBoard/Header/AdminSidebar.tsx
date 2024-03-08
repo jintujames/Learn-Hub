@@ -32,12 +32,12 @@ function AdminSidebar() {
 
   
     return (
-      <aside className="flex flex-col w-64 h-screen px-5 py-8 overflow-y-auto bg-gray-500 border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-white">
+<aside className="flex flex-col w-64 h-screen px-5 py-12 overflow-y-auto bg-pink-950 dark:bg-gray-900 dark:border-white">
   <div className="flex items-center space-x-3 rtl:space-x-reverse">
-    <img src="public/LearnHub Logo.png" className="h-12 rounded-full border-2 border-white" alt="Learn Hub Logo" />
-    <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Learn Hub</span>
+    <img src="public/LearnHub Logo.png" className="h-12 rounded-full" alt="Learn Hub Logo" />
+    <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Learn Hub</span>
   </div>
-  <div className="flex flex-col justify-between flex-1 mt-6">
+  <div className="flex flex-col justify-between flex-1 mt-8">
     <nav className="-mx-3 space-y-6">
       <div className="space-y-3">
         <Link
