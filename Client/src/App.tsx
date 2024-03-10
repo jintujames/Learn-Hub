@@ -24,6 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 import TutorPrivateRoute from "./Components/PrivateRouter/TutorPrivateRoute";
 import CourseDetailsPage from "./Pages/Student/CourseDetailsPage";
 import ProfilePage from "./Pages/Student/ProfilePage";
+import CartPage from "./Pages/Student/CartPage";
 
 function App() {
   const user = useSelector(selectUser);
@@ -42,7 +43,7 @@ function App() {
           <Route path="/newPassword" element={<NewPassword />} />
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/courseDetails" element={<CourseDetailsPage />} />
-          <Route path="/cart" element={<CourseDetailsPage />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/userProfile" element={<ProfilePage />} />
 
 

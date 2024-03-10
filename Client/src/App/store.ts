@@ -14,20 +14,27 @@ const tutorConfig = {
     
     storage
 }
-
-const courseConfig = {
-    key : 'course',
+const userConfig = {
+    key : 'user',
     
     storage
 }
 
+const courseConfig = {
+    key : 'course',
+    
+    storage 
+}
+
 const persistedTutorReducer = persistReducer(tutorConfig , tutorReducer);
 const persistedCourseReducer = persistReducer(courseConfig , courseReducer);
+const persistedUserReducer = persistReducer(userConfig , userReducer);
+
 
 
 const store =  configureStore({
     reducer: {
-        user: userReducer,
+        user: persistedUserReducer,
         tutor: persistedTutorReducer,
         admin: adminReducer,
         course:persistedCourseReducer

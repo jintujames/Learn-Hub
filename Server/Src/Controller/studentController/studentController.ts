@@ -7,6 +7,8 @@ import "dotenv/config";
 import User from "../../Models/studentModel";
 import { sendMail } from "../../Middleware/mailSender";
 import courseModel from "../../Models/courseModel";
+import CartItemModel from "../../Models/cartModel";
+import cartModel from "../../Models/cartModel";
 
 // Student Register
 
@@ -292,6 +294,78 @@ const studentProfile = async (req: Request, res: Response) => {
   }
 };
 
+const addToCart =async(req:Request,res:Response)=>{
+
+  console.log("cart entry")
+    
+    try {
+
+        const {courseId,userId} = req.body   
+
+        const existingCartItem =await cartModel.findOne({user:userId,course:courseId})
+
+        if(existingCartItem){
+            res.status(400).json({message:"Course already in the cart"})
+        }else{
+            const newCartItem = new cartModel({
+                user:userId,
+                course:courseId,
+            });
+            await newCartItem.save();
+            res.status(200).json({message:"Course Added Successfully"})
+        }
+        
+    } catch (error) {
+
+        console.error("Error Occur while Adding to cart",error)
+        res.status(500).json({error:"Internal Server Error"})
+        
+    }
+    
+
+
+}
+
+const getCart =async(req:Request,res:Response)=>{
+
+  console.log("oiiiii")
+
+  const userId = req.params.userId;
+
+  console.log("userid vannu",userId)
+
+  try {
+
+      const cartItems = await cartModel.find({user:userId}).populate('course')
+      console.log(cartItems,"items")
+
+      res.status(200).json(cartItems)
+      
+  } catch (error) {
+
+      console.error("Error fetching cart Items",error)
+      res.status(500).json({error:"Internal server Error"})
+      
+  }
+
+
+}
+
+
+const RemoveCourseFromCart = async (req: Request, res: Response) => {
+  const cartItemId = req.params.cartItemId;
+
+  try {
+    await (cartModel as any).findByIdAndRemove(cartItemId);
+    
+
+    res.status(200).json({ message: "Course Removed from the cart" });
+  } catch (error) {
+    console.error("Error Removing Course From cart", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 
 export {
   studentSignUp,
@@ -303,5 +377,8 @@ export {
   firebaseGoogleAuthVerication,
   userGetAllCategory,
   userGetCourses,
-  studentProfile
+  studentProfile,
+  addToCart,
+  getCart,
+  RemoveCourseFromCart
 };

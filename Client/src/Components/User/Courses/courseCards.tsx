@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getAllCourses,
   getCatagory,
@@ -7,7 +7,8 @@ import {
 } from "../../../utils/config/axios.Method.Get";
 import { toast } from "react-toastify";
 import { number } from "zod";
-
+import {clearCourseDetails,setSingleCourseDetails} from "../../../Features/TutorSlice/courseSlice"
+import { useDispatch } from "react-redux";
 interface Course {
   _id: string;
   courseName: string;
@@ -21,6 +22,8 @@ interface Course {
 }
 
 function CourseCards() {
+  const [data, setData]: any = useState([]);
+
   const [courseDetails, setCourseDetails] = useState<Course[]>([]);
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -33,9 +36,11 @@ function CourseCards() {
   const [catagory, setCatagory]: any = useState({});
   const [selectedCat,setSelectedcat]=useState('')
   const [sortOrder, setSortOrder] = useState<string>('');
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
   const toggleDropdown = (e: React.MouseEvent) => {
     const isButtonClicked = (e.target as HTMLButtonElement).classList.contains('browse-category-button');
-  
+ 
   
     if (!isButtonClicked) {
       setDropdownOpen(!isDropdownOpen);
@@ -92,6 +97,7 @@ const handleApply = () => {
   }
 
   setSearchResult(sortedArray);
+  setDropdownOpen(false)
 };
 //------------------------------------------------------------
 
@@ -174,6 +180,28 @@ const hanleMax = (e: any) => {
   
 // }, [selectedCat]);
 
+const [currentPage, setCurrentPage] = useState(1);
+  const dataPerPage = 6;
+  const lastIndex = dataPerPage * currentPage;
+  const firstIndex = lastIndex - dataPerPage;
+  const page = Math.ceil(data.length / dataPerPage);
+  const paginateddata = searchresult.slice(firstIndex, lastIndex);
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handlePrev = () => {
+    if (currentPage != 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (page != currentPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
 const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   const selectedCategory = e.target.value;
   setSelectedcat(selectedCategory);
@@ -202,6 +230,15 @@ const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       }
     })();
   }, []);
+
+
+  const handleSingleCourse=(course:any)=>{
+    dispatch(clearCourseDetails())
+    dispatch(setSingleCourseDetails(course))
+
+    navigate('/courseDetails')
+
+  }
 
   return (
     <>
@@ -300,7 +337,7 @@ const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       </div>
 
       <div className="container mx-auto px-4 md:px-8 lg:px-20 flex flex-wrap space-x-4">
-        {searchresult.map((course) => (
+        {paginateddata.map((course) => (
           <div
             key={course._id}
             className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden mb-4"
@@ -323,15 +360,45 @@ const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
               <h2 className="text-sky-500 font-bold text-lg">
                 Rs. {course?.coursefee}
               </h2>
-              <Link to="/courseDetails">
-                <button className="px-3 py-1 bg-yellow-300 text-sm text-gray-900 font-semibold rounded">
+              <div >
+                <button className="px-3 py-1 bg-yellow-300 text-sm text-gray-900 font-semibold rounded" onClick={()=>handleSingleCourse(course)}>
                   View Course
                 </button>
-              </Link>
+              </div>
             </div>
           </div>
         ))}
       </div>
+
+      <nav className="flex justify-start items-center rounded-lg space-x-2">
+      <span
+        className="text-black hover:text-teal-600 p-4 inline-flex items-center gap-2 rounded-md"
+        onClick={handlePrev}
+      >
+        <span aria-hidden="true">«</span>
+        <span className="sr-only">Previous</span>
+      </span>
+      {Array.from({ length: page }, (_, index) => (
+        <span
+          key={index + 1}
+          className={`w-10 h-10 ${
+            currentPage === index + 1
+              ? "bg-black text-white"
+              : "text-gray-500 hover:text-teal-600"
+          } p-4 inline-flex items-center text-sm font-medium rounded-full`}
+          onClick={() => handlePageChange(index + 1)}
+        >
+          {index + 1}
+        </span>
+      ))}
+      <span
+        className="text-gray-500 hover:text-teal-600 p-4 inline-flex items-center gap-2 rounded-md"
+        onClick={handleNext}
+      >
+        <span className="sr-only">Next</span>
+        <span aria-hidden="true">»</span>
+      </span>
+    </nav>
     </>
   );
 }

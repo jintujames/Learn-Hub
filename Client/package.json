@@ -23,6 +23,7 @@
     "flowbite": "^2.2.1",
     "google-auth-library": "^9.6.1",
     "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.354.0",
     "preline": "^2.0.3",
     "react": "^18.2.0",
     "react-axios": "^2.0.6",
