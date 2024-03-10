@@ -1,16 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { X } from 'react-feather';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 
 type VideoPlayerProps = {
     videoUrl: string;
-    onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    setShowVideoModal: any;
+    setCurrentVideoUrl:any
   };
 
-function VideoPlayer({ videoUrl, onClose }: VideoPlayerProps) {
+function VideoPlayer({ videoUrl, setShowVideoModal,setCurrentVideoUrl }: VideoPlayerProps) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-
+const navigate=useNavigate()
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.addEventListener('ended', handleVideoEnded);
@@ -21,10 +25,17 @@ function VideoPlayer({ videoUrl, onClose }: VideoPlayerProps) {
   }, []);
 
   const togglePlay = () => {
+    toast.success('here')
     if (videoRef.current) {
+    toast.success('1')
+
       if (!isPlaying) {
+    toast.success('3')
+
         videoRef.current.play();
       } else {
+    toast.success('4')
+
         videoRef.current.pause();
       }
       setIsPlaying(!isPlaying);
@@ -35,42 +46,30 @@ function VideoPlayer({ videoUrl, onClose }: VideoPlayerProps) {
     setIsPlaying(false);
   };
 
-  const handleCloseClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    onClose(event);
+  const handleCloseClick = () => {
+    window.location.reload()
+    setCurrentVideoUrl('')
+    setShowVideoModal(false)
+    
   };
   return (
-    <div>
-      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-80 z-50">
-      <div className="relative w-4/5 h-4/5">
-        <button
-          className="absolute top-2 right-2 text-white text-2xl cursor-pointer z-10"
-          onClick={handleCloseClick}
-        >
-          X
-        </button>
+    <div className='fixed top-0 left-0 flex w-full h-full justify-center items-center bg-black bg-opacity-65 flex-col'>
+      <div className='text-white flex w-full p-3 justify-end'><X size={30} onClick={handleCloseClick}/></div>
+        <div className=' h-5/6 w-9/12'>
+
         <video
           controls
-          width="100%"
-          height="100%"
+         className='w-full h-full object-contain bg-transparent'
           ref={videoRef}
-          src={videoUrl}
-        />
-         
-     
-        <div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-          style={{ display: isPlaying ? 'none' : 'block' }}
         >
-          <button
-            className="bg-blue-500 text-white text-lg font-semibold px-4 py-2 rounded-full"
-            onClick={togglePlay}
-          >
-            Play
-          </button>
+
+          <source 
+          src={videoUrl}/>
+        </video>
+
+
+
         </div>
-      </div>
-    </div>
     </div>
   )
 }

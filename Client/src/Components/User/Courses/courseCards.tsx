@@ -6,6 +6,7 @@ import {
   getTutorCourses,
 } from "../../../utils/config/axios.Method.Get";
 import { toast } from "react-toastify";
+import { number } from "zod";
 
 interface Course {
   _id: string;
@@ -23,19 +24,162 @@ function CourseCards() {
   const [courseDetails, setCourseDetails] = useState<Course[]>([]);
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-
+  const [searcheror, setSearchError] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
+  const [min,setMin]=useState<any>(0)
+  const [max,setMax]=useState<any>(0)
+  const [apply,setapply]=useState<boolean>(false)
+  const [searchresult,setSearchResult]=useState<Course[]>([]);
+  const [catagory, setCatagory]: any = useState({});
+  const [selectedCat,setSelectedcat]=useState('')
+  const [sortOrder, setSortOrder] = useState<string>('');
   const toggleDropdown = (e: React.MouseEvent) => {
     const isButtonClicked = (e.target as HTMLButtonElement).classList.contains('browse-category-button');
+  
   
     if (!isButtonClicked) {
       setDropdownOpen(!isDropdownOpen);
     }
   };
-  
-  const [catagory, setCatagory]: any = useState({});
 
+//------------------------------------------------------------
+const isValidAlphabetic = (value: string) => {
+  return /^[a-zA-Z]+$/.test(value);
+};
+const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (!isValidAlphabetic(event.target.value)) {
+    setSearchError("The provided value to search shulde be in Alphebetic");
+    setSearch("");
+  } else {
+    setSearchError("");
+    setSearch(event.target.value);
+    console.log(event.target.value, "<= handleSortChange =>");
+   
+  }
+};
+
+const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  setSortOrder(e.target.value);
+};
+//------------------------------------
+const handleApply = () => {
+  const data = [...courseDetails];
+
+  // Filter by search term
+  // const searchedItems = data.filter((item: any) =>
+  //   item.courseName.toLowerCase().includes(search.toLowerCase())
+  // );
+
+  // Filter by price range only if both min and max are greater than 0
+  const priceFilteredItems = min > 0 && max > 0
+    ? data.filter((item: any) => {
+      const courseFee = parseFloat(item.coursefee);
+      return courseFee >= min && courseFee <= max;
+    })
+    : data;
+
+  // Filter by category
+  const categoryFilteredItems = selectedCat !== ""
+    ? priceFilteredItems.filter((item: any) => item.category === selectedCat)
+    : priceFilteredItems;
+
+  // Apply sorting
+  let sortedArray = [...categoryFilteredItems];
+  if (sortOrder === "asc") {
+    sortedArray = sortedArray.sort((a, b) => a.coursefee - b.coursefee);
+  } else if (sortOrder === "desc") {
+    sortedArray = sortedArray.sort((a, b) => b.coursefee - a.coursefee);
+  }
+
+  setSearchResult(sortedArray);
+};
+//------------------------------------------------------------
+
+useEffect(()=>{
+   const data=courseDetails
+
+   const serchedItem=data.filter((item:any)=>item.courseName.toLowerCase().startsWith(search.toLowerCase()))
+
+ setSearchResult(serchedItem)
+},[search])
+
+
+const hanleMin = (e: any) => {
+  const inputValue = e.target.value;
+
+  if (inputValue === '' || isNaN(inputValue)) {
+    toast.error('Please enter a valid number');
+    console.log('Not a valid number');
+    setMin(0); // You can set it to an empty string or another default value
+  } else {
+    console.log('It is a number');
+    const numericValue = parseFloat(inputValue);
+    setMin(numericValue);
+  }
+};
+
+const hanleMax = (e: any) => {
+  const inputValue = e.target.value;
+
+  if (inputValue === '' || isNaN(inputValue)) {
+    toast.error('Please enter a valid number');
+    console.log('Not a valid number');
+    setMax(0); // You can set it to an empty string or another default value
+  } else {
+    console.log('It is a number');
+    const numericValue = parseFloat(inputValue);
+    setMax(numericValue);
+  }
+};
+// useEffect(()=>{
+
+
+//   const data=courseDetails
+//   if (typeof min === 'number' && typeof max === 'number') {
+//     const filteredItems = data.filter((item:any) => {
+//       const courseFee = parseFloat(item.coursefee);
+//       return courseFee >= min && courseFee <= max;
+//     });
+
+
+//     setSearchResult(filteredItems)
+//   }
+
+// },[apply])
+
+
+// useEffect(() => {
+//   const data = [...courseDetails]; // Create a copy of the array
+
+//   let sortedArray:any = [];
+
+//   if (sortOrder === 'asc') {
+//     toast.success('as');
+//     sortedArray = data.sort((a, b) => a.coursefee - b.coursefee);
+//   } else if (sortOrder === 'desc') {
+//     toast.success('des');
+//     sortedArray = data.sort((a, b) => b.coursefee - a.coursefee);
+//   }
+
+//   setSearchResult(sortedArray);
+// }, [sortOrder]);
+
+// useEffect(() => {
+
+//   toast.success('hi')
+//   // Check if a valid category is selected
+//   const data=courseDetails
+//     const result = data.filter((item: any) => item.category == selectedCat);
+//     setSearchResult(result);
+  
+// }, [selectedCat]);
+
+const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const selectedCategory = e.target.value;
+  setSelectedcat(selectedCategory);
+};
   useEffect(() => {
-    console.log("hihiihi");
+    // console.log("hihiihi");
 
     (async () => {
       const response: any = await getCatagory();
@@ -54,6 +198,7 @@ function CourseCards() {
 
       if (response) {
         setCourseDetails(response?.data?.courseDetails || []);
+        setSearchResult(response?.data?.courseDetails || []);
       }
     })();
   }, []);
@@ -62,9 +207,9 @@ function CourseCards() {
     <>
       <div
         className="flex justify-between items-center pb-3"
-        onClick={toggleDropdown}
+       
       >
-        <button className="text-sm font-bold bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full cursor-pointer ml-auto">
+        <button className="text-sm font-bold bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full cursor-pointer ml-auto"  onClick={toggleDropdown}>
           Browse Category
         </button>
 
@@ -82,6 +227,8 @@ function CourseCards() {
                       id="searchInput"
                       className="p-2 text-base border rounded focus:outline-none focus:border-teal-500"
                       placeholder="Search for items"
+                      onChange={(e)=>handleSearch(e)}
+                      value={search}
                     />
                   </div>
                   <div className="flex flex-col">
@@ -91,21 +238,25 @@ function CourseCards() {
                         type="text"
                         className="p-2 text-base border rounded focus:outline-none focus:border-teal-500"
                         placeholder="Min"
+                        onChange={(e)=>hanleMin(e)}
+                        value={min}
                       />
                       <input
                         type="text"
                         className="p-2 text-base border rounded focus:outline-none focus:border-teal-500"
                         placeholder="Max"
+                        onChange={(e)=>hanleMax(e)}
+                        value={max}
                       />
                     </div>
                   </div>
                   <div className="flex flex-col">
                     <label className="text-base mb-2">Filter by category</label>
-                    <select className="p-2 text-base border rounded focus:outline-none focus:border-teal-500">
+                    <select className="p-2 text-base border rounded focus:outline-none focus:border-teal-500" onChange={(e) => handleCategoryChange(e)}>
                       <option value="">Select the category</option>
                       {catagory.length > 0 ? (
                         catagory.map((item: any) => (
-                          <option key={item._id} value={item.categoryName}>
+                          <option key={item._id} value={item.categoryName} >
                             {item.categoryName}
                           </option>
                         ))
@@ -116,7 +267,10 @@ function CourseCards() {
                   </div>
                   <div className="flex flex-col">
                     <label className="text-base mb-2">Sort Data</label>
-                    <select className="p-2 text-base border rounded focus:outline-none focus:border-teal-500">
+                    <select className="p-2 text-base border rounded focus:outline-none focus:border-teal-500"
+                    
+                    onChange={handleSortChange}
+        value={sortOrder}>
                       <option value="">Sort Data</option>
                       <option value="asc">Min to Max</option>
                       <option value="desc">Max to Min</option>
@@ -125,6 +279,7 @@ function CourseCards() {
                 </div>
                 <div className="flex items-start space-x-6">
                   <button
+                   onClick={handleApply}
                     type="button"
                     className="py-2  px-4 mt-5 bg-teal-500 text-white rounded-md hover:bg-teal-600 focus:outline-none focus:ring focus:border-teal-500 transition-all text-sm"
                   >
@@ -145,7 +300,7 @@ function CourseCards() {
       </div>
 
       <div className="container mx-auto px-4 md:px-8 lg:px-20 flex flex-wrap space-x-4">
-        {courseDetails.map((course) => (
+        {searchresult.map((course) => (
           <div
             key={course._id}
             className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden mb-4"

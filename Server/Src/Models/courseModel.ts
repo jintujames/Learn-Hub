@@ -10,6 +10,8 @@ interface ICourse extends Document {
   courseName: string;
   courseDuration: string;
   courseDescription: string;
+  shortDescription: string;
+
   isApproved: boolean;
   category:string,
   coursefee: number;
@@ -40,6 +42,11 @@ const courseSchema = new Schema<ICourse>(
       type: String,
       required: true,
     },
+    shortDescription: {
+      type: String,
+      required: true,
+    },
+   
     category: {
       type: String,
       required: true,

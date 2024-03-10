@@ -1,6 +1,22 @@
 import React from "react";
+import { useSelector } from "react-redux";
+interface Course {
+  _id: string;
+  courseName: string;
+  courseDuration: string;
+  courseDescription: string;
+  category:string,
+  coursefee: number;
+  image: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  video: string
+  }
 
 function CourseDetails() {
+
+  const {courseDetails}=useSelector((state:any)=>state.course)
+  
   return (
     <>
       <section className=" bg-blueGray-200 -mt-24">
@@ -12,16 +28,15 @@ function CourseDetails() {
           <div className="flex flex-wrap items-center mt-20">
             <div className="w-full md:w-6/12 px-7 mr-auto ml-auto">
               <h3 className="text-3xl mb-2 font-semibold leading-normal">
-                React - The Complete Guide 2024 (incl. React Router & Redux)
+              {courseDetails.courseName}              
               </h3>
               <h2 className="text-lg font-semibold leading-normal mt-4 mb-4 text-zinc-500">
-                Dive in and learn React.js from scratch! Learn React, Hooks,
-                Redux, React Router, Next.js, Best Practices and way more!
+              {courseDetails.courseDescription}              
+
               </h2>
               <p className="text-lg font-light leading-relaxed mt-0 mb-4 text-Gray-100">
-                The kit comes with three pre-built pages to help you get started
-                faster. You can change the text and images and you're good to
-                go. Just make sure you enable them first via JavaScript.
+              {courseDetails.shortDescription}              
+
               </p>
             </div>
 
@@ -30,13 +45,13 @@ function CourseDetails() {
                 <div className="relative">
                   <img
                     className="w-full rounded-xl"
-                    src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                    src={courseDetails.image[0]}
                     alt="Colors"
                   />
                 </div>
 
                 <h1 className="mt-4 text-gray-800 text-2xl font-bold cursor-pointer">
-                  Javascript Bootcamp for Absolute Beginners
+                {courseDetails.courseName}              
                 </h1>
                 <div className="flex space-x-5 my-4 items-center">
                   <div className="relative">

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api } from "../../../utils/config/axios.Config";
 import { login } from "../../../Features/TutorSlice/tutorSlice";
 import { toast } from "react-toastify";
 import { getTutorCourses } from "../../../utils/config/axios.Method.Get";
-
+import { useDispatch } from "react-redux";
+import {clearCourseDetails,setSingleCourseDetails} from '../../../Features/TutorSlice/courseSlice'
 interface Course {
   _id: string;
   courseName: string;
@@ -21,14 +22,18 @@ interface Course {
 function MyCourses() {
 
   
-  
- 
+  const dispatch=useDispatch()
+ const navigate=useNavigate()
 
   const [courseDetails,setCourseDetails]= useState<Course[]>([])
    
   const tutorId = localStorage.getItem("tutorId");
   console.log(tutorId, "user");
 
+
+  useEffect(()=>{
+  toast.success('ih')
+  },[])
   useEffect(() => {
     getTutorCourses(tutorId)
       .then((response: any) => {
@@ -43,6 +48,12 @@ function MyCourses() {
       });
   }, []);
 
+  const hanldeReadmore=(item:any)=>{
+    dispatch(clearCourseDetails())
+    dispatch(setSingleCourseDetails(item))
+    navigate("/tutorProfile/myCourseView")
+
+  }
 
   return (
     <div>
@@ -58,9 +69,9 @@ function MyCourses() {
                     alt="course Thumbnail"
                   />
                 </div>
-                <div className="p-6">
-                  <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-                    <div>
+                <div className="p-6 ">
+                <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center  h-32 overflow-y-auto " >
+                    <div >
                       <h2 className="mt-2 text-lg font-semibold text-gray-800">
                         {course?.courseName}
                       </h2>
@@ -72,12 +83,12 @@ function MyCourses() {
                   <hr className="mt-4 mb-4" />
                   <div className="flex flex-wrap justify-between">
                     <p className="inline-flex items-center">
-                      <Link
-                        to="/tutorProfile/myCourseView"
+                      <button
+                       
                         className="mt-2 inline-block rounded-full bg-orange-400 p-3 text-sm font-medium text-white"
-                      >
+                        onClick={()=>{hanldeReadmore(course)}}>
                         Read More
-                      </Link>
+                      </button>
                     </p>
                   </div>
                 </div>

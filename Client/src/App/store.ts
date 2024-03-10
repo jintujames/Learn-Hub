@@ -11,17 +11,26 @@ import storage from 'redux-persist/lib/storage'
 
 const tutorConfig = {
     key : 'tutor',
+    
     storage
 }
 
+const courseConfig = {
+    key : 'course',
+    
+    storage
+}
 
 const persistedTutorReducer = persistReducer(tutorConfig , tutorReducer);
+const persistedCourseReducer = persistReducer(courseConfig , courseReducer);
+
 
 const store =  configureStore({
     reducer: {
         user: userReducer,
         tutor: persistedTutorReducer,
         admin: adminReducer,
+        course:persistedCourseReducer
     }
 
 })

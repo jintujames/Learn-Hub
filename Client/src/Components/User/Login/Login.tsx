@@ -17,7 +17,7 @@ function Login() {
   const dispatch = useDispatch();
   const { errors, handleSubmit, register } = useValidate();
 
-  const { user } = useSelector((state: any) => state.user);
+  const  {user}  = useSelector((state: any) => state.user);
 
   useEffect(() => {
     if (user) {
@@ -34,7 +34,10 @@ function Login() {
       if (response.status === 200) {
         console.log(response.data.token, "res");
         dispatch(login(response.data.token));
+        localStorage.removeItem("Token");
+        localStorage.removeItem("userId");
         localStorage.setItem("Token", `${response.data.token}`);
+        localStorage.setItem("userId",`${response.data._id}`);
         navigate("/Home", { replace: true });
       } else {
         if (response.response.status === 404) {
@@ -56,6 +59,7 @@ function Login() {
           if (res.status === 200) {
             if (res.data.userExist) {
               localStorage.setItem("Token", `${res.data.token}`);
+              
               dispatch(login(res.data.token));
               navigate("/Home", { replace: true });
             } else {

@@ -12,6 +12,8 @@ import { ShoppingCart } from "react-feather";
 function HomeNavLogin() {
   const dispatch = useDispatch();
   const { user } = useSelector((state: any) => state.user);
+  const [catagory, setCatagory]: any = useState({});
+
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -37,7 +39,6 @@ function HomeNavLogin() {
   };
 
   
-  const [catagory, setCatagory]: any = useState({});
 
   useEffect(() => {
     console.log("hihiihi");

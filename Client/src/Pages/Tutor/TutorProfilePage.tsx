@@ -12,12 +12,15 @@ import AddLesson from "../../Components/Tutor/TutorProfile/AddLesson";
 import MyCourses from "../../Components/Tutor/TutorProfile/MyCourses";
 import ViewCourse from "../../Components/Tutor/TutorProfile/ViewCourse";
 import MyCourseViewPage from "./MyCourseViewPage";
+import VideoPlayer from "../../Components/Tutor/TutorProfile/VideoPlayer";
 
 function TutorProfilePage() {
-  const [state, setState] = useState(0);
+  const [state, setState]:any = useState(0);
   return (
     <div>
+      
       <Navbar />
+
 
       <Routes>
         <Route path="/" element={<TutorSidebar children={<TutorBio />} />} />

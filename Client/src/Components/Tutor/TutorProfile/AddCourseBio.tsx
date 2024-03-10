@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 function AddCourseBio() {
   const [courseName, setCourseName] = useState<string>("");
   const [courseDescription, setCourseDescription] = useState<string>("");
+  const [shortDescription, setShortDescription] = useState<string>("");
+
   const [courseDuration, setCourseDuration] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [coursefee, setCoursefee] = useState<string>("");
@@ -28,6 +30,8 @@ function AddCourseBio() {
   type course = {
     courseName: string;
     courseDescription: string;
+    shortDescription: string;
+
     courseDuration: string;
     isApproved: boolean;
     category: string;
@@ -115,6 +119,8 @@ function AddCourseBio() {
       image: CloudanaryURL,
       courseName,
       courseDescription,
+      shortDescription,
+      
       isApproved: true,
       category,
       instructor: tutorId || "",
@@ -128,6 +134,8 @@ function AddCourseBio() {
     axios.post(`http://localhost:4001/api/v1/tutor/addCourse`, {
       courseName,
       courseDescription,
+      shortDescription,
+
         category,
         courseLevel,
         instructor: tutorId,
@@ -179,6 +187,20 @@ function AddCourseBio() {
               name="description"
               type="text"
               placeholder="Description"
+              aria-label="Description"
+            />
+          </div>
+          <div className="mt-2">
+            <label className="block text-sm text-gray-600" htmlFor="cus_email">
+              Short Description
+            </label>
+            <input
+              onChange={(e) => setShortDescription(e.target.value)}
+              className="w-full px-5  py-4 text-gray-700 bg-gray-200 rounded"
+              id="description"
+              name="description"
+              type="text"
+              placeholder="Short Description"
               aria-label="Description"
             />
           </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getUserProfile } from "../../../utils/config/axios.Method.Get";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 interface studentDetails {
     studentFirstName: string;
@@ -20,12 +21,18 @@ function UserProfile() {
     const [data, setData] = useState<studentDetails>();
     const userId = localStorage.getItem("userId");
 
-    const { user } = useSelector((state: any) => state.user);
+    const user  = useSelector((state: any) => state.user);
 
     useEffect(() => {
+
+
+      console.log(user,'this is is the user',userId);
+      
         if (user) {
-          console.log("user is here");
+          console.log("user is here",user);
           navigate("/userProfile");
+        }else{
+          toast.error('hi')
         }
       }, []);
 
@@ -33,7 +40,7 @@ function UserProfile() {
       const fetchData = async () => {
         try {
           const result: any = await getUserProfile(userId);
-          console.log("studentdetails", result.data.studentProfileDetails);
+          console.log("studentdetails", result.data);
           setData(result.data.studentProfileDetails);
         } catch (error) {
           

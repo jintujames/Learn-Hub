@@ -1,8 +1,9 @@
 import React from 'react'
 
-function cart() {
+function Cart() {
   return (
-    <>
+    <div>
+      <>
   {/* component */}
   {/* Create By Joker Banny */}
   <style
@@ -141,7 +142,9 @@ function cart() {
     </div>
   </div>
 </>
+
+    </div>
   )
 }
 
-export default cart
+export default Cart

@@ -52,20 +52,20 @@ const courseSlice = createSlice({
   name: "course",
   initialState,
   reducers: {
-    setCourseDetails: (state, action: PayloadAction<Course | null>) => {
+    setSingleCourseDetails: (state, action: PayloadAction<Course | null>) => {
       state.courseDetails = action.payload;
+    },
+    clearCourseDetails:(state)=>{
+      state.courseDetails=null
     },
     setLessons: (state, action: PayloadAction<Lesson[]>) => {
       state.lessons = action.payload;
     },
-    updateCourseDetails:(state,action: PayloadAction<Course>)=>{
-      const editedCourse = action.payload;
-      state.courseDetails ={...state.courseDetails ,...editedCourse}
-    }
+    
   },
 });
 
-export const { setCourseDetails, setLessons, updateCourseDetails } = courseSlice.actions;
+export const { setSingleCourseDetails, setLessons,clearCourseDetails } = courseSlice.actions;
 export const selectCourse = (state: { course: CourseState }) => state.course.courseDetails;
 export const selectLesson = (state: { course: CourseState }) => state.course.lessons;
 

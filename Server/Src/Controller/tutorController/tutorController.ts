@@ -129,6 +129,8 @@ const addCourses = async (req: Request, res: Response) => {
     const {
       courseName,
       courseDescription,
+      shortDescription,
+
       isApproved,
       category,
       coursefee,
@@ -141,6 +143,8 @@ const addCourses = async (req: Request, res: Response) => {
     const course = await courseModel.create({
       courseName,
       courseDescription,
+      shortDescription,
+
       isApproved,
       category,
       coursefee,
@@ -252,6 +256,7 @@ const instructorBio = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
 
 const getCourses = async (req:Request,res:Response)=>{
   try{
