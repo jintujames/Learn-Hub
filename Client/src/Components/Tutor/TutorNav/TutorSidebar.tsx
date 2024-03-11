@@ -28,6 +28,7 @@ function  TutorSidebar({children}:any) {
     // Add other properties as needed
   }
   const [data, setData] = useState<InstructorBioDetails>();
+  
   const tutorId = localStorage.getItem("tutorId");
   console.log("aaaaaaaaa",tutorId);
   console.log(typeof tutorId);
@@ -95,11 +96,11 @@ function  TutorSidebar({children}:any) {
       <div className="flex bg-white">
         <div className="md:flex w-2/5 md:w-1/4 h-screen bg-white border-r hidden">
           <div className="mx-auto py-2">
-            <img
+            {/* <img
               className="w-25 h-28 rounded-full mx-auto"
-              src="https://picsum.photos/200"
+              src= {data?.photo}
               alt="Profile picture"
-            />
+            /> */}
             <h2 className="text-center text-2xl font-semibold mt-3" >                     
             {`${data?.instructorFirstName} ${data?.instructorLastName}`}
             </h2>

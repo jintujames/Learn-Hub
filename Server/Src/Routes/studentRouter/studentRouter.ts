@@ -15,6 +15,8 @@ import {
   addToCart,
   getCart,
   RemoveCourseFromCart,
+  updateUserProfile,
+  editProfile,
 } from "../../Controller/studentController/studentController";
 
 import { protect } from "../../Middleware/authMiddleware";
@@ -29,7 +31,9 @@ studentRouter.post("/signup", studentSignUp);
 studentRouter.post("/login", studentLogin);
 studentRouter.post("/logout", studentLogout);
 studentRouter.get("/userProfile/:id", studentProfile);
-// studentRouter.post("/updateUserProfile", updateTutorProfile);
+studentRouter.post("/updateUserProfile", updateUserProfile);
+studentRouter.put("/EditUserProfile", editProfile);
+
 
 
 

@@ -370,6 +370,60 @@ const RemoveCourseFromCart = async (req: Request, res: Response) => {
 };
 
 
+const updateUserProfile = async (req: Request, res: Response) => {
+  try {
+    const { photo, id } = req.body;
+
+    if (!photo || typeof photo !== 'string' || !id || typeof id !== 'string') {
+      return res.status(400).json({ message: 'Invalid input data' });
+    }
+
+    const user: any = await studentModel.findByIdAndUpdate(id, { $set: { photo: photo } });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Tutor not found' });
+    }
+
+    return res.status(200).json({ message: 'Profile updated successfully', user: user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const editProfile = async (req: Request, res: Response) => {
+  try {
+    const { studentId, updatedProfileDetails } = req.body;
+
+    if (!studentId || !updatedProfileDetails || typeof studentId !== 'string' || typeof updatedProfileDetails !== 'object') {
+      return res.status(400).json({ message: 'Invalid input data' });
+    }
+
+    const updatedProfile = await studentModel.findByIdAndUpdate(
+      studentId,
+      { $set: updatedProfileDetails },
+      { new: true }
+    );
+
+    if (updatedProfile) {
+      return res.status(200).json({
+        message: 'Profile updated successfully',
+        updatedProfile,
+      });
+    } else {
+      return res.status(404).json({
+        message: 'Student not found',
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error',
+    });
+  }
+};
+
+
 export {
   studentSignUp,
   studentLogin,
@@ -383,5 +437,7 @@ export {
   studentProfile,
   addToCart,
   getCart,
-  RemoveCourseFromCart
+  RemoveCourseFromCart,
+  updateUserProfile,
+  editProfile
 };
