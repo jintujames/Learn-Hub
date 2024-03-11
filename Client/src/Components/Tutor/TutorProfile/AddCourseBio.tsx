@@ -5,12 +5,12 @@ import { getCatagory } from "../../../utils/config/axios.Method.Get";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useCourseBasicValidate } from "../../../utils/validations/addCourseValidation";
 
 function AddCourseBio() {
   const [courseName, setCourseName] = useState<string>("");
   const [courseDescription, setCourseDescription] = useState<string>("");
   const [shortDescription, setShortDescription] = useState<string>("");
-
   const [courseDuration, setCourseDuration] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [coursefee, setCoursefee] = useState<string>("");
@@ -18,6 +18,9 @@ function AddCourseBio() {
   const [image, setImage] = useState<File | null>(null);
   const [catagory, setCatagory]: any = useState({});
   const [CloudanaryURL, setCloudanaryURL] = useState("");
+  const { errors, handleSubmit, register } = useCourseBasicValidate();
+
+console.log(errors,"errorserrorserrorserrorserrors");
 
   const navigate = useNavigate();
 
@@ -81,10 +84,17 @@ function AddCourseBio() {
   };
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+
+    const file:any = e?.target?.files[0];
+    console.log(file,"filefilefilefilefile");
+    
     if (file) {
+      console.log("I am IN file");
+      
       setImage(file);
     }
+    console.log(image,"IMMMMM");
+    
   };
   useEffect(() => {
     console.log("hihiihi");
@@ -104,49 +114,60 @@ function AddCourseBio() {
   console.log("tutorId", tutorId);
 
   const handleAddCourse = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    console.log("ENTER to ADD COURSE");
+    // e.preventDefault();
 
     try {
-      // Wait for the video to be uploaded
-      await handleImageUpload();
-
-      if (!CloudanaryURL) {
-        toast.error("Error occur While Uploading the Video");
-        return;
-      }
-
-    const data: course = {
-      image: CloudanaryURL,
-      courseName,
-      courseDescription,
-      shortDescription,
+      console.log("I AM IMM");
       
-      isApproved: true,
-      category,
-      instructor: tutorId || "",
-      coursefee: Number(coursefee),
-      courseLevel,
-      tutorId: storedTutorId,
-      courseDuration: ""
-    };
-    console.log(data, "dataaa");
+      console.log(image,"imggg");
+      
+      if(image){
+        console.log("I am IMAGE");
+        
 
-    axios.post(`http://localhost:4001/api/v1/tutor/addCourse`, {
-      courseName,
-      courseDescription,
-      shortDescription,
-
+        await handleImageUpload();
+  
+        if (!CloudanaryURL) {
+          toast.error("Error occur While Uploading the Video");
+          return;
+        }
+  
+      const data: course = {
+        image: CloudanaryURL,
+        courseName,
+        courseDescription,
+        shortDescription,
+        
+        isApproved: true,
         category,
+        instructor: tutorId || "",
+        coursefee: Number(coursefee),
         courseLevel,
-        instructor: tutorId,
-        coursefee,
-         image: data.image
-      });
-
-      setTimeout(() => {
-        toast.success("Course Added Successfully");
-        navigate("/myCourse");
-      }, 3000);
+        tutorId: storedTutorId,
+        courseDuration: ""
+      };
+      console.log(data, "dataaa");
+  
+      axios.post(`http://localhost:4001/api/v1/tutor/addCourse`, {
+        courseName,
+        courseDescription,
+        shortDescription,
+  
+          category,
+          courseLevel,
+          instructor: tutorId,
+          coursefee,
+           image: data.image
+        });
+  
+        setTimeout(() => {
+          toast.success("Course Added Successfully");
+          navigate("/myCourse");
+        }, 3000);
+      }else{
+        alert("Image reqqqq")
+      }
     } catch (error) {
       console.error(error);
       toast.error("Error Occurred While Adding");
@@ -156,135 +177,170 @@ function AddCourseBio() {
   return (
     <>
       <div className="leading-loose">
-        <form
-          onSubmit={handleAddCourse}
-          encType="multipart/form-data"
-          className="max-w-xl m-4 p-10 bg-white rounded shadow-xl"
-        >
-          <p className="text-gray-800 text-center font-medium">Create Course</p>
-          <div className="">
-            <label className="block text-sm text-gray-00" htmlFor="cus_name">
-              Course Title
-            </label>
-            <input
-              onChange={(e) => setCourseName(e.target.value)}
-              className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
-              id="courseName"
-              name="courseName"
-              type="text"
-              placeholder="courseName"
-              aria-label="courseName"
-            />
-          </div>
-          <div className="mt-2">
-            <label className="block text-sm text-gray-600" htmlFor="cus_email">
-              Description
-            </label>
-            <input
-              onChange={(e) => setCourseDescription(e.target.value)}
-              className="w-full px-5  py-4 text-gray-700 bg-gray-200 rounded"
-              id="description"
-              name="description"
-              type="text"
-              placeholder="Description"
-              aria-label="Description"
-            />
-          </div>
-          <div className="mt-2">
-            <label className="block text-sm text-gray-600" htmlFor="cus_email">
-              Short Description
-            </label>
-            <input
-              onChange={(e) => setShortDescription(e.target.value)}
-              className="w-full px-5  py-4 text-gray-700 bg-gray-200 rounded"
-              id="description"
-              name="description"
-              type="text"
-              placeholder="Short Description"
-              aria-label="Description"
-            />
-          </div>
-          <div className="inline-block mt-2 w-1/2 pr-1">
-            <label className="block text-sm text-gray-600" htmlFor="cus_email">
-              Category
-            </label>
-            <select
-              onChange={(e) => setCategory(e.target.value)}
-              id="categories"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option value="">Choose category</option>
-              {catagory.length > 0 ? (
-                catagory.map((item: any) => (
-                  <option key={item._id} value={item.categoryName}>
-                    {item.categoryName}
-                  </option>
-                ))
-              ) : (
-                <option value="NoCategory">No category</option>
-              )}
-            </select>
-          </div>
-          
-          <div className="inline-block mt-2 w-1/2 pr-1">
-            <label className="block text-sm text-gray-600" htmlFor="cus_email">
-              Price
-            </label>
-            <input
-              onChange={(e) => setCoursefee(e.target.value)}
-              className="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"
-              id="cus_email"
-              name="cus_email"
-              type="text"
-              placeholder="price"
-              aria-label="Email"
-            />
-          </div>
-          <div className="inline-block mt-2 w-1/2 pr-1">
-            <label className="block text-sm text-gray-600" htmlFor="cus_email">
-            Course Duration
-            </label>
-            <input
-              onChange={(e) => setCourseDuration(e.target.value)}
-              className="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"
-              id="duration"
-              name="duration"
-              type="text"
-              placeholder="Duration"
-              aria-label="Duration"
-            />
-          </div>
+      <form
+        onSubmit={handleSubmit(handleAddCourse)}
+        encType="multipart/form-data"
+        className="max-w-xl m-4 p-10 bg-white rounded shadow-xl"
+      >
+        <p className="text-gray-800 text-center font-medium">Create Course</p>
 
-          <p className="mt-4 text-gray-800 font-medium">Image</p>
-          <div className="">
-            <div className="mt-2">
-              <label
-                className="block text-sm text-gray-600"
-                htmlFor="fileInput"
-              >
-                Choose Image
-              </label>
-              <input
-                className="w-full px-5 py-4 text-gray-700 bg-gray-200 rounded"
-                onChange={handleImage}
-                id="fileInput"
-                name="fileInput"
-                type="file"
-                accept="image/*, video/*"
-                aria-label="fileInput"
-              />
-            </div>
-          </div>
+        <div className="">
+          <label className="block text-sm text-gray-600" htmlFor="courseName">
+            Course Title
+          </label>
+          <input
+            {...register("courseName", { required: "Course name is required" })}
+            value={courseName}
+            onChange={(e) => setCourseName(e.target.value)}
+            className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+            id="courseName"
+            name="courseName"
+            type="text"
+            placeholder="Course Name"
+            aria-label="Course Name"
+          />
+          {errors.courseName && (
+            <p className="text-red-500">{errors.courseName.message}</p>
+          )}
+        </div>
 
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="w-44 mt-2 border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 border-2 rounded-md py-1.5 text-white"
+        <div className="mt-2">
+  <label className="block text-sm text-gray-600" htmlFor="courseDescription">
+    Description
+  </label>
+  <input
+    {...register("courseDescription", { required: "Description is required" })}
+    value={courseDescription}
+    onChange={(e) => setCourseDescription(e.target.value)}
+    className="w-full px-5 py-4 text-gray-700 bg-gray-200 rounded"
+    id="courseDescription"
+    name="courseDescription"
+    type="text"
+    placeholder="Description"
+    aria-label="Description"
+  />
+  {errors.courseDescription && (
+    <p className="text-red-500">{errors.courseDescription.message}</p>
+  )}
+</div>
+
+<div className="mt-2">
+  <label className="block text-sm text-gray-600" htmlFor="shortDescription">
+    Short Description
+  </label>
+  <input
+    {...register("shortDescription", { required: "Short description is required" })}
+    value={shortDescription}
+    onChange={(e) => setShortDescription(e.target.value)}
+    className="w-full px-5 py-4 text-gray-700 bg-gray-200 rounded"
+    id="shortDescription"
+    name="shortDescription"
+    type="text"
+    placeholder="Short Description"
+    aria-label="Short Description"
+  />
+  {errors.shortDescription && (
+    <p className="text-red-500">{errors.shortDescription.message}</p>
+  )}
+</div>
+
+<div className="inline-block mt-2 w-1/2 pr-1">
+  <label className="block text-sm text-gray-600" htmlFor="categories">
+    Category
+  </label>
+  <select
+    {...register("category", { required: "Category is required" })}
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    id="categories"
+    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+  >
+    <option value="">Choose category</option>
+    {catagory.length > 0 ? (
+      catagory.map((item: any) => (
+        <option key={item._id} value={item.categoryName}>
+          {item.categoryName}
+        </option>
+      ))
+    ) : (
+      <option value="NoCategory">No category</option>
+    )}
+  </select>
+  {errors.category && (
+    <p className="text-red-500">{errors.category.message}</p>
+  )}
+</div>
+
+<div className="inline-block mt-2 w-1/2 pr-1">
+  <label className="block text-sm text-gray-600" htmlFor="coursefee">
+    Price
+  </label>
+  <input
+    {...register("coursefee", { required: "Price is required" })}
+    value={coursefee}
+    onChange={(e) => setCoursefee(e.target.value)}
+    className="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"
+    id="coursefee"
+    name="coursefee"
+    type="text"
+    placeholder="Price"
+    aria-label="Price"
+  />
+  {errors.coursefee && (
+    <p className="text-red-500">{errors.coursefee.message}</p>
+  )}
+</div>
+
+<div className="inline-block mt-2 w-1/2 pr-1">
+  <label className="block text-sm text-gray-600" htmlFor="courseDuration">
+    Course Duration
+  </label>
+  <input
+    {...register("courseDuration", { required: "Course duration is required" })}
+    value={courseDuration}
+    onChange={(e) => setCourseDuration(e.target.value)}
+    className="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"
+    id="courseDuration"
+    name="courseDuration"
+    type="text"
+    placeholder="Course Duration"
+    aria-label="Course Duration"
+  />
+  {errors.courseDuration && (
+    <p className="text-red-500">{errors.courseDuration.message}</p>
+  )}
+</div>
+
+<div className="mt-4 text-gray-800 font-medium">Image</div>
+        <div className="">
+          <div className="mt-2">
+            <label
+              className="block text-sm text-gray-600"
+              htmlFor="fileInput"
             >
-              Create Course
-            </button>
+              Choose Image
+            </label>
+            <input
+              onChange={(e) => handleImage(e)}
+              className="w-full px-5 py-4 text-gray-700 bg-gray-200 rounded"
+              id="fileInput"
+              name="fileInput"
+              type="file"
+              accept="image/*"
+              aria-label="fileInput"
+            />
           </div>
-        </form>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <button
+            type="submit"
+            className="w-44 mt-2 border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700 border-2 rounded-md py-1.5 text-white"
+          >
+            Create Course
+          </button>
+        </div>
+      </form>
       </div>
     </>
   );

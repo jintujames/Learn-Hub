@@ -353,10 +353,13 @@ const getCart =async(req:Request,res:Response)=>{
 
 
 const RemoveCourseFromCart = async (req: Request, res: Response) => {
-  const cartItemId = req.params.cartItemId;
+  let cartItemId = req.params.cartItemId;
 
   try {
-    await (cartModel as any).findByIdAndRemove(cartItemId);
+    cartItemId = cartItemId.trim().replace(/["\n]/g, '');
+    console.log(cartItemId);
+    
+    await cartModel.findByIdAndDelete(cartItemId);
     
 
     res.status(200).json({ message: "Course Removed from the cart" });

@@ -5,13 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 export type UploadLesson = {
   selectedCourseName: string;
   title: string;
-  isApproved: true;
   category: string;
   courseLevel: string;
-  video: string; 
+ 
 };
 
-const ACCEPTED_VIDEO_TYPES = ['video/mp4', 'video/mpeg', 'video/webm'];
 
 export const schema: ZodType<UploadLesson> = z.object({
   selectedCourseName: z.string().min(1, {
@@ -26,21 +24,13 @@ export const schema: ZodType<UploadLesson> = z.object({
   }).refine((value) => /^[a-zA-Z ]+$/.test(value), {
     message: "Title must contain only letters and spaces",
   }),
-  isApproved: z.literal(true),
   category: z.string().min(1, {
     message: "Please select a category",
   }),
   courseLevel: z.string().min(1, {
     message: "Please select a course level",
   }),
-  video: z.string().refine((file) => {
-    if (file.length === 0) {
-      return true;
-    }
-    return ACCEPTED_VIDEO_TYPES.includes(file.split('.').pop() || '');
-  }, {
-    message: 'Invalid video URL. Supported formats are .mp4, .mpeg, and .webm',
-  }),
+  
 });
 
 export const useCourseLessonValidate = () => {

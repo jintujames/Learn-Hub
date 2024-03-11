@@ -32,17 +32,18 @@ function AdminSidebar() {
 
   
     return (
-<aside className="flex flex-col w-64 h-screen px-5 py-12 overflow-y-auto bg-pink-950 dark:bg-gray-900 dark:border-white">
+      
+<aside className="flex flex-col w-64 h-screen px-5 py-12 overflow-y-auto bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% ... dark:bg-gray-900 dark:border-black">
   <div className="flex items-center space-x-3 rtl:space-x-reverse">
     <img src="public/LearnHub Logo.png" className="h-12 rounded-full" alt="Learn Hub Logo" />
-    <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Learn Hub</span>
+    <span className="self-center text-2xl font-semibold whitespace-nowrap text-black">Learn Hub</span>
   </div>
   <div className="flex flex-col justify-between flex-1 mt-8">
     <nav className="-mx-3 space-y-6">
       <div className="space-y-3">
         <Link
           to="/adminDashboard"
-          className="flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+          className="flex items-center px-3 py-2 text-black transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
         >
           📊
           <span className="mx-2 text-sm font-medium">Dashboard</span>
@@ -51,7 +52,7 @@ function AdminSidebar() {
       <div className="space-y-3">
         <Link
           to="/adminCategory"
-          className="flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+          className="flex items-center px-3 py-2 text-black transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
         >
           📂
           <span className="mx-2 text-sm font-medium">Category</span>
@@ -61,7 +62,7 @@ function AdminSidebar() {
       <div className="space-y-3">
         <Link
           to="/adminStudent"
-          className="flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+          className="flex items-center px-3 py-2 text-black transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
         >
           🎓
           <span className="mx-2 text-sm font-medium">Students</span>
@@ -71,7 +72,7 @@ function AdminSidebar() {
       <div className="space-y-3">
         <Link
           to="/adminTutor"
-          className="flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+          className="flex items-center px-3 py-2 text-black transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
         >
           👩‍🏫
           <span className="mx-2 text-sm font-medium">Tutor</span>
@@ -83,7 +84,7 @@ function AdminSidebar() {
      
         <Link onClick={handleLogout}
           to="/adminLogin"
-          className="flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+          className="flex items-center px-3 py-2 text-black transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
         >
           🚪
           <span className="mx-2 text-sm font-medium">Logout</span>

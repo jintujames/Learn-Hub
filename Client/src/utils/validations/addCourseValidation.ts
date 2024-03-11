@@ -3,56 +3,74 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export type coursesAuth = {
-    courseName: string;
-    courseDescription: string;
-    isApproved: boolean;
-    category: string;
-    coursefee: number;
-    image:any,
-    courseLevel:string
+  courseName: string;
+  courseDescription: string;
+  shortDescription: string;
+  category: string;
+  coursefee: string;
+  
 };
-export const categoryAuthSchema: ZodType<coursesAuth> = z.object({
-  courseName: z
-    .string()
-    .refine((value) => value.trim() !== "", {
-      message: "course name cannot be empty",
-    })
-    .refine((value) => /^[a-zA-Z ]+$/.test(value), {
-      message: "course name must contain only alphabetic characters",
-    }),
-  courseDescription: z
-    .string()
-    .min(50, {
-      message: "Description must contain at least 50 characters",
-    })
-    .max(500, {
-      message: "Cannot exceed 500 characters",
-    }),
-  isApproved: z.boolean(),
-  category: z
-    .string()
-    .refine((value) => value.trim() !== "", {
-      message: "Category is required",
-    }),
-  coursefee: z
-    .number()
-    .refine((value) => /^\d{3}$/.test(value.toString()), {
-      message: "Course fee must be a 3-digit number",
-    }),
-  courseLevel: z.string(), // Add validation for courseLevel if needed
+
+
+const schema: ZodType<coursesAuth> = z.object({
+
+  courseName: z.string().min(4, {
+    message: "course name must contain at least 4 characters",
+  }).max(35, {
+    message: "course name cannot exceed 35 characters",
+  }).refine((value) => value.trim() !== "", {
+    message: "course name cannot be empty",
+  }).refine((value) => /^[a-zA-Z ]+$/.test(value), {
+    message: "course name must contain only letters and spaces",
+  }),
+
+  courseDescription: z.string().min(10, {
+    message: "Description must contain at least 10 characters",
+  }).max(100, {
+    message: "Cannot exceed 100 characters",
+  }).refine((value) => value.trim() !== "", {
+    message: "Description cannot be empty",
+  }).refine((value) => /^[a-zA-Z ]+$/.test(value), {
+    message: "Description must contain only letters and spaces",
+  }),
+
+  shortDescription: z.string().min(20, {
+    message: "Short description must contain at least 20 characters",
+  }).max(300, {
+    message: "Cannot exceed 300 characters",
+  }).refine((value) => value.trim() !== "", {
+    message: "Short description cannot be empty",
+  }).refine((value) => /^[a-zA-Z ]+$/.test(value), {
+    message: "Short description must contain only letters and spaces",
+  }),
+
+  category: z.string().min(1, {
+    message: "Category is required",
+  }).refine((value) => value.trim() !== "", {
+    message: "Category cannot be empty",
+  }),
+
+  coursefee: z.string().refine((value) => /^\d{1,3}$/.test(value), {
+    message: "Course fee must be a number with at most 3 digits",
+  }).refine((value) => value.trim() !== "", {
+    message: "Course fee cannot be empty",
+  }), 
 });
 
-export const useCourseAuth = () => {
+
+
+// Custom Hook
+export const useCourseBasicValidate = () => {
   const {
-    reset,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<coursesAuth>({ resolver: zodResolver(categoryAuthSchema) });
+  } = useForm<coursesAuth>({ resolver: zodResolver(schema) });
+console.log("useCourseBasicValidate");
+
   return {
     register,
     handleSubmit,
     errors,
-    reset,
   };
 };

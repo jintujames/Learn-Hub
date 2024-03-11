@@ -10,7 +10,8 @@ import {
   instructorSignup,
   loginInstructor,
   tutorLogout,
-  addLesson
+  addLesson,
+  updateTutorProfile
 } from "../../Controller/tutorController/tutorController";
 import { upload } from "../../Multer/upload";
 
@@ -25,6 +26,8 @@ tutorRouter.post("/tutorLogout", tutorLogout);
 
 tutorRouter.post("/firebseAuthVerify", firebaseGoogleTutorAuthVerication);
 tutorRouter.get("/tutorProfile/:id", instructorBio);
+tutorRouter.post("/updateProfile", updateTutorProfile);
+
 
 tutorRouter.post("/addLesson",addLesson);
 tutorRouter.post('/addCourse', addCourses);

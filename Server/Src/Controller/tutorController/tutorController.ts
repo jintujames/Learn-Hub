@@ -243,6 +243,8 @@ const instructorBio = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
     const instructorBioDetails = await instructorModel.findById(userId).exec();
+    console.log(instructorBioDetails);
+    
     if (instructorBioDetails) {
       res.status(200).json({
         instructorBioDetails,
@@ -277,6 +279,27 @@ const getCourses = async (req:Request,res:Response)=>{
   }
 }
 
+const updateTutorProfile = async (req: Request, res: Response) => {
+  try {
+    const { photo, id } = req.body;
+
+    if (!photo || typeof photo !== 'string' || !id || typeof id !== 'string') {
+      return res.status(400).json({ message: 'Invalid input data' });
+    }
+
+    const tutor: any = await instructorModel.findByIdAndUpdate(id, { $set: { photo: photo } });
+
+    if (!tutor) {
+      return res.status(404).json({ message: 'Tutor not found' });
+    }
+
+    return res.status(200).json({ message: 'Profile updated successfully', tutor: tutor });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 
 
 export {
@@ -288,4 +311,5 @@ export {
   addCourses,
   instructorBio,
   getCourses,
+  updateTutorProfile
 };

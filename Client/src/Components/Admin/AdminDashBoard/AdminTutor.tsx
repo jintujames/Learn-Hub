@@ -67,14 +67,14 @@ instructorFirstName: string;
   
         tutor.isBlocked = true;
         toast.success("Tutor Blocked Successfully", {
-          style: { background: "#e0a7e8", color: "black" },
+          style: { background: "#171616", color: "white" },
         });
       } else {
         await adminUnblockTutor(tutor._id);
   
         tutor.isBlocked = false;
         toast.success("Tutor Unblocked Successfully", {
-          style: { background: "#aef2ef", color: "black" },
+          style: { background: "#f7f3f2", color: "black" },
         });
       }
   
@@ -93,10 +93,10 @@ instructorFirstName: string;
   return (
     <>
   {/* component */}
-  <div className="md:px-10 py-8 w-full mr-4 flex justify-center items-center">
+  <div className="md:px-10 py-8 w-full mr-4 flex justify-center items-center flex-col">
     {/* <div className="shadow overflow-hidden rounded border-b border-gray-200"> */}
     <table className="w-full lg:w-2/3 xl:w-2/2 bg-white border border-gray-300 rounded-md">
-      <thead className="bg-pink-950 text-white">
+      <thead className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% ... text-black">
         <tr>
           <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Name
@@ -139,7 +139,7 @@ instructorFirstName: string;
             {(data as { phone?: string })?.phone}
             </td>
             <td className="text-left py-3 px-4">
-            <button onClick={() => tutorStatus(data)} type="button" className={data.isBlocked === false ? "text-white bg-gradient-to-r from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 font-medium rounded-lg text-sm px-7 py-2.5 text-center mr-2 mb-2" : "text-gray-900 bg-gradient-to-r from-teal-200 via-teal-400 to-teal-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"}>
+            <button onClick={() => tutorStatus(data)} type="button" className={data.isBlocked === false ? "text-black bg-sky-400 font-medium rounded-lg text-sm px-7 py-2.5 text-center mr-2 mb-2" : "text-white bg-red-600  font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"}>
         {data.isBlocked === false ? "Block " : "UnBlock"}
       </button>
  
@@ -148,7 +148,7 @@ instructorFirstName: string;
         ))}
       </tbody>
     </table>
-    <nav className="flex justify-start items-center rounded-lg space-x-2">
+    <nav className="flex justify-center items-center rounded-lg space-x-2">
       <span
         className="text-gray-500 hover:text-teal-600 p-4 inline-flex items-center gap-2 rounded-md"
         onClick={handlePrev}

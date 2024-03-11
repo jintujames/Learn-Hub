@@ -29,6 +29,8 @@ studentRouter.post("/signup", studentSignUp);
 studentRouter.post("/login", studentLogin);
 studentRouter.post("/logout", studentLogout);
 studentRouter.get("/userProfile/:id", studentProfile);
+// studentRouter.post("/updateUserProfile", updateTutorProfile);
+
 
 
 studentRouter.post("/forget_password", forgetPassword);

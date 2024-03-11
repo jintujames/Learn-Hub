@@ -103,7 +103,7 @@ const handleApply = () => {
 
 useEffect(()=>{
    const data=courseDetails
-
+setData(courseDetails)
    const serchedItem=data.filter((item:any)=>item.courseName.toLowerCase().startsWith(search.toLowerCase()))
 
  setSearchResult(serchedItem)
@@ -370,7 +370,7 @@ const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         ))}
       </div>
 
-      <nav className="flex justify-start items-center rounded-lg space-x-2">
+      <nav className="flex justify-center items-center rounded-lg space-x-2">
       <span
         className="text-black hover:text-teal-600 p-4 inline-flex items-center gap-2 rounded-md"
         onClick={handlePrev}
@@ -378,11 +378,12 @@ const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         <span aria-hidden="true">«</span>
         <span className="sr-only">Previous</span>
       </span>
+
       {Array.from({ length: page }, (_, index) => (
         <span
           key={index + 1}
           className={`w-10 h-10 ${
-            currentPage === index + 1
+            currentPage == index + 1
               ? "bg-black text-white"
               : "text-gray-500 hover:text-teal-600"
           } p-4 inline-flex items-center text-sm font-medium rounded-full`}
