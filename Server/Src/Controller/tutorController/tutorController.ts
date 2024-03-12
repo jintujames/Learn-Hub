@@ -134,8 +134,8 @@ const addCourses = async (req: Request, res: Response) => {
       isApproved,
       category,
       coursefee,
-      tutorId,
-      image, // Assuming you have this in your req.body
+      instructor,
+      image, 
     } = req.body;
 
     console.log(req.body, "Body data");
@@ -144,12 +144,11 @@ const addCourses = async (req: Request, res: Response) => {
       courseName,
       courseDescription,
       shortDescription,
-
       isApproved,
       category,
       coursefee,
-      tutorId,
-      image, // Use CloudanaryURL for the image property
+      instructor:instructor,
+      image, 
     });
 
     await course.save();
@@ -163,7 +162,7 @@ const addCourses = async (req: Request, res: Response) => {
       res.status(400).json({ message: "Invalid Data Entry" });
     }
   } catch (error) {
-    console.error(error); // Log the specific error for debugging
+    console.error(error); 
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -200,44 +199,7 @@ const addLesson = async (req: Request, res: Response) => {
   }
 };
 
-// const addCourses = async (req: any, res: Response) => {
-//   try {
-//     const {
-//       courseName,
-//       courseDescription,
-//       isApproved,
-//       category,
-//       coursefee,
 
-//       tutorId,
-//     } = req.body;
-
-//     const { filename } = req.file;
-
-//     const createdCourse = await courseModel.create({
-//       instructor: tutorId,
-//       courseName: courseName,
-//       courseDescription: courseDescription,
-//       isApproved: isApproved,
-//       category: category,
-//       coursefee: coursefee,
-//       image: filename,
-//     });
-
-//     console.log(createdCourse, "this is create Course");
-
-//     if (createdCourse) {
-//       res.status(200).json({ createdCourse });
-//     } else {
-//       res.status(400).json({ message: "Invalid data" });
-//     }
-//   } catch (error) {
-//     console.log("this  si eroor ", error);
-
-//     res.status(500); // Internal server error
-//     throw error;
-//   }
-// };
 
 const instructorBio = async (req: Request, res: Response) => {
   try {
@@ -262,7 +224,8 @@ const instructorBio = async (req: Request, res: Response) => {
 
 const getCourses = async (req:Request,res:Response)=>{
   try{
-    const courseDetails = await courseModel.find().exec();
+    const id=req.params.id
+    const courseDetails = await courseModel.find({instructor:id})
   console.log("Fetched Course Details:", courseDetails);
     if(courseDetails){
       res.status(200).json({

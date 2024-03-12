@@ -31,7 +31,6 @@ const [userid,setuserid]=useState(null)
     
     setuserId(userId)
   
-    console.log(userId,'HUHUHUHUHUHUHUHUHUHUH');
     
     
   },[userId])

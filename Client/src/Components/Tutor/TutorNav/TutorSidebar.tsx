@@ -76,7 +76,7 @@ function  TutorSidebar({children}:any) {
   const handleLogout = async () => {
     try {
       await tutorLogout();
-      localStorage.removeItem("Token");
+     
       dispatch(logout());
       navigate("/");
     } catch (error) {
@@ -91,8 +91,7 @@ function  TutorSidebar({children}:any) {
 
   return (
     <>
-      {/* component */}
-      {/* component */}
+      
       <div className="flex bg-white">
         <div className="md:flex w-2/5 md:w-1/4 h-screen bg-white border-r hidden">
           <div className="mx-auto py-2">

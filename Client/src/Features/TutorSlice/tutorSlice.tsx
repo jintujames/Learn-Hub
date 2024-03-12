@@ -27,6 +27,8 @@ const tutorSlice = createSlice({
     logout: (state) => {
       state.tutor = null;
       localStorage.removeItem('tutorId')
+      localStorage.removeItem('Token')
+
     },
     updateProfileImage: (state, action: PayloadAction<string>) => {
       // Update the user's profile image

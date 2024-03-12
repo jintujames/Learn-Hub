@@ -110,7 +110,6 @@ function AddLesson() {
     e.preventDefault();
   
     try {
-      // Wait for the video to be uploaded
       await handlevideoUpload();
 
       if (!CloudanaryURL) {
@@ -130,7 +129,6 @@ function AddLesson() {
   
       console.log(data, "dataaassssssss");
   
-      // Send the request to the backend
     axios.post(
         `http://localhost:4001/api/v1/tutor/addLesson`,
         {
@@ -260,22 +258,7 @@ function AddLesson() {
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
-              {/* <div className="inline-block mt-2 w-1/2 pr-1">
-                <label
-                  className="block text-sm text-gray-600"
-                  htmlFor="duration"
-                >
-                  Course Duration
-                </label>
-                <input
-                  className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
-                  id="duration"
-                  name="duration"
-                  type="text"
-                  placeholder="duration"
-                  aria-label="duration  "
-                />
-              </div> */}
+              
 
               <p className="mt-4 text-gray-800 font-medium">Video</p>
               <div className="">

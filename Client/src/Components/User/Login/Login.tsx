@@ -81,11 +81,8 @@ function Login() {
     <>
       <div>
         <ToastContainer />
-        {/* Container */}
         <div className="flex flex-wrap min-h-screen w-full content-center justify-center bg-white">
-          {/* Login component */}
           <div className="flex shadow-md">
-            {/* Login banner */}
             <div
               className="flex flex-wrap content-center justify-center rounded-l-md"
               style={{ width: "32rem", height: "25rem" }}
@@ -96,18 +93,15 @@ function Login() {
                 alt="Login Banner"
               />
             </div>
-            {/* Login form */}
             <div
               className="flex flex-wrap content-center justify-center rounded-r-md bg-white"
               style={{ width: "24rem", height: "22rem" }}
             >
               <div className="w-72">
-                {/* Heading */}
                 <h1 className="text-xl font-semibold">Welcome back</h1>
                 <small className="text-gray-400">
                   Welcome back! Please enter your details
                 </small>
-                {/* Form */}
                 <form className="mt-4" onSubmit={handleSubmit(handleLogin)}>
                   <div className="mb-3">
                     {errors.studentEmail ? (
@@ -196,7 +190,6 @@ function Login() {
                     <span className="ml-4">Sign in with Google</span>
                   </button>
                 </div>
-                {/* Footer */}
                 <div className="text-center">
                   <span className="text-xs text-gray-400 font-semibold">
                     Don't have an account?

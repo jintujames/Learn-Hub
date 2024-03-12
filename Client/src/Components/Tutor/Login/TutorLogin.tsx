@@ -8,7 +8,7 @@ import { Auth } from "firebase/auth";
 import { authentication } from "../../../utils/config/firebase.config";
 import { useTutorValidate } from "../../../utils/validations/tutorLoginValidation";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../../Features/TutorSlice/tutorSlice";
+import { login,logout } from "../../../Features/TutorSlice/tutorSlice";
 import { toast } from "react-toastify";
 
 function TutorLogin() {
@@ -39,6 +39,7 @@ function TutorLogin() {
           tutorToken : response.data.token
         }
         console.log("after login",response.data.token, "res");
+        dispatch(logout())
         dispatch(login(userData));
         localStorage.setItem('tutorId',response.data._id)
         localStorage.setItem("Token", `${response.data.token}`);

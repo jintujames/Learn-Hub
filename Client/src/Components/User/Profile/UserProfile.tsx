@@ -7,175 +7,163 @@ import axios from "axios";
 import { login } from "../../../Features/UserSlice/userSlice";
 
 interface studentDetails {
-    studentFirstName: string;
-    studentLastName: string;
-    studentEmail: string;
-    phone: string;
-    userId: string;    
-    photo: any;
-  
-    // Add other properties as needed
-  }
+  studentFirstName: string;
+  studentLastName: string;
+  studentEmail: string;
+  phone: string;
+  userId: string;
+  photo: any;
+
+}
 
 function UserProfile() {
-    const navigate = useNavigate();
-    const dispatch=useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const [data, setData] = useState<studentDetails>();
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [updateUI, setUpdateUI] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
+  const [CloudanaryURL, setCloudanaryURL] = useState("");
+  const [formData, setFormData] = useState<studentDetails>({
+    studentFirstName: "",
+    studentLastName: "",
+    studentEmail: "",
+    phone: "",
+    userId: "",
+    photo: null,
+  });
 
-    const [data, setData] = useState<studentDetails>();
-    const [photo, setPhoto] = useState<File | null>(null);
-    const [updateUI, setUpdateUI] = useState<boolean>(false)
-    const [isModalOpen, setIsModalOpen] = useState(false); // Manage modal visibility
+  const [originalFormData, setOriginalFormData] =
+    useState<studentDetails | null>(null);
 
+  const userId = localStorage.getItem("userId");
 
-    const [CloudanaryURL, setCloudanaryURL] = useState("");
-    const [formData, setFormData] = useState<studentDetails>({
-      studentFirstName: "",
-      studentLastName: "",
-      studentEmail: "",
-      phone: "",
-      userId: "",
-      photo: null,
+  const user = useSelector((state: any) => state.user);
+
+  useEffect(() => {
+    console.log(user, "this is is the user", userId);
+
+    if (user) {
+      console.log("user is here", user);
+      navigate("/userProfile");
+    } else {
+      toast.error("hi");
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result: any = await getUserProfile(userId);
+        setData(result.data.studentProfileDetails);
+      } catch (error) {
+        console.error("Error in student Profile:", error);
+      }
+    };
+
+    fetchData();
+  }, [userId, updateUI]);
+
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        studentFirstName: data.studentFirstName,
+        studentLastName: data.studentLastName,
+        studentEmail: data.studentEmail,
+        phone: data.phone,
+        userId: data.userId,
+        photo: data.photo,
+      });
+    }
+  }, [data]);
+
+  const handlePhotoUpload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", photo!);
+      formData.append("upload_preset", "LearnHub");
+      formData.append("cloud_name", "dhghmzt8b");
+
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dhghmzt8b/image/upload",
+        formData
+      );
+
+      if (response.data && response.data.url) {
+        setCloudanaryURL(response.data.url);
+      } else {
+        console.error("Invalid response from Cloudinary", response.data);
+        toast.error("Error uploading image: Invalid response from Cloudinary");
+      }
+    } catch (error) {
+      console.error("Error while Uploading Image:", error);
+      toast.error("Error uploading image: Please try again later");
+    }
+  };
+
+  const handleAddPhoto = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      if (!photo) {
+        toast.error("No image selected");
+        return;
+      }
+
+      await handlePhotoUpload();
+
+      if (!CloudanaryURL) {
+        toast.error("Error occurred while uploading the photo");
+        return;
+      }
+
+      const response = await axios.post(
+        `http://localhost:4001/api/v1/student/updateUserProfile`,
+        {
+          photo: CloudanaryURL,
+          id: userId,
+        }
+      );
+
+      if (response.data && response.data.user) {
+        dispatch(login(response.data.user));
+        setUpdateUI((prev) => !prev);
+        toast.success("Profile updated successfully");
+      } else {
+        toast.error("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error during photo upload:", error);
+      toast.error("Error occurred while uploading the photo");
+    }
+  };
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPhoto(file);
+    }
+  };
+  const handleEditClick = () => {
+    setOriginalFormData({ ...data });
+
+    setIsModalOpen(true);
+    setFormData({
+      full_name: `${data?.studentFirstName} ${data?.studentLastName}`,
+      email: data?.studentEmail || "",
+      phone: data?.phone || "",
     });
-  
-  
-    const [originalFormData, setOriginalFormData] = useState<studentDetails | null>(null);
+  };
 
-    const userId = localStorage.getItem("userId");
-
-    const user  = useSelector((state: any) => state.user);
-
-    useEffect(() => {
-
-
-      console.log(user,'this is is the user',userId);
-      
-        if (user) {
-          console.log("user is here",user);
-          navigate("/userProfile");
-        }else{
-          toast.error('hi')
-        }
-      }, []);
-
-      useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const result: any = await getUserProfile(userId);
-            setData(result.data.studentProfileDetails);
-          } catch (error) {
-            console.error("Error in student Profile:", error);
-          }
-        };
-    
-        fetchData();
-      }, [userId, updateUI]);
-
-      useEffect(() => {
-        if (data) {
-          setFormData({
-            studentFirstName: data.studentFirstName,
-            studentLastName: data.studentLastName,
-            studentEmail: data.studentEmail,
-            phone: data.phone,
-            userId: data.userId,
-            photo: data.photo,
-          });
-        }
-      }, [data]);
-
-
-      const handlePhotoUpload = async () => {
-        try {
-          const formData = new FormData();
-          formData.append("file", photo!);
-          formData.append("upload_preset", "LearnHub");
-          formData.append("cloud_name", "dhghmzt8b");
-    
-          const response = await axios.post(
-            "https://api.cloudinary.com/v1_1/dhghmzt8b/image/upload",
-            formData
-          );
-    
-          if (response.data && response.data.url) {
-            setCloudanaryURL(response.data.url);
-          } else {
-            console.error("Invalid response from Cloudinary", response.data);
-            toast.error("Error uploading image: Invalid response from Cloudinary");
-          }
-        } catch (error) {
-          console.error("Error while Uploading Image:", error);
-          toast.error("Error uploading image: Please try again later");
-        }
-      };
-    
-      
-    
-      const handleAddPhoto = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-    
-        try {
-          if (!photo) {
-            toast.error("No image selected");
-            return;
-          }
-    
-          await handlePhotoUpload();
-    
-          if (!CloudanaryURL) {
-            toast.error("Error occurred while uploading the photo");
-            return;
-          }
-    
-          const response = await axios.post(
-            `http://localhost:4001/api/v1/student/updateUserProfile`,
-            {
-              photo: CloudanaryURL,
-              id: userId,
-            }
-          );
-    
-          if (response.data && response.data.user) {
-            dispatch(login(response.data.user));
-            setUpdateUI((prev) => !prev);
-            toast.success("Profile updated successfully");
-          } else {
-            toast.error("Failed to update profile");
-          }
-        } catch (error) {
-          console.error("Error during photo upload:", error);
-          toast.error("Error occurred while uploading the photo");
-        }
-      };
-    
-      const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-          setPhoto(file);
-        }
-      };
-      const handleEditClick = () => {
-        setOriginalFormData({ ...data });
-
-        // Open the modal when "Edit" button is clicked
-        setIsModalOpen(true);
-        setFormData({
-          full_name: `${data?.studentFirstName} ${data?.studentLastName}`,
-          email: data?.studentEmail || "",
-          phone: data?.phone || "",
-        });
-      
-      };
-
-      const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: value,
-        }));
-      };
-
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   return (
     <div>
@@ -196,11 +184,16 @@ function UserProfile() {
                 <div className="bg-gray-100 dark:bg-slate-800 relative rounded-lg p-8 sm:p-12 shadow-lg">
                   <form onSubmit={handleAddPhoto}>
                     <div className="mb-2 flex justify-center flex-col ">
-                    <img
-  className="w-24 h-24 object-fill rounded-full mx-auto"
-  src={data?.photo || 'https://i.pinimg.com/564x/64/77/9d/64779d2b7056542722569d0278837367.jpg'}
-  alt={data?.photo ? 'Profile picture' : 'Default picture'}
-/>
+                      <img
+                        className="w-24 h-24 object-fill rounded-full mx-auto"
+                        src={
+                          data?.photo ||
+                          "https://i.pinimg.com/564x/64/77/9d/64779d2b7056542722569d0278837367.jpg"
+                        }
+                        alt={
+                          data?.photo ? "Profile picture" : "Default picture"
+                        }
+                      />
 
                       <p className="text-center text-gray-600 mt-1"></p>
                       <input
@@ -272,20 +265,19 @@ function UserProfile() {
                       <div className="mb-6">
                         <label
                           className="block text-sm text-gray-600"
-                          
                           htmlFor="fileInput"
                         >
                           Choose Image
                         </label>
                         <input
-              className="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
-              onChange={handlePhotoChange}
-              id="fileInput"
-              name="fileInput"
-              type="file"
-              accept="image/*, video/*"
-              aria-label="fileInput"
-            />
+                          className="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
+                          onChange={handlePhotoChange}
+                          id="fileInput"
+                          name="fileInput"
+                          type="file"
+                          accept="image/*, video/*"
+                          aria-label="fileInput"
+                        />
                       </div>
                     </div>
                     <div className="flex">
@@ -305,10 +297,8 @@ function UserProfile() {
                         Update
                       </button>
                       <div className="mx-4"></div>{" "}
-                      {/* Add space between buttons */}
                       <button
-                                              onClick={handleEditClick}
-
+                        onClick={handleEditClick}
                         type="submit"
                         className="
                         flex-1
@@ -326,20 +316,18 @@ function UserProfile() {
                       </button>
                     </div>
                   </form>
-                   {/* Modal */}
-                   {isModalOpen && (
+                  {isModalOpen && (
                     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
                       <div className="bg-white p-8 rounded-md shadow-lg">
-                        {/* Modal content goes here */}
-                        <form >
-                    <div className="mb-2">
-                      <p>Edit Profile</p>
-                     
-                      <p className="text-center text-gray-600 mt-1"></p>
-                      <input
-                        type="text"
-                        placeholder="Your Name"
-                        className=" w-full
+                        <form>
+                          <div className="mb-2">
+                            <p>Edit Profile</p>
+
+                            <p className="text-center text-gray-600 mt-1"></p>
+                            <input
+                              type="text"
+                              placeholder="Your Name"
+                              className=" w-full
                               rounded
                               p-3
                               text-gray-800
@@ -351,41 +339,18 @@ function UserProfile() {
                               focus-visible:shadow-none
                               focus:border-primary
                               "
-                        name="full_name"
-                        id="full_name"
-                        value={formData.studentFirstName}
-                        onChange={handleFormChange}
-                      />
-                    </div>
-                    <div className="mb-2">
-                      <p className="text-center text-gray-600 mt-1"></p>
-                      <input
-                        type="email"
-                        placeholder="Your Email"
-                        className="
-                              w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                        name="email"
-                        id="email"
-                        value={formData.studentEmail}
+                              name="full_name"
+                              id="full_name"
+                              value={formData.studentFirstName}
                               onChange={handleFormChange}
-                      />
-                    </div>
-                    <div className="mb-6">
-                      <input
-                        type="phone"
-                        placeholder="Your Phone"
-                        className="
+                            />
+                          </div>
+                          <div className="mb-2">
+                            <p className="text-center text-gray-600 mt-1"></p>
+                            <input
+                              type="email"
+                              placeholder="Your Email"
+                              className="
                               w-full
                               rounded
                               p-3
@@ -398,17 +363,40 @@ function UserProfile() {
                               focus-visible:shadow-none
                               focus:border-primary
                               "
-                        name="phone"
-                        id="phone"
-                        value={formData.phone}
-                        onChange={handleFormChange}
-                      />
-                    </div>
-                    
-                    <div className="flex">
-                      <button
-                        type="submit"
-                        className="
+                              name="email"
+                              id="email"
+                              value={formData.studentEmail}
+                              onChange={handleFormChange}
+                            />
+                          </div>
+                          <div className="mb-6">
+                            <input
+                              type="phone"
+                              placeholder="Your Phone"
+                              className="
+                              w-full
+                              rounded
+                              p-3
+                              text-gray-800
+                              dark:text-gray-50
+                              dark:bg-slate-700
+                              border-gray-500
+                              dark:border-slate-600
+                              outline-none
+                              focus-visible:shadow-none
+                              focus:border-primary
+                              "
+                              name="phone"
+                              id="phone"
+                              value={formData.phone}
+                              onChange={handleFormChange}
+                            />
+                          </div>
+
+                          <div className="flex">
+                            <button
+                              type="submit"
+                              className="
                         flex-1
                         text-gray-100
                         hover:text-gray-700
@@ -418,14 +406,12 @@ function UserProfile() {
                         ease-in-out
                         duration-500
                         hover:bg-cyan-500"
-                      >
-                        Update
-                      </button>
-                      <div className="mx-4"></div>{" "}
-                      
-                      
-                    </div>
-                  </form>
+                            >
+                              Update
+                            </button>
+                            <div className="mx-4"></div>{" "}
+                          </div>
+                        </form>
                         <button
                           onClick={() => setIsModalOpen(false)}
                           className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-md"

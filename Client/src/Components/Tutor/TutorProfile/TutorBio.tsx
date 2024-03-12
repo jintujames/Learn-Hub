@@ -12,30 +12,26 @@ interface InstructorBioDetails {
   instructorEmail: string;
   phone: string;
   photo: any;
-  tutorId: string;    
+  tutorId: string;
   instructor: string;
 
-
-  // Add other properties as needed
 }
 
 function TutorBio() {
   const navigate = useNavigate();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const [data, setData] = useState<InstructorBioDetails>();
   const [photo, setPhoto] = useState<File | null>(null);
-  const [updateUI, setUpdateUI] = useState<boolean>(false)
+  const [updateUI, setUpdateUI] = useState<boolean>(false);
 
   const [CloudanaryURL, setCloudanaryURL] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 
-
   const tutorId: any = localStorage.getItem("tutorId");
   console.log("aaaaaaaaa", tutorId);
   console.log(typeof tutorId);
 
-  
   const { tutor } = useSelector((state: any) => state.tutor);
   console.log("tuto", tutor);
 
@@ -51,7 +47,7 @@ function TutorBio() {
       try {
         const result: any = await getTutorBio(tutorId);
         console.log("tutordetails", result.data);
-       
+
         setData(result.data.instructorBioDetails);
       } catch (error) {
         console.log("Error in tutor Bio:", error);
@@ -62,7 +58,6 @@ function TutorBio() {
 
   const [isEditModal, setIsEditModal] = useState(false);
   const [editModalIndex, setEditModalIndex]: any = useState(null);
-
 
   const openEditModal = (i: any) => {
     setEditModalIndex(i);
@@ -76,16 +71,16 @@ function TutorBio() {
   const handlePhotoUpload = async () => {
     try {
       const formData = new FormData();
-      formData.append("file", photo!); // Use non-null assertion as you checked earlier
-  
+      formData.append("file", photo!);
+
       formData.append("upload_preset", "LearnHub");
       formData.append("cloud_name", "dhghmzt8b");
-  
+
       const response = await axios.post(
         "https://api.cloudinary.com/v1_1/dhghmzt8b/image/upload",
         formData
       );
-  
+
       if (response.data && response.data.url) {
         setCloudanaryURL(response.data.url);
       } else {
@@ -97,7 +92,6 @@ function TutorBio() {
       toast.error("Error uploading image: Please try again later");
     }
   };
-  
 
   const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -108,22 +102,22 @@ function TutorBio() {
 
   const handleAddPhoto = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     try {
       if (!photo) {
         toast.error("No image selected");
         return;
       }
-  
+
       await handlePhotoUpload();
-  
+
       if (!CloudanaryURL) {
         toast.error("Error occurred while uploading the photo");
         return;
       }
-  
+
       const tutorId = tutor.tutorId;
-  
+
       const response = await axios.post(
         `http://localhost:4001/api/v1/tutor/updateProfile`,
         {
@@ -131,10 +125,10 @@ function TutorBio() {
           id: tutorId,
         }
       );
-  
+
       if (response.data && response.data.tutor) {
         dispatch(login(response.data.tutor));
-        setUpdateUI((prev)=> !prev)
+        setUpdateUI((prev) => !prev);
         toast.success("Profile updated successfully");
       } else {
         toast.error("Failed to update profile");
@@ -144,9 +138,6 @@ function TutorBio() {
       toast.error("Error occurred while uploading the photo");
     }
   };
- 
-
-  
 
   return (
     <>
@@ -165,13 +156,15 @@ function TutorBio() {
             >
               <div className="bg-gray-100 dark:bg-slate-800 relative rounded-lg p-8 sm:p-12 shadow-lg">
                 <form onSubmit={handleAddPhoto}>
-                  <div className="mb-2">
-                  <img
-                     className="w-25 h-28 rounded-full mx-auto"
-                     src={data?.photo}
-                     alt="Profile picture"
-                   />
-                  
+                  <div className="mb-2 flex justify-center flex-col ">
+                    <img
+                      className="w-24 h-24 object-fill rounded-full mx-auto"
+                      src={
+                        data?.photo ||
+                        "https://i.pinimg.com/564x/64/77/9d/64779d2b7056542722569d0278837367.jpg"
+                      }
+                      alt={data?.photo ? "Profile picture" : "Default picture"}
+                    />
 
                     <p className="text-center text-gray-600 mt-1"></p>
                     <input
@@ -250,7 +243,6 @@ function TutorBio() {
                       <input
                         className="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
                         onChange={handlePhoto}
-
                         id="fileInput"
                         name="fileInput"
                         type="file"
@@ -276,7 +268,6 @@ function TutorBio() {
                       Update
                     </button>
                     <div className="mx-4"></div>{" "}
-                    {/* Add space between buttons */}
                     <button
                       onClick={() => openEditModal(index)}
                       type="submit"
@@ -298,70 +289,67 @@ function TutorBio() {
                 </form>
                 <div></div>
                 {isEditModal && (
-        <div
-          className="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
-          style={{ background: "rgba(0,0,0,.7)" }}
-          onClick={closeEditModal}
-        >
-          <div
-            className="border border-teal-500 shadow-lg modal-container bg-white w-11/12 md:max-w-md mx-auto rounded z-50 overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <form >
-              <div className="modal-content py-4 text-left px-6">
-                <div className="flex justify-between items-center pb-3">
-                  <p className="text-2xl font-bold">Edit Category</p>
                   <div
-                    className="modal-close cursor-pointer z-50"
+                    className="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
+                    style={{ background: "rgba(0,0,0,.7)" }}
                     onClick={closeEditModal}
                   >
-                    <svg
-                      className="fill-current text-black"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={18}
-                      height={18}
-                      viewBox="0 0 18 18"
+                    <div
+                      className="border border-teal-500 shadow-lg modal-container bg-white w-11/12 md:max-w-md mx-auto rounded z-50 overflow-y-auto"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                    </svg>
-                  </div>
-                </div>
-                <div className="my-5">
-                  <input
-                   
-                   
-                    value=''
-                    type="text"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Enter your text here"
-                  />
-                </div>
+                      <form>
+                        <div className="modal-content py-4 text-left px-6">
+                          <div className="flex justify-between items-center pb-3">
+                            <p className="text-2xl font-bold">Edit Category</p>
+                            <div
+                              className="modal-close cursor-pointer z-50"
+                              onClick={closeEditModal}
+                            >
+                              <svg
+                                className="fill-current text-black"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width={18}
+                                height={18}
+                                viewBox="0 0 18 18"
+                              >
+                                <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                              </svg>
+                            </div>
+                          </div>
+                          <div className="my-5">
+                            <input
+                              value=""
+                              type="text"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                              placeholder="Enter your text here"
+                            />
+                          </div>
 
-                <div className="flex justify-end pt-2">
-                  <button
-                    onClick={() => {
-                      closeEditModal(); 
-                    }}
-                    className="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => {
-                      
-                      closeEditModal(); 
-                    }}
-                    type="submit"
-                    className="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400"
-                  >
-                    Confirm
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+                          <div className="flex justify-end pt-2">
+                            <button
+                              onClick={() => {
+                                closeEditModal();
+                              }}
+                              className="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={() => {
+                                closeEditModal();
+                              }}
+                              type="submit"
+                              className="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400"
+                            >
+                              Confirm
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

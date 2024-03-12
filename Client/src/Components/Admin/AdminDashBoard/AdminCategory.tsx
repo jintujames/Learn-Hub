@@ -95,9 +95,9 @@ function AdminCategory() {
 
         navigate("/adminCategory");
       } else if (response.status === 400) {
-        toast.error(response.data.error);
+        toast.error(response.data.message);
       } else {
-        toast.error(response.data.error);
+        toast.error(response.response.data.message);
       }
     });
   };
@@ -149,7 +149,7 @@ function AdminCategory() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [handleDeleteCategory]);
 
   return (
     <>
@@ -267,7 +267,7 @@ function AdminCategory() {
                 <div className="flex justify-end pt-2">
                   <button
                     onClick={() => {
-                      closeEditModal(); 
+                      closeEditModal();
                     }}
                     className="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300"
                   >
@@ -276,7 +276,7 @@ function AdminCategory() {
                   <button
                     onClick={() => {
                       handleEditCategory();
-                      closeEditModal(); 
+                      closeEditModal();
                     }}
                     type="submit"
                     className="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400"
@@ -387,8 +387,8 @@ function AdminCategory() {
               <div className="flex justify-end pt-2">
                 <button
                   onClick={() => {
-                    closeModal(); 
-                    reset(); 
+                    closeModal();
+                    reset();
                   }}
                   type="button"
                   className="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300"

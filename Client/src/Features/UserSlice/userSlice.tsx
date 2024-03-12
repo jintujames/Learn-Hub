@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
-  user: any; // You should replace 'any' with the actual type of your user object
+  user: any; 
 }
 
 const initialState: UserState = {
