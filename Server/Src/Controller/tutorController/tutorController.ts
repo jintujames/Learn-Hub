@@ -263,6 +263,38 @@ const updateTutorProfile = async (req: Request, res: Response) => {
   }
 };
 
+const editInstructorProfile = async (req: Request, res: Response) => {
+  try {
+   
+    const updateData = req.body; 
+    console.log(updateData);
+    
+const {name,id}=req.body
+
+    const instructorBioDetails = await instructorModel.findByIdAndUpdate(name, id, { new: true }).exec();
+    console.log(instructorBioDetails);
+
+    if (instructorBioDetails) {
+      const updateResult = await instructorBioDetails.save();
+
+      res.status(200).json({
+        message: "Profile updated successfully",
+        instructorBioDetails: updateResult,
+      });
+    } else {
+      return res.status(400).json({
+        message: "No user found with the provided ID",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+
 
 
 export {
@@ -274,5 +306,6 @@ export {
   addCourses,
   instructorBio,
   getCourses,
-  updateTutorProfile
+  updateTutorProfile,
+  editInstructorProfile
 };

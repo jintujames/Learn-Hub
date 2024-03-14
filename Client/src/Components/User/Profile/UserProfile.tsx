@@ -19,32 +19,18 @@ interface studentDetails {
 function UserProfile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [data, setData] = useState<studentDetails>();
   const [photo, setPhoto] = useState<File | null>(null);
   const [updateUI, setUpdateUI] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false); 
-
   const [CloudanaryURL, setCloudanaryURL] = useState("");
-  const [formData, setFormData] = useState<studentDetails>({
-    studentFirstName: "",
-    studentLastName: "",
-    studentEmail: "",
-    phone: "",
-    userId: "",
-    photo: null,
-  });
-
-  const [originalFormData, setOriginalFormData] =
-    useState<studentDetails | null>(null);
+  
 
   const userId = localStorage.getItem("userId");
-
   const user = useSelector((state: any) => state.user);
 
   useEffect(() => {
     console.log(user, "this is is the user", userId);
-
     if (user) {
       console.log("user is here", user);
       navigate("/userProfile");
@@ -53,7 +39,7 @@ function UserProfile() {
     }
   }, []);
 
-  useEffect(() => {
+ 
     const fetchData = async () => {
       try {
         const result: any = await getUserProfile(userId);
@@ -62,23 +48,25 @@ function UserProfile() {
         console.error("Error in student Profile:", error);
       }
     };
-
+    useEffect(() => {
     fetchData();
   }, [userId, updateUI]);
 
-  useEffect(() => {
-    if (data) {
-      setFormData({
-        studentFirstName: data.studentFirstName,
-        studentLastName: data.studentLastName,
-        studentEmail: data.studentEmail,
-        phone: data.phone,
-        userId: data.userId,
-        photo: data.photo,
-      });
-    }
-  }, [data]);
+  const openEditModal = () => {
+    setIsEditModal(true);
+    setEditProfile({
+      studentFirstName: data?.studentFirstName || "",
+      studentLastName: data?.studentLastName || "",
+      studentEmail: data?.studentEmail|| "",
+      phone: data?.phone || "",
+    });
+  };
 
+  const closeEditModal = () => {
+    setIsEditModal(false);
+  };
+
+ 
   const handlePhotoUpload = async () => {
     try {
       const formData = new FormData();
@@ -146,24 +134,20 @@ function UserProfile() {
       setPhoto(file);
     }
   };
-  const handleEditClick = () => {
-    setOriginalFormData({ ...data });
 
-    setIsModalOpen(true);
-    setFormData({
-      full_name: `${data?.studentFirstName} ${data?.studentLastName}`,
-      email: data?.studentEmail || "",
-      phone: data?.phone || "",
-    });
-  };
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getUserProfile(userId)
+
+        setData(result.data.)
+      }
+    }
+  })
+
+
+ 
 
   return (
     <div>
@@ -298,7 +282,6 @@ function UserProfile() {
                       </button>
                       <div className="mx-4"></div>{" "}
                       <button
-                        onClick={handleEditClick}
                         type="submit"
                         className="
                         flex-1
@@ -316,111 +299,7 @@ function UserProfile() {
                       </button>
                     </div>
                   </form>
-                  {isModalOpen && (
-                    <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-                      <div className="bg-white p-8 rounded-md shadow-lg">
-                        <form>
-                          <div className="mb-2">
-                            <p>Edit Profile</p>
-
-                            <p className="text-center text-gray-600 mt-1"></p>
-                            <input
-                              type="text"
-                              placeholder="Your Name"
-                              className=" w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                              name="full_name"
-                              id="full_name"
-                              value={formData.studentFirstName}
-                              onChange={handleFormChange}
-                            />
-                          </div>
-                          <div className="mb-2">
-                            <p className="text-center text-gray-600 mt-1"></p>
-                            <input
-                              type="email"
-                              placeholder="Your Email"
-                              className="
-                              w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                              name="email"
-                              id="email"
-                              value={formData.studentEmail}
-                              onChange={handleFormChange}
-                            />
-                          </div>
-                          <div className="mb-6">
-                            <input
-                              type="phone"
-                              placeholder="Your Phone"
-                              className="
-                              w-full
-                              rounded
-                              p-3
-                              text-gray-800
-                              dark:text-gray-50
-                              dark:bg-slate-700
-                              border-gray-500
-                              dark:border-slate-600
-                              outline-none
-                              focus-visible:shadow-none
-                              focus:border-primary
-                              "
-                              name="phone"
-                              id="phone"
-                              value={formData.phone}
-                              onChange={handleFormChange}
-                            />
-                          </div>
-
-                          <div className="flex">
-                            <button
-                              type="submit"
-                              className="
-                        flex-1
-                        text-gray-100
-                        hover:text-gray-700
-                        border-gradient-200 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% dark:bg-gradient-800 dark:border-gradient-700
-                        p-3
-                        transition
-                        ease-in-out
-                        duration-500
-                        hover:bg-cyan-500"
-                            >
-                              Update
-                            </button>
-                            <div className="mx-4"></div>{" "}
-                          </div>
-                        </form>
-                        <button
-                          onClick={() => setIsModalOpen(false)}
-                          className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-md"
-                        >
-                          Close
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  
                   <div></div>
                 </div>
               </div>

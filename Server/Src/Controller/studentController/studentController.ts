@@ -393,32 +393,28 @@ const updateUserProfile = async (req: Request, res: Response) => {
 
 const editProfile = async (req: Request, res: Response) => {
   try {
-    const { studentId, updatedProfileDetails } = req.body;
+    const updateData = req.body;
+    const {name, id} = req.body
 
-    if (!studentId || !updatedProfileDetails || typeof studentId !== 'string' || typeof updatedProfileDetails !== 'object') {
-      return res.status(400).json({ message: 'Invalid input data' });
-    }
+    const studentBioDetails = await studentModel.findByIdAndUpdate(name, id, { new: true }).exec();
+    console.log(studentBioDetails);
 
-    const updatedProfile = await studentModel.findByIdAndUpdate(
-      studentId,
-      { $set: updatedProfileDetails },
-      { new: true }
-    );
+    if (studentBioDetails) {
+      const updateResult = await studentBioDetails.save();
 
-    if (updatedProfile) {
-      return res.status(200).json({
-        message: 'Profile updated successfully',
-        updatedProfile,
+      res.status(200).json({
+        message: "Profile updated successfully",
+        studentBioDetails: updateResult,
       });
     } else {
-      return res.status(404).json({
-        message: 'Student not found',
+      return res.status(400).json({
+        message: "No user found with the provided ID",
       });
     }
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      message: 'Internal server error',
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
     });
   }
 };

@@ -243,4 +243,25 @@ console.log(formData , 'hahhaahhahahaha');
 };
 
 
+export const editTutorProfile = async (tutorPayload: signUpTutor,id:any) => {
+  console.log("tutorPayload", tutorPayload);
+
+  try {
+    const data={
+      id:id,
+      name:tutorPayload
+    }
+    const config: AxiosRequestConfig = {
+      method: "POST",
+      url: "api/v1/tutor/editProfile",
+      data: data,
+    };
+
+    return await apiRequest(config);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 

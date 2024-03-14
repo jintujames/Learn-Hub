@@ -5,8 +5,10 @@ import { getTutorBio } from "../../../utils/config/axios.Method.Get";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { login } from "../../../Features/UserSlice/userSlice";
+import { editTutorProfile } from "../../../utils/config/axios.Methode.post";
 
 interface InstructorBioDetails {
+  _id: any;
   instructorFirstName: string;
   instructorLastName: string;
   instructorEmail: string;
@@ -14,7 +16,6 @@ interface InstructorBioDetails {
   photo: any;
   tutorId: string;
   instructor: string;
-
 }
 
 function TutorBio() {
@@ -23,10 +24,15 @@ function TutorBio() {
   const [data, setData] = useState<InstructorBioDetails>();
   const [photo, setPhoto] = useState<File | null>(null);
   const [updateUI, setUpdateUI] = useState<boolean>(false);
-
   const [CloudanaryURL, setCloudanaryURL] = useState("");
-
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModal, setIsEditModal] = useState(false);
+  const [editProfile, setEditProfile] = useState<any>({
+    instructorFirstName: "",
+    instructorLastName: "",
+    instructorEmail: "",
+    phone: "",
+  });
 
   const tutorId: any = localStorage.getItem("tutorId");
   console.log("aaaaaaaaa", tutorId);
@@ -42,29 +48,32 @@ function TutorBio() {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result: any = await getTutorBio(tutorId);
-        console.log("tutordetails", result.data);
+  const fetchData = async () => {
+    try {
+      const result: any = await getTutorBio(tutorId);
+      console.log("tutordetails", result.data);
 
-        setData(result.data.instructorBioDetails);
-      } catch (error) {
-        console.log("Error in tutor Bio:", error);
-      }
-    };
+      setData(result.data.instructorBioDetails);
+    } catch (error) {
+      console.log("Error in tutor Bio:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [getTutorBio, updateUI]);
 
-  const [isEditModal, setIsEditModal] = useState(false);
-  const [editModalIndex, setEditModalIndex]: any = useState(null);
-
-  const openEditModal = (i: any) => {
-    setEditModalIndex(i);
+  const openEditModal = () => {
     setIsEditModal(true);
+    setEditProfile({
+      instructorFirstName: data?.instructorFirstName || "",
+      instructorLastName: data?.instructorLastName || "",
+      instructorEmail: data?.instructorEmail || "",
+      phone: data?.phone || "",
+    });
   };
+
   const closeEditModal = () => {
-    setEditModalIndex(null);
     setIsEditModal(false);
   };
 
@@ -116,8 +125,6 @@ function TutorBio() {
         return;
       }
 
-      const tutorId = tutor.tutorId;
-
       const response = await axios.post(
         `http://localhost:4001/api/v1/tutor/updateProfile`,
         {
@@ -136,6 +143,55 @@ function TutorBio() {
     } catch (error) {
       console.error("Error during photo upload:", error);
       toast.error("Error occurred while uploading the photo");
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result: any = await getTutorBio(tutorId);
+        console.log("tutor details", result.data);
+
+        const {
+          instructorFirstName,
+          instructorLastName,
+          instructorEmail,
+          phone,
+        } = result.data;
+
+        setEditProfile({
+          instructorFirstName,
+          instructorLastName,
+          instructorEmail,
+          phone,
+        });
+      } catch (error) {
+        console.log("Error in fetching tutor Bio:", error);
+      }
+    };
+
+    fetchData();
+  }, [getTutorBio, tutorId]);
+
+  const handleEditProfile = async () => {
+    if (!data || !data._id) {
+      console.error("Invalid data or ID");
+      return;
+    }
+
+    try {
+      const response: any = await editTutorProfile(data._id, editProfile);
+      console.log("Edit profile response:", response);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        fetchData();
+        setIsEditModal(false);
+      } else {
+        toast.error(response.data.message || "Failed to edit profile");
+      }
+    } catch (error) {
+      console.error("Error editing profile:", error);
+      toast.error("Failed to edit profile. Please try again later.");
     }
   };
 
@@ -269,7 +325,7 @@ function TutorBio() {
                     </button>
                     <div className="mx-4"></div>{" "}
                     <button
-                      onClick={() => openEditModal(index)}
+                      onClick={() => openEditModal()}
                       type="submit"
                       className="
                         flex-1
@@ -301,7 +357,7 @@ function TutorBio() {
                       <form>
                         <div className="modal-content py-4 text-left px-6">
                           <div className="flex justify-between items-center pb-3">
-                            <p className="text-2xl font-bold">Edit Category</p>
+                            <p className="text-2xl font-bold">Edit Profile</p>
                             <div
                               className="modal-close cursor-pointer z-50"
                               onClick={closeEditModal}
@@ -318,11 +374,89 @@ function TutorBio() {
                             </div>
                           </div>
                           <div className="my-5">
+                            <label
+                              htmlFor="fullName"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              First Name
+                            </label>
                             <input
-                              value=""
+                              value={`${editProfile.instructorFirstName}`}
                               type="text"
+                              id="firstName"
                               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                              placeholder="Enter your text here"
+                              placeholder="Enter your first name here"
+                              onChange={(e) =>
+                                setEditProfile({
+                                  ...editProfile,
+                                  instructorFirstName: e.target.value,
+                                })
+                              }
+                              
+                              
+                            />
+                          </div>
+                          <div className="my-5">
+                            <label
+                              htmlFor="fullName"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Last Name
+                            </label>
+                            <input
+                              value={`${editProfile.instructorLastName}`}
+                              type="text"
+                              id="firstName"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                              placeholder="Enter your first name here"
+                              onChange={(e) =>
+                                setEditProfile({
+                                  ...editProfile,
+                                  instructorLastName: e.target.value,
+                                })
+                              }
+                              
+                              
+                            />
+                          </div>
+                          <div className="my-5">
+                            <label
+                              htmlFor="email"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Email
+                            </label>
+                            <input
+                              value={editProfile.instructorEmail}
+                              type="text"
+                              id="email"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                              placeholder="Enter your email here"
+                              onChange={(e) =>
+                                setEditProfile({
+                                  instructorEmail: e.target.value,
+                                })
+                              }
+                            />
+                          </div>
+                          <div className="my-5">
+                            <label
+                              htmlFor="phone"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Phone Number
+                            </label>
+                            <input
+                              value={editProfile.phone}
+                              type="text"
+                              id="phone"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                              placeholder="Enter your phone number here"
+                              onChange={(e) =>
+                                setEditProfile({
+                                  phone: e.target.value,
+                                })
+                              }
                             />
                           </div>
 
@@ -337,6 +471,7 @@ function TutorBio() {
                             </button>
                             <button
                               onClick={() => {
+                                handleEditProfile();
                                 closeEditModal();
                               }}
                               type="submit"
