@@ -13,6 +13,7 @@ import MyCourses from "../../Components/Tutor/TutorProfile/MyCourses";
 import ViewCourse from "../../Components/Tutor/TutorProfile/ViewCourse";
 import MyCourseViewPage from "./MyCourseViewPage";
 import VideoPlayer from "../../Components/Tutor/TutorProfile/VideoPlayer";
+import EnrollStudents from "../../Components/Tutor/TutorProfile/EnrollStudents";
 
 function TutorProfilePage() {
   const [state, setState]:any = useState(0);
@@ -28,7 +29,11 @@ function TutorProfilePage() {
         <Route
           path="/image"
           element={<TutorSidebar children={<AddImage />} />}
-        />        
+        />    
+        <Route
+          path="/enrollStudents"
+          element={<TutorSidebar children={<EnrollStudents />} />}
+        />      
 
         <Route
           path="/addCourse"

@@ -25,6 +25,12 @@ import TutorPrivateRoute from "./Components/PrivateRouter/TutorPrivateRoute";
 import CourseDetailsPage from "./Pages/Student/CourseDetailsPage";
 import ProfilePage from "./Pages/Student/ProfilePage";
 import CartPage from "./Pages/Student/CartPage";
+import UserPrivateRoute from "./Components/PrivateRouter/UserPrivateRoute";
+import CheckOutPage from "./Pages/Student/CheckOutPage";
+import PaymentSuccess from "./Components/User/Payment/PaymentSuccess";
+import EnrolledPage from "./Pages/Student/EnrolledPage";
+import SingleEnrollPage from "./Pages/Student/SingleEnrollPage";
+import TutorPage from "./Pages/Student/TutorPage";
 
 function App() {
   const user = useSelector(selectUser);
@@ -42,26 +48,35 @@ function App() {
           <Route path="/otp_verify" element={<OtpPage />} />
           <Route path="/newPassword" element={<NewPassword />} />
           <Route path="/courses" element={<CoursePage />} />
+          <Route path="/tutors" element={<TutorPage />} />
           <Route path="/courseDetails" element={<CourseDetailsPage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckOutPage />}/>
           <Route path="/userProfile" element={<ProfilePage />} />
+          <Route path="/userProfile" element={<ProfilePage />} />
+          <Route path="/paymentSuccess" element={<PaymentSuccess />} />
+          <Route path="/enrolledCourses" element={<EnrolledPage />} />
+          <Route path="/singleEnrolledCourses" element={<SingleEnrollPage />} />
 
 
 
-
-            <Route path="/tutorProfile/*" element={<TutorProfilePage />} />
-            <Route path="/tutorImage" element={<TutorProfilePage />} />
-            <Route path="/addCourse" element={<TutorProfilePage />} />
-            <Route path="/myCourse" element={<TutorProfilePage />} />
+          
 
 
-            
+          
 
 
-
-      
+          <Route path="/tutorProfile/*" element={<TutorProfilePage />} />
+          <Route path="/tutorImage" element={<TutorProfilePage />} />
+          <Route path="/addCourse" element={<TutorProfilePage />} />
+          <Route path="/myCourse" element={<TutorProfilePage />} />
           <Route path="/tutorSignup" element={<TutorSignUpPage />} />
           <Route path="/tutorLogin" element={<TutorLoginPage />} />
+          <Route path="/tutorEnrollHistory" element={<TutorProfilePage />} />
+
+
+
+
 
           <Route path="/adminLogin" element={<AdminLoginPage />} />
           <Route path="/adminDashboard" element={<AdminDashboardPage />} />
@@ -69,7 +84,6 @@ function App() {
           <Route path="/adminTutor" element={<AdminTutorPage />} />
           <Route path="/adminCategory" element={<AdminCategoryPage />} />
           <Route path="/addCategory" element={<AdminCategoryPage />} />
-
         </Routes>
       </Router>
     </>

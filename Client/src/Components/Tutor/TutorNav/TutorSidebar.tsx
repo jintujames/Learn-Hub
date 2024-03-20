@@ -57,7 +57,7 @@ function  TutorSidebar({children}:any) {
     if(data=="Profile"){
       navigate('/tutorProfile')
     }else if(data=='Image'){
-      navigate('/tutorProfile/image')
+      navigate('/tutorProfile/enrollStudents')
     }else if (data=='NewCourse'){
       console.log('hhhh');
       
@@ -184,7 +184,7 @@ function  TutorSidebar({children}:any) {
                 <li>
                 <Link
                   to=""
-                  className={`text-md font-semibold text-left text-black uppercase md:p-0 dark:text-white ${
+                  className={`text-md font-semibold text-left text-black uppercase md:p-0 dark:text-black ${
                     showCourseDropdown ? "hover:text-blue-700" : ""
                   }`}
                   onClick={handleCourseClick}
@@ -196,7 +196,7 @@ function  TutorSidebar({children}:any) {
                     <li>
                       <Link
                         to="/tutorProfile/addCourse"
-                        className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="block w-full px-4 py-2 text-left text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
                         Create Course
                       </Link>
@@ -204,7 +204,7 @@ function  TutorSidebar({children}:any) {
                     <li>
                       <Link
                         to="/tutorProfile/addLesson"
-                        className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="block w-full px-4 py-2 text-left text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
                         Add Lesson
                       </Link>
@@ -237,7 +237,7 @@ function  TutorSidebar({children}:any) {
                 >
                   
                   <div className="ml-2">
-                    <h2 className="text-sm font-medium">Settings</h2>
+                    <h2 className="text-sm font-medium">Instructor</h2>
                   </div>
                   <svg
                     className="-mr-1 h-5 w-5 text-gray-400"

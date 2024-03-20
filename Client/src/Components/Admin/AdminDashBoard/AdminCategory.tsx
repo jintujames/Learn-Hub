@@ -51,6 +51,7 @@ function AdminCategory() {
 
   const fetchData = async () => {
     try {
+      console.log('fetchjjjj');
       const result: any = await admingetCategory();
       console.log(result.data.categoryDetails, "PPPP");
       setData(result.data.categoryDetails);
@@ -149,7 +150,9 @@ function AdminCategory() {
 
   useEffect(() => {
     fetchData();
-  }, [handleDeleteCategory]);
+    console.log('fetchjjjj');
+    
+  },[handleDeleteCategory]);
 
   return (
     <>

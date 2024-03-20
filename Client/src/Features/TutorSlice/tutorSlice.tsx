@@ -7,6 +7,10 @@ interface tutorState {
   image:any;
 }
 
+export interface TutorState{
+  tutordata : tutorState | null;
+}
+
 const initialState: tutorState = {
   tutor: null,
   course:null,

@@ -4,6 +4,12 @@ interface UserState {
   user: any; 
 }
 
+export interface UsersState{
+  userdata : UserState | null;
+}
+
+
+
 const initialState: UserState = {
   user: null,
 };

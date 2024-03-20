@@ -115,7 +115,10 @@ const courseSchema = new Schema<ICourse>(
       type: Number, 
       default: 0,
     },
+    // buyedUsers:[],
+
   },
+ 
   { timestamps: true }
 );
 

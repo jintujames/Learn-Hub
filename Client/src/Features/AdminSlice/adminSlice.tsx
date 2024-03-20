@@ -4,6 +4,10 @@ interface adminState {
   admin: any; // You should replace 'any' with the actual type of your user object
 }
 
+export interface AdminState{
+  admindata : adminState | null;
+}
+
 const initialState: adminState = {
   admin: null,
 };

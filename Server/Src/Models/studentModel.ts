@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import mongoose, { Schema, Document, model, Model } from "mongoose";
 
-interface NewStudent extends Document {
+interface Student extends Document {
   studentFirstName: string;
   studentLastName: string;
   studentEmail: string;
@@ -14,7 +14,7 @@ interface NewStudent extends Document {
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
-const userSchema = new Schema<NewStudent>(
+const userSchema = new Schema<Student>(
   {
     studentFirstName: {
       type: String,
@@ -60,7 +60,7 @@ userSchema.methods.matchPassword = async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-userSchema.pre<NewStudent>("save", async function (next) {
+userSchema.pre<Student>("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }

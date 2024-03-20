@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import { Session } from 'express-session';
+
 import bcrypt from "bcrypt";
 import studentModel from "../../Models/studentModel";
-import categoryModel from "../../Models/categoryModel"
+import categoryModel from "../../Models/categoryModel";
 import generateToken from "../../Utlitis/generateToken";
 import "dotenv/config";
 import User from "../../Models/studentModel";
@@ -9,6 +11,7 @@ import { sendMail } from "../../Middleware/mailSender";
 import courseModel from "../../Models/courseModel";
 import CartItemModel from "../../Models/cartModel";
 import cartModel from "../../Models/cartModel";
+import orderModel from "../../Models/orderModel";
 
 // Student Register
 
@@ -20,6 +23,7 @@ const globalData = {
     studentEmail: string;
     phone: string;
     password: string;
+    snotp?: string; 
   },
 };
 
@@ -122,7 +126,7 @@ const forgetData = {
   otp: null as null | number,
 };
 
-const forgetPassword = async (req: Request, res: Response) => {
+const forgetPassword = async (req: Request & { session: Session }, res: Response) => {
   try {
     const { studentEmail } = req.body;
     req.session.userEmail = studentEmail;
@@ -187,6 +191,7 @@ const newPassword = async (req: Request, res: Response) => {
           studentModel
             .findOneAndUpdate({ studentEmail: email }, { password: hash })
             .then((data) => {
+              console.log(data, "datatatat");
               console.log(data, "datatatat");
               if (!data) {
                 res.status(404).send({
@@ -254,25 +259,24 @@ const userGetAllCategory = async (req: Request, res: Response) => {
   }
 };
 
-
-const userGetCourses = async (req:Request,res:Response)=>{
-  try{
+const userGetCourses = async (req: Request, res: Response) => {
+  try {
     const courseDetails = await courseModel.find().exec();
-  console.log("Fetched Course Details:", courseDetails);
-    if(courseDetails){
+    console.log("Fetched Course Details:", courseDetails);
+    if (courseDetails) {
       res.status(200).json({
-        courseDetails,message:"courseDetails"
-      })
-    }else{
+        courseDetails,
+        message: "courseDetails",
+      });
+    } else {
       return res.status(400).json({
-        error:"no course available "
-      })
+        error: "no course available ",
+      });
     }
-  }
-  catch(error){
+  } catch (error) {
     console.log(error);
   }
-}
+};
 
 const studentProfile = async (req: Request, res: Response) => {
   try {
@@ -294,117 +298,123 @@ const studentProfile = async (req: Request, res: Response) => {
   }
 };
 
-const addToCart =async(req:Request,res:Response)=>{
+const addToCart = async (req: Request, res: Response) => {
+  console.log("cart entry");
 
-  console.log("cart entry")
-    
-    try {
+  try {
+    const { courseId, userId } = req.body;
 
-        const {courseId,userId} = req.body   
+    const existingCartItem = await cartModel.findOne({
+      user: userId,
+      course: courseId,
+    });
 
-        const existingCartItem =await cartModel.findOne({user:userId,course:courseId})
-
-        if(existingCartItem){
-            res.status(400).json({message:"Course already in the cart"})
-        }else{
-            const newCartItem = new cartModel({
-                user:userId,
-                course:courseId,
-            });
-            await newCartItem.save();
-            res.status(200).json({message:"Course Added Successfully"})
-        }
-        
-    } catch (error) {
-
-        console.error("Error Occur while Adding to cart",error)
-        res.status(500).json({error:"Internal Server Error"})
-        
+    if (existingCartItem) {
+      res.status(400).json({ message: "Course already in the cart" });
+    } else {
+      const newCartItem = new cartModel({
+        user: userId,
+        course: courseId,
+      });
+      await newCartItem.save();
+      res.status(200).json({ message: "Course Added Successfully" });
     }
-    
-
-
-}
-
-const getCart =async(req:Request,res:Response)=>{
-
-  console.log("oiiiii")
-
-  const userId = req.params.userId;
-
-  console.log("userid vannu",userId)
-
-  try {
-
-      const cartItems = await cartModel.find({user:userId}).populate('course')
-      console.log(cartItems,"items")
-
-      res.status(200).json(cartItems)
-      
   } catch (error) {
-
-      console.error("Error fetching cart Items",error)
-      res.status(500).json({error:"Internal server Error"})
-      
-  }
-
-
-}
-
-
-const RemoveCourseFromCart = async (req: Request, res: Response) => {
-  let cartItemId = req.params.cartItemId;
-
-  try {
-    cartItemId = cartItemId.trim().replace(/["\n]/g, '');
-    console.log(cartItemId);
-    
-    await cartModel.findByIdAndDelete(cartItemId);
-    
-
-    res.status(200).json({ message: "Course Removed from the cart" });
-  } catch (error) {
-    console.error("Error Removing Course From cart", error);
+    console.error("Error Occur while Adding to cart", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+const getCart = async (req: Request, res: Response) => {
+  console.log("oiiiii");
+
+  const userId = req.params.userId;
+
+  console.log("userid vannu", userId);
+
+  try {
+    const cartItems = await cartModel.find({ user: userId }).populate("course");
+    console.log(cartItems, "items");
+
+    res.status(200).json(cartItems);
+  } catch (error) {
+    console.error("Error fetching cart Items", error);
+    res.status(500).json({ error: "Internal server Error" });
+  }
+};
+
+const RemoveCourseFromCart = async (req: Request, res: Response) => {
+  const cartItemId = req.params.cartItemId;
+
+  try {
+    const removedItem = await cartModel.findByIdAndDelete(cartItemId);
+    if (!removedItem) {
+      return res.status(404).json({ error: "Cart item not found" });
+    }
+    res.status(200).json({ message: "Course removed from the cart" });
+  } catch (error) {
+    console.error("Error removing course from cart", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const RemoveAllCoursesFromCart = async (req: Request, res: Response) => {
+  try {
+    const result = await cartModel.deleteMany({});
+    
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: "No cart items found" });
+    }
+    
+    console.log("All courses removed from cart");
+    res.status(200).json({ message: "All courses removed from cart" });
+  } catch (error) {
+    console.error("Error removing all courses from cart", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+
 
 
 const updateUserProfile = async (req: Request, res: Response) => {
   try {
     const { photo, id } = req.body;
 
-    if (!photo || typeof photo !== 'string' || !id || typeof id !== 'string') {
-      return res.status(400).json({ message: 'Invalid input data' });
+    if (!photo || typeof photo !== "string" || !id || typeof id !== "string") {
+      return res.status(400).json({ message: "Invalid input data" });
     }
 
-    const user: any = await studentModel.findByIdAndUpdate(id, { $set: { photo: photo } });
+    const user: any = await studentModel.findByIdAndUpdate(id, {
+      $set: { photo: photo },
+    });
 
     if (!user) {
-      return res.status(404).json({ message: 'Tutor not found' });
+      return res.status(404).json({ message: "Tutor not found" });
     }
 
-    return res.status(200).json({ message: 'Profile updated successfully', user: user });
+    return res
+      .status(200)
+      .json({ message: "Profile updated successfully", user: user });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
 const editProfile = async (req: Request, res: Response) => {
   try {
     const updateData = req.body;
-    const {name, id} = req.body
+    const { id, name } = updateData; // Assuming 'id' is the MongoDB ObjectId
 
-    const studentBioDetails = await studentModel.findByIdAndUpdate(name, id, { new: true }).exec();
-    console.log(studentBioDetails);
+    const studentProfileDetails = await studentModel.findByIdAndUpdate(id, name, { new: true }).exec();
 
-    if (studentBioDetails) {
-      const updateResult = await studentBioDetails.save();
-
+    if (studentProfileDetails) {
       res.status(200).json({
         message: "Profile updated successfully",
-        studentBioDetails: updateResult,
+        studentProfileDetails: studentProfileDetails,
       });
     } else {
       return res.status(400).json({
@@ -418,6 +428,69 @@ const editProfile = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+const enrolledCourses = async (req: Request, res: Response) => {
+  console.log("enrolled courses");
+
+  const userId = req.params.userId;
+  console.log(userId, "id ondonnu okkku");
+
+  try {
+      const enrolledCourses = await orderModel
+          .find({studentId: userId })
+          .populate("studentId")
+          .populate("courseId")
+          .populate("tutorId")
+   
+          
+
+      console.log(enrolledCourses, "enrolled courses");
+
+      res.status(200).json(enrolledCourses );
+  } catch (error) {
+      console.log("error While Fetching EnrolledCourses", error);
+      res.status(500).json({ error: "internal Server Error" });
+  }
+}
+
+
+const clearCart=async(req: Request, res: Response)=>{
+  try {
+    console.log(req.body,'HIHIHIH');
+    
+    const cartId=req.body.id
+    
+    const deleteCart=await CartItemModel.findByIdAndDelete(cartId)
+    if(deleteCart){
+      res.json({status:true})
+    }else{
+      res.json({status:false})
+    }
+  } catch (error) {
+    
+  }
+}
+
+const checkEnrollmentStatus =async(req:Request,res:Response)=>{
+  const { userId, courseId } = req.params;
+try {
+  const isEnrolled = await orderModel.exists({
+      studentId: userId,
+      courseId: courseId,
+    });
+    console.log(isEnrolled,'II');
+    
+    res.status(200).json({ isEnrolled });
+    
+  
+}catch (error) {
+  console.error("Error checking enrollment status:", error);
+  res.status(500).json({ error: "Internal Server Error" });
+}
+
+}
+
 
 
 export {
@@ -435,5 +508,9 @@ export {
   getCart,
   RemoveCourseFromCart,
   updateUserProfile,
-  editProfile
+  editProfile,
+  RemoveAllCoursesFromCart,
+  enrolledCourses,
+  clearCart,
+  checkEnrollmentStatus
 };

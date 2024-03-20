@@ -190,7 +190,6 @@ function CourseCards() {
   const handleSingleCourse = (course: any) => {
     dispatch(clearCourseDetails());
     dispatch(setSingleCourseDetails(course));
-
     navigate("/courseDetails");
   };
 

@@ -5,15 +5,17 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { login } from "../../../Features/UserSlice/userSlice";
+import { editUserProfile } from "../../../utils/config/axios.Methode.post";
+import { UserBaseUrl } from "../../../utils/Api";
 
 interface studentDetails {
+  _id: any;
   studentFirstName: string;
   studentLastName: string;
   studentEmail: string;
   phone: string;
   userId: string;
   photo: any;
-
 }
 
 function UserProfile() {
@@ -22,9 +24,15 @@ function UserProfile() {
   const [data, setData] = useState<studentDetails>();
   const [photo, setPhoto] = useState<File | null>(null);
   const [updateUI, setUpdateUI] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [CloudanaryURL, setCloudanaryURL] = useState("");
-  
+  const [isEditModal, setIsEditModal] = useState(false);
+  const [editProfile, setEditProfile] = useState<any>({
+    studentFirstName: "",
+    studentLastName: "",
+    studentEmail: "",
+    phone: "",
+  });
 
   const userId = localStorage.getItem("userId");
   const user = useSelector((state: any) => state.user);
@@ -39,16 +47,15 @@ function UserProfile() {
     }
   }, []);
 
- 
-    const fetchData = async () => {
-      try {
-        const result: any = await getUserProfile(userId);
-        setData(result.data.studentProfileDetails);
-      } catch (error) {
-        console.error("Error in student Profile:", error);
-      }
-    };
-    useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const result: any = await getUserProfile(userId);
+      setData(result.data.studentProfileDetails);
+    } catch (error) {
+      console.error("Error in student Profile:", error);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, [userId, updateUI]);
 
@@ -57,7 +64,7 @@ function UserProfile() {
     setEditProfile({
       studentFirstName: data?.studentFirstName || "",
       studentLastName: data?.studentLastName || "",
-      studentEmail: data?.studentEmail|| "",
+      studentEmail: data?.studentEmail || "",
       phone: data?.phone || "",
     });
   };
@@ -66,55 +73,60 @@ function UserProfile() {
     setIsEditModal(false);
   };
 
- 
   const handlePhotoUpload = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("file", photo!);
-      formData.append("upload_preset", "LearnHub");
-      formData.append("cloud_name", "dhghmzt8b");
+  try {
+    const formData = new FormData();
+    formData.append("file", photo!);
+    formData.append("upload_preset", "LearnHub");
+    formData.append("cloud_name", "dhghmzt8b");
 
-      const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dhghmzt8b/image/upload",
-        formData
-      );
+    const response = await axios.post(
+      "https://api.cloudinary.com/v1_1/dhghmzt8b/image/upload",
+      formData
+    );
 
-      if (response.data && response.data.url) {
-        setCloudanaryURL(response.data.url);
-      } else {
-        console.error("Invalid response from Cloudinary", response.data);
-        toast.error("Error uploading image: Invalid response from Cloudinary");
-      }
-    } catch (error) {
-      console.error("Error while Uploading Image:", error);
-      toast.error("Error uploading image: Please try again later");
+    if (response.data && response.data.url) {
+      setCloudanaryURL(response.data.url);
+      console.log("Photo upload successful. Cloudinary URL:", response.data.url);
+    } else {
+      console.error("Invalid response from Cloudinary", response.data);
+      toast.error("Error uploading image: Invalid response from Cloudinary");
     }
-  };
+  } catch (error) {
+    console.error("Error while Uploading Image:", error);
+    toast.error("Error uploading image: Please try again later");
+  }
+};
+
 
   const handleAddPhoto = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     try {
       if (!photo) {
         toast.error("No image selected");
         return;
       }
-
+  
       await handlePhotoUpload();
-
+  
       if (!CloudanaryURL) {
         toast.error("Error occurred while uploading the photo");
         return;
       }
-
+  
+      console.log("Cloudinary URL:", CloudanaryURL); // Log Cloudinary URL
+  
       const response = await axios.post(
-        `http://localhost:4001/api/v1/student/updateUserProfile`,
+        `${UserBaseUrl}/updateUserProfile`,
         {
           photo: CloudanaryURL,
           id: userId,
         }
       );
-
+  
+      console.log("Update Profile Response:", response.data); // Log response
+  
       if (response.data && response.data.user) {
         dispatch(login(response.data.user));
         setUpdateUI((prev) => !prev);
@@ -127,7 +139,7 @@ function UserProfile() {
       toast.error("Error occurred while uploading the photo");
     }
   };
-
+  
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -135,19 +147,50 @@ function UserProfile() {
     }
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await getUserProfile(userId)
+        const result: any = await getUserProfile(userId);
+        console.log("user details", result.data);
 
-        setData(result.data.)
+        const { studentFirstName, studentLastName, studentEmail, phone } =
+          result.data;
+
+        setEditProfile({
+          studentFirstName,
+          studentLastName,
+          studentEmail,
+          phone,
+        });
+      } catch (error) {
+        console.log("Error in fetching tutor Bio:", error);
       }
+    };
+
+    fetchData();
+  }, [getUserProfile, userId]);
+
+  const handleEditProfile = async () => {
+    if (!data || !data._id) {
+      console.error("Invalid data or ID");
+      return;
     }
-  })
 
-
- 
+    try {
+      const response: any = await editUserProfile(editProfile, data._id);
+      console.log("Edit profile response:", response);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        fetchData();
+        setIsEditModal(false);
+      } else {
+        toast.error(response.data.message || "Failed to edit profile");
+      }
+    } catch (error) {
+      console.error("Error editing profile:", error);
+      toast.error("Failed to edit profile. Please try again later.");
+    }
+  };
 
   return (
     <div>
@@ -282,6 +325,7 @@ function UserProfile() {
                       </button>
                       <div className="mx-4"></div>{" "}
                       <button
+                        onClick={() => openEditModal()}
                         type="submit"
                         className="
                         flex-1
@@ -299,8 +343,146 @@ function UserProfile() {
                       </button>
                     </div>
                   </form>
-                  
+
                   <div></div>
+                  {isEditModal && (
+                    <div
+                      className="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
+                      style={{ background: "rgba(0,0,0,.7)" }}
+                      onClick={closeEditModal}
+                    >
+                      <div
+                        className="border border-teal-500 shadow-lg modal-container bg-white w-11/12 md:max-w-md mx-auto rounded z-50 overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <form>
+                          <div className="modal-content py-4 text-left px-6">
+                            <div className="flex justify-between items-center pb-3">
+                              <p className="text-2xl font-bold">Edit Profile</p>
+                              <div
+                                className="modal-close cursor-pointer z-50"
+                                onClick={closeEditModal}
+                              >
+                                <svg
+                                  className="fill-current text-black"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width={18}
+                                  height={18}
+                                  viewBox="0 0 18 18"
+                                >
+                                  <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                                </svg>
+                              </div>
+                            </div>
+                            <div className="my-5">
+                              <label
+                                htmlFor="fullName"
+                                className="block text-sm font-medium text-gray-700"
+                              >
+                                First Name
+                              </label>
+                              <input
+                                value={`${editProfile.studentFirstName}`}
+                                type="text"
+                                id="firstName"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter your first name here"
+                                onChange={(e) =>
+                                  setEditProfile({
+                                    ...editProfile,
+                                    studentFirstName: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="my-5">
+                              <label
+                                htmlFor="fullName"
+                                className="block text-sm font-medium text-gray-700"
+                              >
+                                Last Name
+                              </label>
+                              <input
+                                value={`${editProfile.studentLastName}`}
+                                type="text"
+                                id="firstName"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter your first name here"
+                                onChange={(e) =>
+                                  setEditProfile({
+                                    ...editProfile,
+                                    studentLastName: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="my-5">
+                              <label
+                                htmlFor="email"
+                                className="block text-sm font-medium text-gray-700"
+                              >
+                                Email
+                              </label>
+                              <input
+                                value={editProfile.studentEmail}
+                                type="text"
+                                id="email"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter your email here"
+                                onChange={(e) =>
+                                  setEditProfile({
+                                    ...editProfile,
+                                    studentEmail: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="my-5">
+                              <label
+                                htmlFor="phone"
+                                className="block text-sm font-medium text-gray-700"
+                              >
+                                Phone Number
+                              </label>
+                              <input
+                                value={editProfile.phone}
+                                type="text"
+                                id="phone"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter your phone number here"
+                                onChange={(e) =>
+                                  setEditProfile({
+                                    phone: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+
+                            <div className="flex justify-end pt-2">
+                              <button
+                                onClick={() => {
+                                  closeEditModal();
+                                }}
+                                className="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300"
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                onClick={() => {
+                                  handleEditProfile();
+                                  closeEditModal();
+                                }}
+                                type="submit"
+                                className="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400"
+                              >
+                                Confirm
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

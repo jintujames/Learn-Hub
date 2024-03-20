@@ -8,6 +8,11 @@ export interface Course {
     courseDescription: string;
     image: string[];
     coursefee: number;
+    courseDuration: string;
+    courseLevel: string;
+    category: string;
+
+
   
   }
   courseName: string;

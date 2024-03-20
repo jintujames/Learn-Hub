@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { login } from "../../../Features/UserSlice/userSlice";
 import { editTutorProfile } from "../../../utils/config/axios.Methode.post";
+import { TutorBaseUrl } from "../../../utils/Api";
 
 interface InstructorBioDetails {
   _id: any;
@@ -126,7 +127,7 @@ function TutorBio() {
       }
 
       const response = await axios.post(
-        `http://localhost:4001/api/v1/tutor/updateProfile`,
+        `${TutorBaseUrl}/updateProfile`,
         {
           photo: CloudanaryURL,
           id: tutorId,

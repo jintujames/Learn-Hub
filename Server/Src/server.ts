@@ -9,6 +9,7 @@ import cors from "cors"
 import path from "path";
 import tutorRouter from "./Routes/tutorRouter/tutorRouter";
 import morgan from "morgan"
+import paymentRouter from "./Routes/PaymentRouter/paymentRouter";
 env.config()
  
 
@@ -53,6 +54,8 @@ app.use(
 app.use("/api/v1/student",studentRouter)
 app.use("/api/v1/tutor", tutorRouter);
 app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/payment", paymentRouter);
+
 dbConnect.connect()
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

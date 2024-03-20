@@ -180,6 +180,7 @@ export const addCourseBio = async (coursePayload: courseBio) => {
   formData.append('image', coursePayload.image);
   formData.append('courseName', coursePayload.courseName);
   formData.append('courseDescription', coursePayload.courseDescription);
+  formData.append('courseDuration', coursePayload?.courseDuration);
   formData.append('courseLevel', coursePayload.courseLevel);
   formData.append('isApproved', coursePayload.isApproved);
   formData.append('category', coursePayload.category);
@@ -212,6 +213,7 @@ export const addCourseLesson = async (coursePayload: LessonData) => {
   formData.append('courseName', coursePayload?.courseName);
   formData.append('title', coursePayload?.title);
   formData.append('Description', coursePayload?.Description);
+  formData.append('courseDuration', coursePayload?.courseDuration);
   formData.append('isApproved', coursePayload?.isApproved);
   formData.append('category', coursePayload?.category);
   formData.append('courseLevel', coursePayload?.courseLevel);
@@ -263,5 +265,22 @@ export const editTutorProfile = async (tutorPayload: signUpTutor,id:any) => {
   }
 };
 
+export const editUserProfile = async (studentPayload: any, id: any) => {
+  try {
+    const data = {
+      id: id,
+      name: studentPayload,
+    };
 
+    const config: AxiosRequestConfig = {
+      method: "POST",
+      url: "/api/v1/student/EditUserProfile", // Assuming the API is available at this URL
+      data: data,
+    };
+
+    return await apiRequest(config);
+  } catch (error) {
+    throw error;
+  }
+};
 

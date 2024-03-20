@@ -36,6 +36,7 @@ export type addAdminCategory = {
 export type courseBio = {
   courseName: string;
   courseDescription: string;
+  courseDuration: string;
   isApproved: any;
   category: string;
   coursefee: any;
@@ -48,6 +49,7 @@ export type LessonData = {
   
   courseName: string;
   Description: string;
+  courseDuration: string;
   isApproved: any;
   category: string;
   title: string;

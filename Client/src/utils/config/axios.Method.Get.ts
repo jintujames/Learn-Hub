@@ -71,6 +71,8 @@ export const getTutorBio = async (userId: any) => {
 
 
 export const getCatagory=async()=>{
+  console.log('INSide the APII');
+  
   const config: AxiosRequestConfig = {
     method: "GET",
     url: `/api/v1/admin/adminCategory`,

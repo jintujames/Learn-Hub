@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { useNavigate } from 'react-router';
+import PayButton from '../PayButton/PayButton';
 
 interface CartItem {
   _id: string;
@@ -17,65 +18,43 @@ interface CartItem {
 }
 
 function Cart() {
-
-  const [userId,setuserId]:any=useState('')
-  const navigate = useNavigate()
+  const [userId, setUserId]: any = useState('');
+  const [cartItems, setCartItems] = useState([]);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [cartItems,setCartItems]:any =useState<any[]>([])
-const [userid,setuserid]=useState(null)
-
-
-  const user = useSelector(selectUser)
-  useEffect(()=>{
-    const userId:any=localStorage.getItem("userId")
-    
-    setuserId(userId)
-  
-    
-    
-  },[userId])
-  
-
-      
 
   useEffect(() => {
-    
-  
+    const userId = localStorage.getItem("userId");
+    setUserId(userId);
+  }, []);
+
+  useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const response = await axios.get(`http://localhost:4001/api/v1/student/cart/${userId}`);
         setCartItems(response.data);
         dispatch(updateCartCount(response.data.length));
       } catch (error) {
-        
+        console.error("Error fetching cart items:", error);
       }
     };
-  
+
     fetchCartItems();
   }, [userId, dispatch]);
 
-  const handleDelete =(cartItemId:any)=>{
-    axios.delete(`http://localhost:4001/api/v1/student/removeCourse/${cartItemId}`)
-    .then((response)=>{
-      console.log(response.data,"deleted Successfully")
-      
-      dispatch(updateCartCount(response.data.length));
-
-      setCartItems((prevCartItems: any[])=>prevCartItems.filter((cartItem:any)=>cartItem.course[0]?._id !== cartItemId))
-    })
-    .catch((error)=>{
-      console.error("error", error);
-    })
-    
+  const handleDelete = async (cartItemId: any) => {
+    try {
+      await axios.delete(`http://localhost:4001/api/v1/student/removeCourse/${cartItemId}`);
+      setCartItems(prevCartItems => prevCartItems.filter(item => item._id !== cartItemId));
+      console.log("Course deleted Successfully");
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    }
   }
 
-  const handleSingleCourse=()=>{
-   
-
-    navigate('/courses')
-
+  const handleSingleCourse = () => {
+    navigate('/courses');
   }
-  
   
   return (
     <div>
@@ -130,7 +109,8 @@ const [userid,setuserid]=useState(null)
                             <div className="flex items-center border-gray-100">
                               <p
                                 onClick={() =>
-                                  handleDelete(cartItem.course[0]?._id)
+                                  handleDelete(cartItem._id)
+
                                 }
                                 className="cursor-pointer text-red-500 hover:underline"
                               >
@@ -178,7 +158,7 @@ const [userid,setuserid]=useState(null)
                   </div>
                 </div>
                 <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
-                  Check out
+                <PayButton cartItems={cartItems}  />
                 </button>
               </div>
             </div>

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState ={
-    cartCount: 0,
+    cartId: '',
 }
 
 const cartSlice =createSlice({
@@ -10,7 +10,7 @@ const cartSlice =createSlice({
     initialState,
     reducers:{
         updateCartCount:(state,action)=>{
-            state.cartCount =action.payload;
+            state.cartId =action.payload;
         }
     }
 })

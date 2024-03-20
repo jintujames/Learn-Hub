@@ -10,6 +10,7 @@ import {
   getCatagory,
   getTutorCourses,
 } from "../../../utils/config/axios.Method.Get";
+import { TutorBaseUrl } from "../../../utils/Api";
 
 function AddLesson() {
   const tutorId = localStorage.getItem("tutorId");
@@ -130,7 +131,7 @@ function AddLesson() {
       console.log(data, "dataaassssssss");
   
     axios.post(
-        `http://localhost:4001/api/v1/tutor/addLesson`,
+        `${TutorBaseUrl}/addLesson`,
         {
           courseName: data.courseName,
           title,

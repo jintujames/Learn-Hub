@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useCourseBasicValidate } from "../../../utils/validations/addCourseValidation";
+import { TutorBaseUrl } from "../../../utils/Api";
 
 function AddCourseBio() {
   const [courseName, setCourseName] = useState<string>("");
@@ -34,7 +35,6 @@ console.log(errors,"errorserrorserrorserrorserrors");
     courseName: string;
     courseDescription: string;
     shortDescription: string;
-
     courseDuration: string;
     isApproved: boolean;
     category: string;
@@ -83,7 +83,7 @@ console.log(errors,"errorserrorserrorserrorserrors");
     }
   };
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImage = (e: any) => {
 
     const file:any = e?.target?.files[0];
     console.log(file,"filefilefilefilefile");
@@ -113,7 +113,7 @@ console.log(errors,"errorserrorserrorserrorserrors");
 
   console.log("tutorId", tutorId);
 
-  const handleAddCourse = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddCourse = async () => {
     console.log("ENTER to ADD COURSE");
     // e.preventDefault();
 
@@ -138,18 +138,18 @@ console.log(errors,"errorserrorserrorserrorserrors");
         courseName,
         courseDescription,
         shortDescription,
-        
+        courseDuration,
         isApproved: true,
         category,
         instructor: tutorId || "",
         coursefee: Number(coursefee),
         courseLevel,
         tutorId: storedTutorId,
-        courseDuration: ""
+        
       };
       console.log(data, "dataaa");
   
-      axios.post(`http://localhost:4001/api/v1/tutor/addCourse`, {
+      axios.post(`${TutorBaseUrl}/addCourse`, {
         courseName,
         courseDescription,
         shortDescription,

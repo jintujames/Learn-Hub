@@ -1,0 +1,5 @@
+export const BaseUrl ='http://localhost:4001'
+export const TutorBaseUrl ='http://localhost:4001/api/v1/tutor'
+export const UserBaseUrl ='http://localhost:4001/api/v1/student'
+export const AdminBaseUrl ='http://localhost:4001/api/v1/admin'
+export const PaymentBaseUrl = 'http://localhost:4001/api/v1/payment'
