@@ -19,8 +19,8 @@ import {
   editProfile,
   RemoveAllCoursesFromCart,
   enrolledCourses,
-  // clearCart,
-  checkEnrollmentStatus,
+  clearCart,
+  checkEnrollmentStatus
 } from "../../Controller/studentController/studentController";
 
 import { protect } from "../../Middleware/authMiddleware";
@@ -51,8 +51,8 @@ studentRouter.get("/cart/:userId", getCart);
 studentRouter.delete('/removeCourse/:cartItemId',RemoveCourseFromCart)
 studentRouter.delete('/clearCart/:userId', RemoveAllCoursesFromCart)
 studentRouter.get('/entrolledCourses/:userId',enrolledCourses)
-// studentRouter.post("/clearCart",clearCart)
-studentRouter.get('/check-enrollment/:userId/:courseId', checkEnrollmentStatus);
+studentRouter.post("/clearCart",clearCart)
+studentRouter.get('/check-enrollment/:userId/:courseId',  checkEnrollmentStatus);
 
 
 

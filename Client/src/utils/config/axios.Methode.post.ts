@@ -63,6 +63,17 @@ export const tutorLogin = async (SignInPayload: signInTutor) => {
   return await apiRequest(config);
 };
 
+export const deleteCart = async (data: any) => {
+    const config: AxiosRequestConfig = {
+      method: "POST",
+      url:`/api/v1/student/clearCart`,
+      data:data
+    
+    };
+    return await apiRequest(config);
+  };
+
+
 export const tutorLogout = async () => {
   try {
     const config: AxiosRequestConfig = {

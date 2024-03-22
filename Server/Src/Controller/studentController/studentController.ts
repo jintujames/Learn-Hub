@@ -376,9 +376,6 @@ const RemoveAllCoursesFromCart = async (req: Request, res: Response) => {
 
 
 
-
-
-
 const updateUserProfile = async (req: Request, res: Response) => {
   try {
     const { photo, id } = req.body;
@@ -407,8 +404,7 @@ const updateUserProfile = async (req: Request, res: Response) => {
 const editProfile = async (req: Request, res: Response) => {
   try {
     const updateData = req.body;
-    const { id, name } = updateData; // Assuming 'id' is the MongoDB ObjectId
-
+    const { id, name } = updateData; 
     const studentProfileDetails = await studentModel.findByIdAndUpdate(id, name, { new: true }).exec();
 
     if (studentProfileDetails) {
@@ -455,22 +451,25 @@ const enrolledCourses = async (req: Request, res: Response) => {
 }
 
 
-const clearCart=async(req: Request, res: Response)=>{
+const clearCart = async (req: Request, res: Response) => {
   try {
-    console.log(req.body,'HIHIHIH');
+    console.log("Request body:", req.body); 
+    const cartId = req.body.id;
     
-    const cartId=req.body.id
-    
-    const deleteCart=await CartItemModel.findByIdAndDelete(cartId)
-    if(deleteCart){
-      res.json({status:true})
-    }else{
-      res.json({status:false})
+    const deleteCart = await CartItemModel.findByIdAndDelete(cartId);
+    if (deleteCart) {
+      console.log("Cart deleted successfully");
+      res.json({ status: true });
+    } else {
+      console.log("Cart not found");
+      res.json({ status: false });
     }
   } catch (error) {
-    
+    console.error("Error clearing cart:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-}
+};
+
 
 const checkEnrollmentStatus =async(req:Request,res:Response)=>{
   const { userId, courseId } = req.params;

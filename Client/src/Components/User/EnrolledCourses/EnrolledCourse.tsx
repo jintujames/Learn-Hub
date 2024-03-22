@@ -97,7 +97,35 @@ function EnrolledCourse() {
             </div>
           ))
         ) : (
-          <p>No enrolled courses found.</p>
+          <>
+ 
+  <div className="h-screen w-screen bg-gray-50 flex items-center">
+    <div className="container flex flex-col md:flex-row items-center justify-between px-5 text-gray-700">
+      <div className="w-full lg:w-1/2 mx-8">
+        <div className="text-7xl text-purple-400 font-dark font-extrabold mb-8">
+          {" "}
+          No Enrolled Course Found
+        </div>
+        
+        <Link
+  to="/courses"
+  className="px-5 inline py-3 text-sm font-medium leading-5 shadow-2xl text-white transition-all duration-400 border border-transparent rounded-lg focus:outline-none bg-rose-600 active:bg-red-600 hover:bg-red-700"
+>
+  Browse Courses
+</Link>
+
+      </div>
+      <div className="w-full lg:flex lg:justify-end lg:w-1/2 mx-5 my-12">
+        <img
+          src="public/Free PSD _ 3d illustration of female graphic designer character working on tablet.png"
+          className=""
+          alt="Page not found"
+        />
+      </div>
+    </div>
+  </div>
+</>
+
         )}
       </div>
     </div>

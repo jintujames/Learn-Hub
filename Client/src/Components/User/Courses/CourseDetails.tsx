@@ -7,34 +7,20 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { BaseUrl, UserBaseUrl } from "../../../utils/Api";
 import SingleViewPayButton from "../PayButton/SingleViewPayButton";
-import { setSingleCourseDetails } from "../../../Features/TutorSlice/courseSlice";
+import { Course, setSingleCourseDetails } from "../../../Features/TutorSlice/courseSlice";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
-interface Course {
-  _id: string;
-  courseName: string;
-  courseDuration: string;
-  courseDescription: string;
-  category: string;
-  coursefee: number;
-  image: string[];
-  createdAt: Date;
-  updatedAt: Date;
-  video: string;
-}
-
 function CourseDetails() {
   const { courseId } = useParams();
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const userData = JSON.parse(localStorage.getItem("") || "{}");
   const { courseDetails } = useSelector((state: any) => state.course);
   const [userId, setuserId]: any = useState("");
-  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [enrolled, setEnrolled] = useState([]);
   const [videoUrl, setVideoUrl] = useState(null);
   const [isClick, setisClick] = useState(false);
-
+  const [entrolledCourses, setEntrolledCourses] = useState<Course[]>([]);
   useEffect(() => {
     const data: any = localStorage.getItem("userId");
     setuserId(data);
@@ -52,12 +38,10 @@ function CourseDetails() {
           courseId: courseDetails?._id,
           userId: userId,
         });
-
         console.log(response, "added to cart");
         toast.success(response.data.message);
       } catch (error) {
         console.error("Error occur while adding to cart", error);
-        // toast.error(response.data.message);
       }
     } else {
       toast.error("Please log in to add the course to your cart.");
@@ -67,7 +51,7 @@ function CourseDetails() {
   useEffect(() => {
     axios
       .get(`${UserBaseUrl}/getCourse/${courseId}`)
-      .then((response:any) => {
+      .then((response: any) => {
         dispatch(setSingleCourseDetails(response.data));
         checkEnrollmentStatus(response.data._id);
       })
@@ -78,16 +62,35 @@ function CourseDetails() {
 
   const checkEnrollmentStatus = async (courseId: any) => {
     if (userData && courseId) {
+      console.log(userData, "userdata is here!!!!!!!!!");
       try {
         const response = await axios.get(
           `${UserBaseUrl}/check-enrollment/${userId}/${courseId}`
         );
-        setIsEnrolled(response.data.isEnrolled);
+        setEnrolled(response.data.isEnrolled);
       } catch (error) {
         console.error("Error checking enrollment status:", error);
       }
     }
   };
+
+  useEffect(() => {
+    if (userId) {
+      axios
+        .get(`${UserBaseUrl}/entrolledCourses/${userId}`)
+        .then((response) => {
+          console.log(response.data, "response annuijbhkjbhkjkjhh");
+          setEntrolledCourses(response.data);
+         
+          console.log(response.data, "fffffffffffffff");
+        })
+        .catch((error) => {
+          console.error("Error fetching enrolled courses:", error);
+          
+        });
+    }
+  }, [userId]);
+
   return (
     <>
       {isClick && (
@@ -141,26 +144,29 @@ function CourseDetails() {
                 <div className="my-4">
                   <div className="flex space-x-1 items-center">
                     <h2 className="text-sky-500 font-bold text-lg">
-                      &#8377;  {courseDetails.coursefee}
+                      &#8377;  {courseDetails  .coursefee}
                     </h2>
                   </div>
                   <div className="flex space-x-1 items-center">
-                    <span className="mx-2"></span>
+                   <>
+                   {console.log(entrolledCourses,'YYYYYYYYYYYYYYYYYYYYYYYYYYYY',courseDetails)
+                   }
+                   </>
+                  {entrolledCourses.some((course:any) => course.courseId._id == courseDetails._id) ? (
 
-                    {isEnrolled ? (
-           <Link to="/entrolledCourses">
-           <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg">
-             Enrolled
-           </button>
-         </Link>
-          ) : (                   
-             <button
-                      onClick={handleAddToCart}
-                      className="px-6 py-2 rounded-md bg-yellow-300 text-gray-900 text-sm font-medium  hover:bg-yellow-500 focus:outline-none focus:bg-yellow-300"
-                    >
-                      Add To Cart
-                    </button>
-                    )}
+  <Link to="/enrolledCourses">
+    <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg">
+      Enrolled
+    </button>
+  </Link>
+) : (
+  <button
+    onClick={handleAddToCart}
+    className="px-6 py-2 rounded-md bg-yellow-300 text-gray-900 text-sm font-medium hover:bg-yellow-500 focus:outline-none focus:bg-yellow-300"
+  >
+    Add To Cart
+  </button>
+)}
                   </div>
                 </div>
               </div>

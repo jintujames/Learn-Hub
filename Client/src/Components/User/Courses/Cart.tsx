@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Course } from '../../../Features/TutorSlice/courseSlice';
 import { selectUser } from '../../../Features/UserSlice/userSlice';
 import axios from 'axios';
-import { updateCartCount } from '../../../Features/UserSlice/CartSlice';
+
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -32,8 +32,10 @@ function Cart() {
     const fetchCartItems = async () => {
       try {
         const response = await axios.get(`http://localhost:4001/api/v1/student/cart/${userId}`);
+        console.log(response.data[0]._id,'DDTDATDATDTDT');
+        
         setCartItems(response.data);
-        dispatch(updateCartCount(response.data.length));
+       
       } catch (error) {
         console.error("Error fetching cart items:", error);
       }

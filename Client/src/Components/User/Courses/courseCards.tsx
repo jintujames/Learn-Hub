@@ -195,21 +195,22 @@ function CourseCards() {
 
   return (
     <>
-      <div className="flex justify-between items-center pb-3">
-        <button
-          className="text-sm font-bold bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full cursor-pointer ml-auto"
-          onClick={toggleDropdown}
-        >
-          Browse Category
-        </button>
+      <div className="flex py-3 justify-between items-center pb-3">
+      <button
+  className="text-sm font-bold bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 text-white px-4 py-2 rounded-full cursor-pointer ml-auto"
+  onClick={toggleDropdown}
+>
+  Browse Category
+</button>
+
 
         {isDropdownOpen && (
           <div className="absolute top-0 right-0 mt-14">
-            <div className="w-[75rem] ml-[6.4rem] pt-5 p-5 pb-8 rounded-lg  shadow-md mr-16 h-auto border border-slate-50 bg-gray-200">
+            <div className="w-[75rem] ml-[6.4rem] pt-5 p-5 pb-8 rounded-lg  shadow-md mr-16 h-auto border border-slate-50 bg-black bg-opacity-70">
               <div className="container mx-auto p-2">
                 <div className="flex items-start space-x-6">
                   <div className="flex flex-col">
-                    <label htmlFor="searchInput" className="text-base mb-2">
+                    <label htmlFor="searchInput" className="text-base mb-2 text-white">
                       Search courses
                     </label>
                     <input
@@ -222,7 +223,7 @@ function CourseCards() {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <label className="text-base mb-2">Add price range</label>
+                    <label className="text-base mb-2 text-white">Add price range</label>
                     <div className="flex space-x-4">
                       <input
                         type="text"
@@ -241,9 +242,9 @@ function CourseCards() {
                     </div>
                   </div>
                   <div className="flex flex-col">
-                    <label className="text-base mb-2">Filter by category</label>
+                    <label className="text-base mb-2 text-white ">Filter by category</label>
                     <select
-                      className="p-2 text-base border rounded focus:outline-none focus:border-teal-500"
+                      className="p-2 text-base border rounded focus:outline-none  focus:border-teal-500"
                       onChange={(e) => handleCategoryChange(e)}
                     >
                       <option value="">Select the category</option>
@@ -259,7 +260,7 @@ function CourseCards() {
                     </select>
                   </div>
                   <div className="flex flex-col">
-                    <label className="text-base mb-2">Sort Data</label>
+                    <label className="text-base mb-2 text-white">Sort Data</label>
                     <select
                       className="p-2 text-base border rounded focus:outline-none focus:border-teal-500"
                       onChange={handleSortChange}
@@ -294,41 +295,62 @@ function CourseCards() {
       </div>
 
       <div className="container mx-auto px-4 md:px-8 lg:px-20 flex flex-wrap space-x-4">
-        {paginateddata.map((course) => (
-          <div
-            key={course._id}
-            className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden mb-4"
-          >
-            <img
-              className="h-56 w-full object-cover mt-2"
-              src={course?.image[0]}
-              alt="fegrthgthb"
-            />
-            <div className="px-4 py-2">
-              <Link to={`/courseDetails/${course._id}`}>
-                <h2 className="text-gray-900 font-bold text-xl">
-                  {course?.courseName}
-                </h2>
-              </Link>
-              <p className="text-gray-600 text-sm mt-1"></p>
-            </div>
+  {paginateddata.length > 0 ? (
+    paginateddata.map((course) => (
+      <div
+        key={course._id}
+        className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden mb-4"
+      >
+        <img
+          className="h-56 w-full object-cover mt-2"
+          src={course?.image[0]}
+          alt="fegrthgthb"
+        />
+        <div className="px-4 py-2">
+          <Link to={`/courseDetails/${course._id}`}>
+            <h2 className="text-gray-900 font-bold text-xl">
+              {course?.courseName}
+            </h2>
+          </Link>
+          <p className="text-gray-600 text-sm mt-1"></p>
+        </div>
 
-            <div className="flex items-center justify-between px-4 py-2">
-              <h2 className="text-sky-500 font-bold text-lg">
-                Rs. {course?.coursefee}
-              </h2>
-              <div>
-                <button
-                  className="px-3 py-1 bg-yellow-300 text-sm text-gray-900 font-semibold rounded"
-                  onClick={() => handleSingleCourse(course)}
-                >
-                  View Course
-                </button>
-              </div>
-            </div>
+        <div className="flex items-center justify-between px-4 py-2">
+          <h2 className="text-sky-500 font-bold text-lg">
+            Rs. {course?.coursefee}
+          </h2>
+          <div>
+            <button
+              className="px-3 py-1 bg-yellow-300 text-sm text-gray-900 font-semibold rounded"
+              onClick={() => handleSingleCourse(course)}
+            >
+              View Course
+            </button>
           </div>
-        ))}
+        </div>
       </div>
+    ))
+  ) : (
+    <div className="h-screen w-screen bg-gray-50 flex items-center">
+      <div className="container flex flex-col md:flex-row items-center justify-between px-5 text-gray-700">
+        <div className="w-full lg:w-1/2 mx-8">
+          <div className="text-7xl text-purple-400 font-dark font-extrabold mb-8">
+            No Course Found!!
+          </div>
+          
+        </div>
+        <div className="w-full lg:flex lg:justify-end lg:w-1/2 mx-5 my-12">
+          <img
+            src="public/Free PSD _ 3d illustration of female graphic designer character working on tablet.png"
+            className=""
+            alt="Page not found"
+          />
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
 
       <nav className="flex justify-center items-center rounded-lg space-x-2">
         <span
