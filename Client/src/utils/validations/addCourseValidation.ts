@@ -20,18 +20,18 @@ const schema: ZodType<coursesAuth> = z.object({
     message: "course name cannot exceed 35 characters",
   }).refine((value) => value.trim() !== "", {
     message: "course name cannot be empty",
-  }).refine((value) => /^[a-zA-Z ]+$/.test(value), {
-    message: "course name must contain only letters and spaces",
+  }).refine((value) => /^[a-zA-Z\s\S]+$/.test(value), {
+    message: "course name must contain only letters, spaces, and special characters",
   }),
 
-  courseDescription: z.string().min(10, {
+  courseDescription:z.string().min(10, {
     message: "Description must contain at least 10 characters",
   }).max(100, {
     message: "Cannot exceed 100 characters",
   }).refine((value) => value.trim() !== "", {
     message: "Description cannot be empty",
-  }).refine((value) => /^[a-zA-Z ]+$/.test(value), {
-    message: "Description must contain only letters and spaces",
+  }).refine((value) => /^[a-zA-Z\s\S]+$/.test(value), {
+    message: "Description must contain only letters, spaces, and special characters",
   }),
 
   shortDescription: z.string().min(20, {
@@ -40,8 +40,8 @@ const schema: ZodType<coursesAuth> = z.object({
     message: "Cannot exceed 300 characters",
   }).refine((value) => value.trim() !== "", {
     message: "Short description cannot be empty",
-  }).refine((value) => /^[a-zA-Z ]+$/.test(value), {
-    message: "Short description must contain only letters and spaces",
+  }).refine((value) => /^[a-zA-Z\s\S]+$/.test(value), {
+    message: "Short description must contain only letters, spaces, and special characters",
   }),
 
   category: z.string().min(1, {

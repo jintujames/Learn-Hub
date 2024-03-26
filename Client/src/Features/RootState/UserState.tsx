@@ -1,7 +1,7 @@
-import { UsersState } from "../UserSlice/userSlice";
+import { UserState } from "../UserSlice/userSlice";
 
 interface UserrootState {
-    auth : UsersState
+    auth : UserState
 }
 
 export default  UserrootState;

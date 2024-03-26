@@ -46,7 +46,9 @@ function Login() {
           toast.error(response.response.data.message);
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error in login button clicked" , error)
+    }
   };
 
   const googleSignInStudent = async (auth: Auth) => {

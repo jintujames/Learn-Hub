@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -15,13 +16,13 @@ function Hero() {
           <div className="items-center lg:flex">
             <div className="flex w-full mt-6 lg:mt-0 lg:w-2/2">
               <img
-                className="w-half object-contain"
+                className="w-2/3 object-contain"
                 src="public/Home screen.png"
                 alt="email illustration vector art"
               />
             </div>
 
-            <div className="w-full lg:w-1/2">
+            <div className="w-full lg:w-2/3">
               <div className="lg:max-w-lg">
                 <h1 className="text-3xl font-semibold text-gray-800 dark:text-white lg:text-4xl">
                   Elevate Your E-Learning Journey Instantly.

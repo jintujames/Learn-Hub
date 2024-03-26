@@ -12,6 +12,7 @@ import courseModel from "../../Models/courseModel";
 import CartItemModel from "../../Models/cartModel";
 import cartModel from "../../Models/cartModel";
 import orderModel from "../../Models/orderModel";
+import RatingModel from "../../Models/RatingModel";
 
 // Student Register
 
@@ -490,6 +491,57 @@ try {
 
 }
 
+const ratings =async(req:Request,res:Response)=>{
+  console.log("Hello rating anney")
+
+  try {
+
+      const {rating,comment,user,course} =req.body
+
+
+      const existRating = await RatingModel.findOne({user,course})
+
+      if(existRating){
+          return res.status(400).json("You can only Leave one comment for this course")
+      }
+
+      console.log(req.body,"body ondey")
+
+      const newRating = new RatingModel({
+          rating,
+          comment,
+          user,
+          course
+      })
+
+      await newRating.save()
+      res.status(201).json(newRating) 
+      
+  } catch (error) {
+      console.error("Error submitting rating:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+
+}
+
+const getRatings =async(req:Request,res:Response)=>{
+
+  try {
+      const courseId = req.params.courseId
+
+      const ratings = await RatingModel.find({course:courseId}).populate("user")
+
+      res.status(200).json(ratings)
+      
+  }  catch (error) {
+      console.error("Error fetching ratings:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  
+
+
+}
+
 
 
 export {
@@ -511,5 +563,7 @@ export {
   RemoveAllCoursesFromCart,
   enrolledCourses,
   clearCart,
-  checkEnrollmentStatus
+  checkEnrollmentStatus,
+  ratings,
+  getRatings
 };

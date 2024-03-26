@@ -12,9 +12,11 @@ import {
   tutorLogout,
   addLesson,
   updateTutorProfile,
-  editInstructorProfile
+  editInstructorProfile,
+  getStudentDetails
 } from "../../Controller/tutorController/tutorController";
 import { upload } from "../../Multer/upload";
+import { isLogin } from "../../Middleware/authMiddleware";
 
 // tutorRouter.get("/",(req,res)=>{
 //     console.log("api working");
@@ -34,7 +36,9 @@ tutorRouter.post("/editProfile", editInstructorProfile);
 
 tutorRouter.post("/addLesson",addLesson);
 tutorRouter.post('/addCourse', addCourses);
-tutorRouter.get('/courses/:id',getCourses)
+tutorRouter.get('/courses/:id',getCourses);
+tutorRouter.post('/getAllStudents',getStudentDetails)
+
 
 
 export default tutorRouter;

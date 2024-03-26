@@ -12,7 +12,7 @@ function AddCourseBio() {
   const [courseName, setCourseName] = useState<string>("");
   const [courseDescription, setCourseDescription] = useState<string>("");
   const [shortDescription, setShortDescription] = useState<string>("");
-  const [courseDuration, setCourseDuration] = useState<string>("");
+  const [courseDuration, setCourseDuration]:any = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [coursefee, setCoursefee] = useState<string>("");
   const [courseLevel, setCourseLevel] = useState<string>("");
@@ -50,9 +50,9 @@ console.log(errors,"errorserrorserrorserrorserrors");
 
   const handleImageUpload = async () => {
     try {
-      if (image) {
+      
         const formData = new FormData();
-        formData.append("file", image);
+        formData.append("file", image!);
         formData.append("upload_preset", "LearnHub");
         formData.append("cloud_name", "dhghmzt8b");
 
@@ -67,21 +67,16 @@ console.log(errors,"errorserrorserrorserrorserrors");
         if (response.data && response.data.url) {
           console.log("Video uploaded successfully. URL:", response.data.url);
           setCloudanaryURL(response.data.url);
-          return;
+          return response.data.url;
         } else {
-          console.error("Invalid response from Cloudinary", response.data);
-          toast.error(
-            "Error uploading image: Invalid response from Cloudinary"
-          );
-        }
-      } else {
-        toast.error("No image selected");
-      }
-    } catch (error) {
-      console.error("Error while Uploading Image:", error);
-      toast.error("Error uploading image: Please try again later");
+      console.error("Invalid response from Cloudinary", response.data);
+      toast.error("Error uploading image: Invalid response from Cloudinary");
     }
-  };
+  } catch (error) {
+    console.error("Error while Uploading Image:", error);
+    toast.error("Error uploading image: Please try again later");
+  }
+};
 
   const handleImage = (e: any) => {
 
@@ -118,23 +113,21 @@ console.log(errors,"errorserrorserrorserrorserrors");
     // e.preventDefault();
 
     try {
-      console.log("I AM IMM");
+     
       
-      console.log(image,"imggg");
-      
-      if(image){
-        console.log("I am IMAGE");
-        
-
-        await handleImageUpload();
+      if (!image) {
+        toast.error("No image selected");
+        return;
+      }
+        const url =  await handleImageUpload();
   
-        if (!CloudanaryURL) {
+        if (!url) {
           toast.error("Error occur While Uploading the Video");
           return;
         }
   
       const data: course = {
-        image: CloudanaryURL,
+        image: url,
         courseName,
         courseDescription,
         shortDescription,
@@ -165,9 +158,7 @@ console.log(errors,"errorserrorserrorserrorserrors");
           toast.success("Course Added Successfully");
           navigate("/myCourse");
         }, 3000);
-      }else{
-        alert("Image reqqqq")
-      }
+     
     } catch (error) {
       console.error(error);
       toast.error("Error Occurred While Adding");

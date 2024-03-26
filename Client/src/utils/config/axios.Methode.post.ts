@@ -25,6 +25,7 @@ export const studentLogin = async (signInPayload: signInUser) => {
 
     return await apiRequest(config);
   } catch (error) {
+    console.log("Error while requesting" , error)
     throw error;
   }
 };

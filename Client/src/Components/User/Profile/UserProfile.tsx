@@ -88,6 +88,7 @@ function UserProfile() {
     if (response.data && response.data.url) {
       setCloudanaryURL(response.data.url);
       console.log("Photo upload successful. Cloudinary URL:", response.data.url);
+      return response.data.url
     } else {
       console.error("Invalid response from Cloudinary", response.data);
       toast.error("Error uploading image: Invalid response from Cloudinary");
@@ -99,6 +100,7 @@ function UserProfile() {
 };
 
 
+
   const handleAddPhoto = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
@@ -108,10 +110,10 @@ function UserProfile() {
         return;
       }
   
-      await handlePhotoUpload();
+   const url =    await handlePhotoUpload();
   
-      if (!CloudanaryURL) {
-        toast.error("Error occurred while uploading the photo");
+      if (!url) {
+        toast.error("Error occurred while uploading the photo=========");
         return;
       }
   
@@ -120,7 +122,7 @@ function UserProfile() {
       const response = await axios.post(
         `${UserBaseUrl}/updateUserProfile`,
         {
-          photo: CloudanaryURL,
+          photo: url,
           id: userId,
         }
       );

@@ -81,7 +81,7 @@ function TutorRegister() {
   return (
     <>
       {/* Container */}
-      <div className="flex flex-wrap min-h-screen w-full content-center justify-center bg-white">
+      <div className="flex flex-wrap min-h-screen h-2/3 content-center justify-center bg-white">
         {/* Login component */}
         <div className="flex shadow-md">
           {/* Login banner */}

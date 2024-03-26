@@ -1,12 +1,39 @@
+
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { Navigate, Outlet } from 'react-router-dom'
+import { useSelector } from 'react-redux';
+import { Navigate, Outlet } from 'react-router-dom';
+import { selectAdmin } from '../../Features/AdminSlice/adminSlice'
 
-function AdminPrivateRoute() {
-    const { admin } = useSelector( (state: any) => state.admin)
+interface PrivatePageProps {
+    isStudent : boolean;          //received as props from App.jsx
+}
 
-    return  admin?<Outlet/>:<Navigate to='/adminLogin' replace/>
-
+const AdminPrivateRoute: React.FC<PrivatePageProps> = ({isStudent}) => {
+    const admin = useSelector(selectAdmin);
+    
+ 
+    if(isStudent) {
+        if(admin) {
+            return <Outlet/>
+        } else {
+            return <Navigate to={'/adminLogin'}/>
+        }
+    } else {
+       
+        
+    }
 }
 
 export default AdminPrivateRoute
+
+
+
+
+
+
+
+
+
+
+
+

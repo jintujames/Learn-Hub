@@ -5,6 +5,8 @@ import generateToken from "../../Utlitis/generateToken";
 import "dotenv/config";
 import Tutor from "../../Models/instructorModel";
 import courseModel from "../../Models/courseModel";
+import studentModel from "../../Models/studentModel"
+import orderModel from "../../Models/orderModel";
 
 //Instructor Register
 
@@ -294,6 +296,49 @@ const {name,id}=req.body
   }
 };
 
+const getStudentDetails = async (req:Request,res:Response)=>{
+  try {
+
+const {tutorId}= req.body
+
+console.log(req.body);
+
+    const studentData =await orderModel.find({tutorId}).exec()
+  
+    console.log(studentData,'GGGGGG');
+    
+
+    if(studentData){
+      console.log(studentData,"get dataaaaaaaa************");
+      
+const students:any=[]
+      for(let i=0 ;i<studentData.length;i++){
+        console.log(studentData[i],'------');
+        
+        const id=studentData[i].studentId
+        const studentDetails:any=await studentModel.findById(id)
+        
+        students.push(studentDetails)
+      }
+
+      console.log(students,'DETAILSSSSS');
+      
+        res.status(200).json({
+          studentData,
+          students
+        })
+    }else{
+        return res.status(400).json({
+            message:"no users Found"
+        })
+
+    }
+} catch (error) {
+    console.log(error)
+}
+
+
+}
 
 
 
@@ -307,5 +352,6 @@ export {
   instructorBio,
   getCourses,
   updateTutorProfile,
-  editInstructorProfile
+  editInstructorProfile,
+  getStudentDetails
 };

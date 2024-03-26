@@ -260,40 +260,18 @@ function FeaturedCard() {
         Top-Rated Study Specialties
       </h4>
 
-      
-
-
       <>
-  {/* component */}
-  {/* This is an example component */}
-  <div className="h-screen w-screen bg-gray-100 flex items-center">
-    <div className="container flex flex-col md:flex-row items-center justify-between px-5 text-gray-700">
-      <div className="w-full lg:w-1/2 mx-8">
-      <img
-          src="public/3D_woman_talking_with_chatbot.png"
-          className=""
-          alt="Page not found"
-        />
-        <p className="text-2xl md:text-3xl font-bold leading-normal mb-8">
-        Our Strength Lies in Our Students. Hear Their Voices and Discover What Sets Us Apart.
+        {/* component */}
 
-</p>
-        
-      </div>
-      <div className="w-full lg:flex lg:justify-end lg:w-1/2 mx-5 my-12">
-        <img
-          src="public/3D Man chatting remotely with female colleague illustration.png"
-          className=""
-          alt="Page not found"
-        />
-      </div>
+        <div className="grid items-center max-w-4xl grid-cols-2 gap-4 mx-auto mt-12 md:mt-20 md:grid-cols-4">
+      {data?.map((category, index) => (
+        <div key={index} className="bg-slate-200 h-12 flex shadow-lg items-center justify-center">
+          <p className="text-black">{category?.categoryName}</p>
+        </div>
+      ))}
     </div>
-  </div>
-</>
-
-      
+      </>
     </>
-    
   );
 }
 

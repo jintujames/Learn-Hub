@@ -43,9 +43,9 @@ function AddLesson() {
 
   const handlevideoUpload = async () => {
     try {
-      if (video) {
+      
         const formData = new FormData();
-        formData.append("file", video);
+        formData.append("file", video!);
         formData.append("upload_preset", "LearnHub");
         formData.append("cloud_name", "dhghmzt8b");
 
@@ -60,21 +60,16 @@ function AddLesson() {
         if (response.data && response.data.url) {
           console.log("Video uploaded successfully. URL:", response.data.url);
           setCloudanaryURL(response.data.url);
-          return;
+          return response.data.url;
         } else {
-          console.error("Invalid response from Cloudinary", response.data);
-          toast.error(
-            "Error uploading image: Invalid response from Cloudinary"
-          );
-        }
-      } else {
-        toast.error("No image selected");
-      }
-    } catch (error) {
-      console.error("Error while Uploading Image:", error);
-      toast.error("Error uploading image: Please try again later");
+      console.error("Invalid response from Cloudinary", response.data);
+      toast.error("Error uploading image: Invalid response from Cloudinary");
     }
-  };
+  } catch (error) {
+    console.error("Error while Uploading Image:", error);
+    toast.error("Error uploading image: Please try again later");
+  }
+};
 
   const handleVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -111,9 +106,13 @@ function AddLesson() {
     e.preventDefault();
   
     try {
-      await handlevideoUpload();
+      if (!video) {
+        toast.error("No video selected");
+        return;
+      }
+      const url = await handlevideoUpload();
 
-      if (!CloudanaryURL) {
+      if (!url) {
         toast.error("Error occur While Uploading the Video");
         return;
       }
@@ -125,7 +124,7 @@ function AddLesson() {
         isApproved: true,
         category,
         courseLevel,
-        video: CloudanaryURL,
+        video: url,
       };
   
       console.log(data, "dataaassssssss");

@@ -93,6 +93,7 @@ function TutorBio() {
 
       if (response.data && response.data.url) {
         setCloudanaryURL(response.data.url);
+        return response.data.url
       } else {
         console.error("Invalid response from Cloudinary", response.data);
         toast.error("Error uploading image: Invalid response from Cloudinary");
@@ -103,12 +104,7 @@ function TutorBio() {
     }
   };
 
-  const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setPhoto(file);
-    }
-  };
+ 
 
   const handleAddPhoto = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -119,17 +115,19 @@ function TutorBio() {
         return;
       }
 
-      await handlePhotoUpload();
-
-      if (!CloudanaryURL) {
-        toast.error("Error occurred while uploading the photo");
+      const url =    await handlePhotoUpload();
+      if (!url) {
+        toast.error("Error occurred while uploading the photo=========");
         return;
       }
+  
+
+    
 
       const response = await axios.post(
         `${TutorBaseUrl}/updateProfile`,
         {
-          photo: CloudanaryURL,
+          photo: url,
           id: tutorId,
         }
       );
@@ -144,6 +142,13 @@ function TutorBio() {
     } catch (error) {
       console.error("Error during photo upload:", error);
       toast.error("Error occurred while uploading the photo");
+    }
+  };
+
+  const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPhoto(file);
     }
   };
 
@@ -218,7 +223,7 @@ function TutorBio() {
                       className="w-24 h-24 object-fill rounded-full mx-auto"
                       src={
                         data?.photo ||
-                        "https://i.pinimg.com/564x/64/77/9d/64779d2b7056542722569d0278837367.jpg"
+                        "public/download__1_-removebg-preview.png"
                       }
                       alt={data?.photo ? "Profile picture" : "Default picture"}
                     />

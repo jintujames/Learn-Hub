@@ -31,18 +31,12 @@ function EnrolledSingleCourse() {
   const [showVideoModal, setShowVideoModal] = useState<boolean>(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string>("");
   const { courseDetails } = useSelector((state: any) => state.course);
-  {
-    console.log("HIHrIHI", courseDetails);
-  }
-
-  {
-    console.log("HIHrIHI");
-  }
+  
   console.log(localStorage.getItem("userId"), "USER ID FROM LOCAL STORAGE");
 
   useEffect(() => {
     console.log("hihihi", courseDetails);
-    toast.success("HI");
+  
   }, []);
 
   useEffect(() => {
@@ -70,14 +64,13 @@ function EnrolledSingleCourse() {
         </>
       )}
 
-{showVideoModal && (
+      {showVideoModal && (
         <VideoPlayer
           videoUrl={currentVideoUrl}
           setShowVideoModal={setShowVideoModal}
           setCurrentVideoUrl={setCurrentVideoUrl}
         />
       )}
-      <>{console.log("JJJIIIII", courseDetails)}</>
       <section className=" bg-blueGray-200 -mt-24">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap">
@@ -98,28 +91,35 @@ function EnrolledSingleCourse() {
               <h2 className="text-lg font-semibold leading-normal mt-4 mb-4 text-zinc-500">
                 &#8226; Duration: {courseDetails.courseId.courseDuration}
               </h2>
+              <h2 className="text-lg font-semibold leading-normal mt-4 mb-4 text-zinc-500">
+                &#8226; Course Level: {courseDetails.courseId.courseLevel}
+              </h2>
 
               <h2 className="text-lg font-semibold leading-normal mt-4 mb-4 text-zinc-500">
                 &#8226; Category: {courseDetails.courseId.category}
               </h2>
-              
 
               <h5 className="text-black font-bold mb-5">Course Contents :</h5>
-              {courseDetails.courseId.courseLessons.map((lesson: any, index: number) => (
-
-              <div key={index} className="w-[800] flex rounded-md shadow-md border border-[#d7d5d1]  justify-around mb-2  h-[3rem] ">
-                <div className=" w-5/12 flex justify-center items-center font-semibold">{lesson.title}</div>
-                <div className="w-full  flex   h-full  justify-end items-center p-1 ">
-                
-                <button
-                       onClick={() => handleUrl(lesson.video)}
-
-                      className="hover:shadow-2xl  bg-teal-600 items-center justify-center w-20 h-9  font-semibold tracking-wide text-gray-100 rounded-lg">
+              {courseDetails.courseId.courseLessons.map(
+                (lesson: any, index: number) => (
+                  <div
+                    key={index}
+                    className="w-[800] flex rounded-md shadow-md border border-[#d7d5d1]  justify-around mb-2  h-[3rem] "
+                  >
+                    <div className=" w-5/12 flex justify-center items-center font-semibold">
+                      {lesson.title}
+                    </div>
+                    <div className="w-full  flex   h-full  justify-end items-center p-1 ">
+                      <button
+                        onClick={() => handleUrl(lesson.video)}
+                        className="hover:shadow-2xl  bg-teal-600 items-center justify-center w-20 h-9  font-semibold tracking-wide text-gray-100 rounded-lg"
+                      >
                         Play
                       </button>
-                </div>
-              </div>
-              ))}
+                    </div>
+                  </div>
+                )
+              )}
             </div>
 
             <div className="w-full md:w-4/12 px-4 mr-auto ml-auto -z-10">
@@ -153,19 +153,49 @@ function EnrolledSingleCourse() {
                     <h2 className="text-sky-500 font-bold text-lg">
                       &#8377; {courseDetails.courseId.coursefee}
                     </h2>
-                  </div>
-                  <div className="flex space-x-1 items-center">
                     <span className="mx-2"></span>
-
                     <button className="px-6 py-2 rounded-md bg-yellow-300 text-gray-900 text-sm font-medium  hover:bg-yellow-500 focus:outline-none focus:bg-yellow-300">
                       Enrolled
                     </button>
+                  </div>
+                  <div className="flex space-x-1 items-center">
+                    
+
+                   
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div className="flex-1 flex justify-end items-center relative">
+    <button
+      className="z-20 text-white flex flex-col shrink-0 grow-0 justify-around 
+            fixed bottom-0  right-5 rounded-lg
+            mr-1 mb-5 lg:mr-5 lg:mb-5 xl:mr-10 xl:mb-10"
+    >
+      <div className="p-3 rounded-full border-4 border-white bg-green-600">
+        <svg
+          className="w-10 h-10 lg:w-12 lg:h-12 xl:w-16 xl:h-16"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fillRule="evenodd"
+            d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </div>
+    </button>
+  {/* <img
+    src="public/3D_woman_talking_with_chatbot.png"
+    alt="Chatbot Icon"
+    className="w-40 h-40 cursor-pointer"
+  /> */}
+</div>
+
 
         <footer className="relative pt-8 pb-6 mt-8">
           <div className="container mx-auto px-4">

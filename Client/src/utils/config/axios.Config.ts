@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { axiosInstance } from "./axiosEnd";
 
 export const api = axios.create({
   baseURL: "http://localhost:4001/",
@@ -7,9 +8,8 @@ export const api = axios.create({
 });
 
 export const apiRequest = async (config: AxiosRequestConfig) => {
-
   try {
-    const response = await api(config);    
+    const response = await axiosInstance(config);    
     return response;
   } catch (error) {
     console.error(error, "errr");

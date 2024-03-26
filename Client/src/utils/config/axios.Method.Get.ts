@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import { apiRequest } from "./axios.Config";
+import { axiosInstance } from "./axiosEnd";
 
 export const adminGetAllStudent = async () => {
   const config: AxiosRequestConfig = {
@@ -91,11 +92,13 @@ export const getTutorCourses = async (tutorId: any) => {
 };
 
 export const getAllCourses = async () => {
-  const config: AxiosRequestConfig = {
-    method: "GET",
-    url: "/api/v1/student/courses", // Assuming this endpoint returns all courses
-  };
-  return await apiRequest(config);
+  // const config: AxiosRequestConfig = {
+  //   method: "GET",
+  //   url: "/api/v1/student/courses", // Assuming this endpoint returns all courses
+  // };
+  // return await apiRequest(config);
+  const response=await axiosInstance.get('/courses')
+  return response
 };
 
 export const getUserProfile = async (studentId: any) => {

@@ -98,12 +98,12 @@ function CourseDetails() {
           <UserVideoPlayer videoUrl={videoUrl} />
         </>
       )}
-      <section className=" bg-blueGray-200 -mt-24">
+      <section className="bg-blueGray-200 -mt-24">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap">
             <div className="lg:pt-12 pt-6 w-full md:w-6/12 px-4 text-center"></div>
           </div>
-
+  
           <div className="flex flex-wrap items-center mt-20">
             <div className="w-full md:w-6/12 px-7 mr-auto ml-auto">
               <h3 className="text-3xl mb-2 font-semibold leading-normal">
@@ -116,12 +116,12 @@ function CourseDetails() {
                 {courseDetails.shortDescription}
               </p>
             </div>
-
+  
             <div className="w-full md:w-4/12 px-4 mr-auto ml-auto">
               <div className="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500">
-                <div className="relative ">
+                <div className="relative">
                   <img
-                    className="w-full rounded-xl "
+                    className="w-full rounded-xl"
                     src={courseDetails.image[0]}
                     alt="Colors"
                   />
@@ -130,139 +130,69 @@ function CourseDetails() {
                     <CirclePlay size={40} color="white" onClick={handlePlay} />
                   </div>
                 </div>
-
+  
                 <h1 className="mt-4 text-gray-800 text-2xl font-bold cursor-pointer">
                   {courseDetails.courseName}
                 </h1>
                 <div className="flex space-x-5 my-4 items-center">
                   <div className="relative">
-                    <div className="rounded-full w-6 h-8   md:w-8 md:h-8 bg-gray-200" />
+                    <div className="rounded-full w-6 h-8 md:w-8 md:h-8 bg-gray-200" />
                     <span className="absolute top-0 right-0 inline-block w-3 h-6 bg-primary-red rounded-full" />
                   </div>
-                  <p className="ml-6 text-gray-800 line-clamp-3">{courseDetails.instructor}</p>
+                  <p className="ml-6 text-gray-800 line-clamp-3">
+                    {courseDetails.instructor}
+                  </p>
                 </div>
                 <div className="my-4">
                   <div className="flex space-x-1 items-center">
                     <h2 className="text-sky-500 font-bold text-lg">
-                      &#8377;  {courseDetails  .coursefee}
+                      &#8377; {courseDetails.coursefee}
                     </h2>
                   </div>
                   <div className="flex space-x-1 items-center">
-                   <>
-                   {console.log(entrolledCourses,'YYYYYYYYYYYYYYYYYYYYYYYYYYYY',courseDetails)
-                   }
-                   </>
-                  {entrolledCourses.some((course:any) => course.courseId._id == courseDetails._id) ? (
-
-  <Link to="/enrolledCourses">
-    <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg">
-      Enrolled
-    </button>
-  </Link>
-) : (
-  <button
-    onClick={handleAddToCart}
-    className="px-6 py-2 rounded-md bg-yellow-300 text-gray-900 text-sm font-medium hover:bg-yellow-500 focus:outline-none focus:bg-yellow-300"
-  >
-    Add To Cart
-  </button>
-)}
+                    <>
+                      {console.log(
+                        entrolledCourses,
+                        'YYYYYYYYYYYYYYYYYYYYYYYYYYYY',
+                        courseDetails
+                      )}
+                    </>
+                    {entrolledCourses.some(
+                      (course: any) => course.courseId._id == courseDetails._id
+                    ) ? (
+                      <Link to="/enrolledCourses">
+                        <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg">
+                          Enrolled
+                        </button>
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={handleAddToCart}
+                        className="px-6 py-2 rounded-md bg-yellow-300 text-gray-900 text-sm font-medium hover:bg-yellow-500 focus:outline-none focus:bg-yellow-300"
+                      >
+                        Add To Cart
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <>
-          {/* component */}
-          <div className="flex justify-center items-center min-h-screen p-14">
-            <div className="md:w-3/5 w-3/4 px-10 flex flex-col gap-2 p-5 bg-gray-800 text-white">
-              <h1 className="py-5 text-lg">Ratings and Comments</h1>
-              <div className="flex bg-gray-600 bg-opacity-20 border border-gray-200 rounded-md">
-                <IonIcon className="py-4 p-3" name="search-outline" />
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Search Review"
-                  className="p-2 bg-transparent focus:outline-none"
-                />
-              </div>
-              {/* Tags */}
-              
-              {/* Item Container */}
-              <div className="flex flex-col gap-3 mt-14">
-                <div className="flex flex-col gap-4 bg-gray-700 p-4">
-                  {/* Profile and Rating */}
-                  <div className="flex justify justify-between">
-                    <div className="flex gap-2">
-                      <div className="w-7 h-7 text-center rounded-full bg-red-500">
-                        J
-                      </div>
-                      <span>Jess Hopkins</span>
-                    </div>
-                    <div className="flex p-1 gap-1 text-orange-300">
-                      <IonIcon name="star" />
-                      <IonIcon name="star" />
-                      <IonIcon name="star" />
-                      <IonIcon name="star" />
-                      <IonIcon name="star-half" />
-                    </div>
-                  </div>
-                  <div>
-                    Gorgeous design! Even more responsive than the previous
-                    version. A pleasure to use!
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Feb 13, 2021</span>
-                    <button className="p-1 px-2 bg-gray-900 hover:bg-gray-950 border border-gray-950 bg-opacity-60">
-                      <IonIcon className="py-4 p-3" name="search-outline" />
-                    </button>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-4 bg-gray-700 p-4">
-                  {/* Profile and Rating */}
-                  <div className="flex justify justify-between">
-                    <div className="flex gap-2">
-                      <div className="w-7 h-7 text-center rounded-full bg-yellow-500">
-                        A
-                      </div>
-                      <span>Alice Banks</span>
-                    </div>
-                    <div className="flex p-1 gap-1 text-orange-300">
-                      <IonIcon name="star" />
-                      <IonIcon name="star" />
-                      <IonIcon name="star" />
-                      <IonIcon name="star" />
-                      <IonIcon name="star" />
-                    </div>
-                  </div>
-                  <div>
-                    The device has a clean design and the metal housing feels
-                    sturdy in my hands. Soft rounded corners make it a pleasure
-                    to look at.
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Feb 13, 2021</span>
-                    <button className="p-1 px-2 bg-gray-900 hover:bg-gray-950 border border-gray-950 bg-opacity-60">
-                      <IonIcon name="share-outline" /> Share
-                    </button>
-                  </div>
-                </div>
-              </div>
+  
+        <h2 className="text-xl font-semibold mt-14 mb-4">Ratings and Comments</h2>
+        <ul>
+          <li className="mb-4">
+            <div className="border p-4 border-secondary w-400">
+              <p className="text-secondary font-semibold">User: studentName</p>
+              <p className="text-lg font-semibold">Rating</p>
+              <p className="mt-2">Comment: comment</p>
             </div>
-          </div>
-        </>
-
-        <footer className="relative pt-8 pb-6 mt-8">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-wrap items-center md:justify-between justify-center"></div>
-          </div>
-        </footer>
+          </li>
+        </ul>
       </section>
     </>
-  );
-}
+  )
+                    }
 
-export default CourseDetails;
+export default CourseDetails

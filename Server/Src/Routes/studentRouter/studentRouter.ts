@@ -20,10 +20,12 @@ import {
   RemoveAllCoursesFromCart,
   enrolledCourses,
   clearCart,
-  checkEnrollmentStatus
+  checkEnrollmentStatus,
+  ratings,
+  getRatings
 } from "../../Controller/studentController/studentController";
 
-import { protect } from "../../Middleware/authMiddleware";
+import { isLogin } from "../../Middleware/authMiddleware";
 
 studentRouter.get("/", (req, res) => {
   console.log("api working");
@@ -45,14 +47,16 @@ studentRouter.post("/forget_password", forgetPassword);
 studentRouter.post("/otp_verify", verifyForgetPassword);
 studentRouter.post("/newpassword", newPassword);
 studentRouter.get("/firebseAuthVerify", firebaseGoogleAuthVerication);
-studentRouter.get("/courses", userGetCourses);
+studentRouter.get("/courses", isLogin, userGetCourses);
 studentRouter.post("/addToCart", addToCart);
-studentRouter.get("/cart/:userId", getCart);
+studentRouter.get("/cart/:userId",isLogin ,getCart);
 studentRouter.delete('/removeCourse/:cartItemId',RemoveCourseFromCart)
 studentRouter.delete('/clearCart/:userId', RemoveAllCoursesFromCart)
 studentRouter.get('/entrolledCourses/:userId',enrolledCourses)
 studentRouter.post("/clearCart",clearCart)
-studentRouter.get('/check-enrollment/:userId/:courseId',  checkEnrollmentStatus);
+studentRouter.get('/check-enrollment/:userId/:courseId', checkEnrollmentStatus);
+studentRouter.post('/ratings',ratings)
+studentRouter.get('/ratings/:courseId',getRatings)
 
 
 
